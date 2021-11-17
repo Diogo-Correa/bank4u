@@ -1,0 +1,151 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    outline: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body, html {
+    background-color: #1f1f1f !important;
+    height: 100%;
+    width: 100%;
+    color: #fff !important;
+    scroll-behavior: smooth;
+}
+
+#top {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        rgba(31, 31, 31, 0.0),
+        rgba(31, 31, 31, 1)
+        ),
+        url(../images/header-bg.jpg);
+    background-size: cover;
+    background-position: center;
+}
+
+.navbar-brand {
+    font-weight: 800 !important;
+    font-size: 2.5rem !important;
+    color: #00FECA !important;
+    transition: all 0.3s ease-in-out;
+}
+
+.navbar-brand:hover {
+    color: #fff !important;
+    font-size: 2.9rem !important;
+}
+
+.header-content {
+    width: 100%;
+    height: auto;
+    margin-top: 8rem;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-content-inner {
+    width: 100%;
+    height: 100%;
+    color: #00FECA;
+}
+
+.header-content-inner .card {
+    color: #000;
+    margin-top: .9rem;
+}
+
+.header-content-inner .card button {
+    border-radius: 50px;
+    width: 100%;
+}
+
+.header-content-inner .card button:hover {
+    background-color: #00FECA;
+    color: #000;
+    border-color: #00eebe;
+    transition: all .5s ease-in-out;
+}
+
+section {
+    width: 100%;
+    height: 100vh;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.info {
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.2),
+        rgba(255, 255, 255, 0.2)
+        ),
+        url(../images/article-bg.jpg);
+    background-size: cover;
+    background-position: bottom;
+    justify-content: center;
+}
+
+.info h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    color: #00FECA;
+    margin-bottom: 1rem;
+}
+
+.info p {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 1rem;
+}
+
+.footer {
+    height: 10vh;
+}
+
+.footer a {
+    color: #fff;
+    font-weight: 600;
+}
+
+.footer a:hover {
+    color: #00FECA;
+}
+
+.dash-top {
+    height: 30vh;
+    background-color: #00eebe;
+}
+
+.dash-menu {
+    background-color: #00FECA !important;
+}
+
+.dash-menu .navbar-brand {
+    color: #fff !important;
+    transition: all 0.5s ease-in-out;
+    padding-left: 1.5rem;
+}
+
+.dash-menu .navbar-brand:hover {
+    color: #1f1f1f !important;
+}
+
+.dash-main {
+    width: 100%;
+    height: 80vh;
+    margin-top: -10vh;
+}
+
+.dash-main .content {
+    min-height: 75vh;
+}
