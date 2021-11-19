@@ -1,0 +1,48 @@
+<div class="modal fade" id="novoUser" tabindex="-1" aria-labelledby="ModalNovoUsuario" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen-sm-down">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-light">
+              <h5 class="modal-title" id="exampleModalLabel">Novo usuario</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="" onsubmit="$('.loader').show(); $('.enter_txt').hide();">
+                <div class="mb-3">
+                  <label for="nome" class="col-form-label">Nome:</label>
+                  <input type="text" class="form-control" id="nome" name="nome" maxlength="20"/>
+                </div>
+                <div class="mb-3">
+                  <label for="cpf" class="col-form-label">CPF:</label>
+                  <input type="text" class="form-control mascara-cpf" id="cpf" name="cpf" maxlength="14"/>
+                </div>
+                <div class="mb-3">
+                  <label for="senha" class="col-form-label">Senha:</label>
+                  <input type="password" class="form-control mascara-cpf" id="senha" name="senha" minlength="6"/>
+                </div>
+                <div class="mb-3">
+                    <input class="list-group-item-check" type="radio" name="role" id="admin" value="">
+                    <label class="list-group-item py-3" for="admin">
+                        Administrador
+                        <span class="d-block small opacity-50">Usuario master</span>
+                    </label>
+                    <input class="list-group-item-check" type="radio" name="role" id="user" value="">
+                    <label class="list-group-item py-3" for="user">
+                        Usuario
+                        <span class="d-block small opacity-50">Usuario basico</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-success">
+                    <span class="spinner-border spinner-border-sm loader" role="status" style="display:none;">
+                        <span class="visually-hidden">Loading...</span>
+                    </span>
+                    <span class="enter_txt">
+                        <i class="fas fa-paper-plane"></i>
+                    </span>
+              </button>
+              </form>
+            </div>
+        </div>
+    </div>
+</div>

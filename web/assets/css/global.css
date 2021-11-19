@@ -134,6 +134,7 @@ section {
 	box-shadow: 2px 2px 3px #999;
         transition: all ease-in-out .5s;
         border: none;
+        z-index: 9;
 }
 
 .float:hover {
@@ -143,6 +144,46 @@ section {
 
 .my-float{
 	margin-top:7px;
+}
+
+.list-group-checkable .list-group-item {
+  cursor: pointer;
+  border-radius: .5rem;
+}
+.list-group-item-check {
+  position: absolute;
+  clip: rect(0, 0, 0, 0);
+  pointer-events: none;
+}
+.list-group-item-check:hover + .list-group-item {
+  background-color: var(--bs-light);
+}
+.list-group-item-check:checked + .list-group-item {
+  color: #fff;
+  background-color: var(--bs-blue);
+}
+.list-group-item-check[disabled] + .list-group-item,
+.list-group-item-check:disabled + .list-group-item {
+  pointer-events: none;
+  filter: none;
+  opacity: .5;
+}
+
+.dropdown-item-danger {
+  color: var(--bs-red) !important;
+}
+.dropdown-item-danger:hover,
+.dropdown-item-danger:focus {
+  color: #fff !important;
+  background-color: var(--bs-red) !important;
+}
+.dropdown-item-danger.active {
+  background-color: var(--bs-red) !important;
+}
+
+.form-control-dark {
+  background-color: rgba(255, 255, 255, .05);
+  border-color: rgba(255, 255, 255, .15);
 }
 
 @media (min-width: 576px) {

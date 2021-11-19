@@ -1,0 +1,28 @@
+<div class="modal fade" id="novaCategoria" tabindex="-1" aria-labelledby="ModalNovaCategoria" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen-sm-down">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-light">
+              <h5 class="modal-title" id="exampleModalLabel">Nova Categoria</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="" onsubmit="$('.loader').show(); $('.enter_txt').hide();">
+                <div class="mb-3">
+                  <label for="descricao" class="col-form-label">Descricao:</label>
+                  <input type="text" class="form-control" id="descricao" name="descricao" maxlength="20"/>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-success">
+                    <span class="spinner-border spinner-border-sm loader" role="status" style="display:none;">
+                        <span class="visually-hidden">Loading...</span>
+                    </span>
+                    <span class="enter_txt">
+                        <i class="fas fa-paper-plane"></i>
+                    </span>
+              </button>
+              </form>
+            </div>
+        </div>
+    </div>
+</div>

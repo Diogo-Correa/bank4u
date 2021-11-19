@@ -1,0 +1,44 @@
+<div class="modal fade" id="novaConta" tabindex="-1" aria-labelledby="ModalNovaConta" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen-sm-down">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-light">
+              <h5 class="modal-title" id="exampleModalLabel">Nova Conta</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="" onsubmit="$('.loader').show(); $('.enter_txt').hide();">
+                <input type="hidden" class="form-control" id="id_usuario" name="id_usuario"/>
+                <div class="mb-3">
+                  <label for="nome_conta" class="col-form-label">Nome da conta:</label>
+                  <input type="text" class="form-control" id="nome_conta" name="nome_conta"/>
+                </div>
+                <div class="mb-3">
+                  <label for="banco" class="col-form-label">Banco:</label>
+                  <select class="form-control" id="banco" name="banco">
+                      <option value="001">Banco do Brasil</option>
+                      <option value="341">Itau</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="agencia" class="col-form-label">Agencia:</label>
+                  <input type="number" class="form-control" min="000001" max="999999" id="agencia" name="agencia"/>
+                </div>
+                <div class="mb-3">
+                  <label for="conta_corrente" class="col-form-label">C/C</label>
+                  <input type="number" class="form-control" min="000001" max="999999" id="conta_corrente" name="conta_corrente"/>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-success">
+                    <span class="spinner-border spinner-border-sm loader" role="status" style="display:none;">
+                        <span class="visually-hidden">Loading...</span>
+                    </span>
+                    <span class="enter_txt">
+                        <i class="fas fa-paper-plane"></i>
+                    </span>
+              </button>
+              </form>
+            </div>
+        </div>
+    </div>
+</div>
