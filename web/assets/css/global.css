@@ -121,31 +121,32 @@ section {
     color: #00FECA;
 }
 
-.dash-top {
-    height: 30vh;
-    background-color: #00eebe;
+.float{
+	position:fixed;
+	width:60px;
+	height:60px;
+	bottom:40px;
+	right:40px;
+	background-color:#0C9;
+	color:#FFF;
+	border-radius:50px;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+        transition: all ease-in-out .5s;
+        border: none;
 }
 
-.dash-menu {
-    background-color: #00FECA !important;
+.float:hover {
+    background-color:#00a87e;
+    color: #fff;
 }
 
-.dash-menu .navbar-brand {
-    color: #fff !important;
-    transition: all 0.5s ease-in-out;
-    padding-left: 1.5rem;
+.my-float{
+	margin-top:7px;
 }
 
-.dash-menu .navbar-brand:hover {
-    color: #1f1f1f !important;
-}
-
-.dash-main {
-    width: 100%;
-    height: 80vh;
-    margin-top: -10vh;
-}
-
-.dash-main .content {
-    min-height: 75vh;
+@media (min-width: 576px) {
+    .h-sm-100 {
+        height: 100%;
+    }
 }

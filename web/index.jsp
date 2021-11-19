@@ -9,6 +9,7 @@
 <html lang="pt-br">
 <head>
     <jsp:include page="./assets/includes/head.html" />
+    <title>4U - O banco para voce!</title>
 </head>
 <body>
 

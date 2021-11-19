@@ -1,5 +1,13 @@
 $( document ).ready(function() {
-
+    /* global bootstrap: false */
+    (function () {
+      'use strict'
+      var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+      tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+        new bootstrap.Tooltip(tooltipTriggerEl);
+      });
+    })();
+    
     // Definições de Máscaras
     $(".mascara-data").mask("99/99/9999");
     $(".mascara-cpf").mask("999.999.999-99");
@@ -63,18 +71,18 @@ ValidaCPF.prototype.isSequencia = function() {
 function checkCPF(value) {
     const cpfInput = document.getElementById('cpf');
     const passInput = document.getElementById('senha');
-    const loginBtn = document.getElementById('loginBtn');
+    const btn = document.getElementById('btnDisabled');
     const isValid = new ValidaCPF(value).valida();
     
     if(isValid) {
       cpfInput.classList.remove('is-invalid');
       cpfInput.classList.add('is-valid');
       passInput.classList.remove('d-none');
-      loginBtn.disabled = false;
+      btn.disabled = false;
     } else {
       cpfInput.classList.add('is-invalid'); 
       passInput.classList.add('d-none');
-      loginBtn.disabled = true;
+      btn.disabled = true;
     }
     
 }
