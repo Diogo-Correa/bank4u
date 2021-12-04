@@ -42,7 +42,7 @@ public class UsuarioDAO {
     }
     
     public Usuario getUsuarioAuth(String login, String senha) {
-        Usuario user = null;
+        Usuario user = new Usuario();
         try {
             PreparedStatement stmt = conexao.prepareStatement("SELECT * FROM usuarios WHERE cpf = ? AND senha = ? limit 1");
             stmt.setString(1, login);
