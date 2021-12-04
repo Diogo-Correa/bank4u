@@ -9,14 +9,6 @@ public class Usuario {
     private int id;
     private String nome, cpf, senha, suspenso;
 
-    public Usuario(int id, String nome, String cpf, String senha, String suspenso) {
-        this.id = id;
-        this.nome = nome;
-        this.cpf = cpf;
-        this.senha = senha;
-        this.suspenso = suspenso;
-    }
-
     public int getId() {
         return this.id;
     }
@@ -45,6 +37,10 @@ public class Usuario {
         return this.senha;
     }
 
+    public void setSenha(String value) {
+        this.senha = value;
+    }
+    
     public String getSuspenso() {
         return this.suspenso;
     }

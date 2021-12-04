@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controllers;
+package controllers.auth;
 
 import app.Administrador;
 import java.io.IOException;
@@ -44,14 +44,17 @@ public class AuthController extends HttpServlet {
         Usuario user = userDAO.getUsuarioAuth(userCPF, userPassword);
 
         if(user != null) {
-            request.getSession().setAttribute("user", user);
+            request.getSession().setAttribute("authUser", user);
             request.getSession().setAttribute("isAdmin", false);
+            request.getSession().setAttribute("isLoggedIn", true);
             response.sendRedirect("dashboard.jsp");
         } else if(admin != null) { 
-            request.getSession().setAttribute("user", admin);
+            request.getSession().setAttribute("authUser", admin);
             request.getSession().setAttribute("isAdmin", true);
+            request.getSession().setAttribute("isLoggedIn", true);
             response.sendRedirect("settings.jsp");
         } else {
+            request.getSession().setAttribute("isLoggedIn", false);
             response.sendRedirect("/banco");
         }
 

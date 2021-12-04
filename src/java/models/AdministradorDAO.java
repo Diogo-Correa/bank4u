@@ -28,21 +28,38 @@ public class AdministradorDAO {
         }
     }
 
+    public boolean store(Administrador user) {
+        try {
+            PreparedStatement stmt = conexao.prepareStatement("INSERT INTO administradores (nome, cpf, senha) VALUES (?,?,?)");
+            stmt.setString(1, user.getNome());
+            stmt.setString(2, user.getCpf());
+            stmt.setString(3, user.getSenha());
+            stmt.execute();
+        } catch(SQLException e) {
+            System.out.println("DAO adminStore error.");
+            System.out.println(e);
+        }
+        return false;
+    }
+    
     public Administrador getAdministradorAuth(String login, String senha) {
-        Administrador administrador = null;
+        Administrador admin = new Administrador();
         try {
             PreparedStatement stmt = conexao.prepareStatement("SELECT * FROM administradores WHERE cpf = ? AND senha = ? limit 1");
             stmt.setString(1, login);
             stmt.setString(2, senha);
             ResultSet rs = stmt.executeQuery();
             if(rs.next()) {
-                administrador = new Administrador(rs.getInt("id"), rs.getString("nome"), rs.getString("cpf"), rs.getString("senha"));
+                admin.setId(rs.getInt("id")); 
+                admin.setNome(rs.getString("nome")); 
+                admin.setCpf(rs.getString("cpf")); 
+                admin.setSenha(rs.getString("senha"));
             }
         } catch(SQLException e) {
             System.out.println("DAO getAdministradorAuth error.");
             System.out.println(e);
         }
-        return administrador;
+        return admin;
     }
     
 }

@@ -4,6 +4,16 @@
     Author     : Diogo
 --%>
 
+<% 
+    if((boolean) request.getSession().getAttribute("isLoggedIn")) { 
+        if((boolean) request.getSession().getAttribute("isAdmin")) {
+            response.sendRedirect("settings.jsp");
+        } else {
+            response.sendRedirect("dashboard.jsp");
+        }
+    }
+%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="pt-br">

@@ -13,13 +13,6 @@ public class Administrador {
     private int id;
     private String nome, cpf, senha;
 
-    public Administrador(int id, String nome, String cpf, String senha) {
-        this.id = id;
-        this.nome = nome;
-        this.cpf = cpf;
-        this.senha = senha;
-    }
-
     public int getId() {
         return this.id;
     }
@@ -46,5 +39,9 @@ public class Administrador {
 
     public String getSenha() {
         return this.senha;
+    }
+    
+    public void setSenha(String value) {
+        this.senha = value;
     }
 }

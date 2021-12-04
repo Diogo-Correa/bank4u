@@ -4,8 +4,7 @@
     Author     : Diogo
 --%>
 <% 
-    if(!(boolean) request.getSession().getAttribute("isAdmin")) { 
-            request.getSession().setAttribute("user", null);
+    if(!(boolean) request.getSession().getAttribute("isAdmin") || !(boolean) request.getSession().getAttribute("isLoggedIn")) { 
             response.sendRedirect("/banco");
     }  else {
 %>
@@ -20,7 +19,7 @@
     </head>
     <body style="background-color: #efefef !important;" class="text-dark">
         <%
-            Administrador admin = (Administrador) request.getSession().getAttribute("user");
+            Administrador admin = (Administrador) request.getSession().getAttribute("authUser");
         %>
         <jsp:include page="./assets/components/header/header.html" />
         
