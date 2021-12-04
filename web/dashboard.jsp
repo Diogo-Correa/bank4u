@@ -3,6 +3,14 @@
     Created on : 16/11/2021, 23:27:43
     Author     : Diogo
 --%>
+
+<% 
+    if((boolean) request.getSession().getAttribute("isAdmin")) { 
+            request.getSession().setAttribute("user", null);
+            response.sendRedirect("/banco");
+    } else {
+%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8" import="app.Usuario"%>
 <!DOCTYPE html>
 <html>
@@ -63,3 +71,5 @@
         <jsp:include page="./assets/includes/scripts.html" />
     </body>
 </html>
+
+<% } %>
