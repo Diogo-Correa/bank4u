@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import app.Administrador;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import models.UsuarioDAO;
 import app.Usuario;
+import models.AdministradorDAO;
 
 /**
  *
@@ -35,13 +37,20 @@ public class AuthController extends HttpServlet {
         String userCPF = request.getParameter("cpf");
         String userPassword = request.getParameter("senha");
 
+        AdministradorDAO adminDAO = new AdministradorDAO();
+        Administrador admin = adminDAO.getAdministradorAuth(userCPF, userPassword);
+        
         UsuarioDAO userDAO = new UsuarioDAO();
-
         Usuario user = userDAO.getUsuarioAuth(userCPF, userPassword);
 
         if(user != null) {
             request.getSession().setAttribute("user", user);
+            request.getSession().setAttribute("isAdmin", false);
             response.sendRedirect("dashboard.jsp");
+        } else if(admin != null) { 
+            request.getSession().setAttribute("user", admin);
+            request.getSession().setAttribute("isAdmin", true);
+            response.sendRedirect("settings.jsp");
         } else {
             response.sendRedirect("/banco");
         }

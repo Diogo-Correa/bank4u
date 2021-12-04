@@ -3,8 +3,7 @@
     Created on : 16/11/2021, 23:27:43
     Author     : Diogo
 --%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="app.Usuario"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,6 +11,9 @@
         <title>4U - Dashboard</title>
     </head>
     <body style="background-color: #efefef !important;" class="text-dark">
+        <% 
+            Usuario user = (Usuario) request.getSession().getAttribute("user");  
+        %>
         <jsp:include page="./assets/components/header/header.html" />
         
         <div class="container">
@@ -21,7 +23,7 @@
             
             <div class="alert alert-info">
                 <i class="fas fa-wallet me-2"></i>
-                Parece que voce ainda nao tem uma conta cadastrada, clique <a class="alert-link" href=""  data-bs-toggle="modal" data-bs-target="#novaConta">aqui</a> para cadastrar uma.
+                Ola <%= user.getNome()  %>, parece que voce ainda nao tem uma conta cadastrada, clique <a class="alert-link" href=""  data-bs-toggle="modal" data-bs-target="#novaConta">aqui</a> para cadastrar uma.
             </div>
             
             <div class="row">

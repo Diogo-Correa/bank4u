@@ -4,7 +4,7 @@
     Author     : Diogo
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="app.Administrador"%>
 <!DOCTYPE html>
 <html style="background-color: #efefef !important;">
     <head>
@@ -12,7 +12,9 @@
         <title>4U - Settings</title>
     </head>
     <body style="background-color: #efefef !important;" class="text-dark">
-        
+        <%
+            Administrador admin = (Administrador) request.getSession().getAttribute("user");
+        %>
         <jsp:include page="./assets/components/header/header.html" />
         
         <div class="container">
@@ -22,7 +24,7 @@
             
             <div class="alert alert-danger">
                 <i class="fas fa-cog me-2"></i>
-                Ola Admin, essa eh sua area de configuracoes.
+                Ola <%= admin.getNome() %>, essa eh sua area de configuracoes.
             </div>
             
             <div class="row">
