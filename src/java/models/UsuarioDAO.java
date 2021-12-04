@@ -54,6 +54,8 @@ public class UsuarioDAO {
                 user.setCpf(rs.getString("cpf")); 
                 user.setSenha(rs.getString("senha"));
                 user.setSuspenso(rs.getString("suspenso"));
+            } else {
+                return null;
             }
         } catch(SQLException e) {
             System.out.println("DAO getUsuarioAuth error.");

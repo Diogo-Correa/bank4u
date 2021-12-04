@@ -30,7 +30,7 @@ public class LogoutController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getSession().setAttribute("authUser", null);
+        request.getSession().removeAttribute("authUser");
         request.getSession().setAttribute("isAdmin", false);
         request.getSession().setAttribute("isLoggedIn", false);
         response.sendRedirect("/banco");

@@ -17,8 +17,8 @@ public class Administrador {
         return this.id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int value) {
+        this.id = value;
     }
 
     public String getNome() {

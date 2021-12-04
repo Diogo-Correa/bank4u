@@ -54,6 +54,8 @@ public class AdministradorDAO {
                 admin.setNome(rs.getString("nome")); 
                 admin.setCpf(rs.getString("cpf")); 
                 admin.setSenha(rs.getString("senha"));
+            } else {
+                return null;
             }
         } catch(SQLException e) {
             System.out.println("DAO getAdministradorAuth error.");
