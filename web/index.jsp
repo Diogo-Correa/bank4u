@@ -2,6 +2,20 @@
     Document   : index
     Created on : 15/11/2021, 20:54:17
     Author     : Diogo
+
+    ----- Casos de Usos - Admin -----
+    RF1: OK
+    RF2: OK
+    RF3: OK
+    RF4:
+    RF5: OK
+
+    ----- Casos de Usos - Usuario -----
+    RF6:
+    RF7:
+    RF8:
+    RF9:
+
 --%>
 
 <% 

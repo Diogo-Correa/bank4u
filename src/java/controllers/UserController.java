@@ -39,32 +39,28 @@ public class UserController extends HttpServlet {
         String cpf = request.getParameter("cpf");
         String senha = request.getParameter("senha");
         String userRole = request.getParameter("role");
-        System.out.println("Informe uma role valida." + nome);
-        System.out.println("Informe uma role valida." + senha);
-        System.out.println("Informe uma role valida." + cpf);
-        System.out.println("Informe uma role valida." + userRole);
         
-        if(userRole.equals("admin")) {
-            AdministradorDAO adminDAO = new AdministradorDAO();
-            Administrador admin = new Administrador();
-            
-            admin.setNome(nome);
-            admin.setCpf(cpf);
-            admin.setSenha(senha);
-            
-            adminDAO.store(admin);
-        } else if(userRole.equals("user")) {
-            UsuarioDAO userDAO = new UsuarioDAO();
-            Usuario user = new Usuario();
-            
-            user.setNome(nome);
-            user.setCpf(cpf);
-            user.setSenha(senha);
-            user.setSuspenso("N");
-            
-            userDAO.store(user);
-        } else {
-            System.out.println("Informe uma role valida.");
+        switch (userRole) {
+            case "admin":
+                AdministradorDAO adminDAO = new AdministradorDAO();
+                Administrador admin = new Administrador();
+                admin.setNome(nome);
+                admin.setCpf(cpf);
+                admin.setSenha(senha);
+                adminDAO.store(admin);
+                break;
+            case "user":
+                UsuarioDAO userDAO = new UsuarioDAO();
+                Usuario user = new Usuario();
+                user.setNome(nome);
+                user.setCpf(cpf);
+                user.setSenha(senha);
+                user.setSuspenso("N");
+                userDAO.store(user);
+                break;
+            default:
+                System.out.println("Informe uma role valida.");
+                break;
         }
         
         response.sendRedirect("settings.jsp");
