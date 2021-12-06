@@ -19,8 +19,31 @@
     </head>
     <body style="background-color: #efefef !important;" class="text-dark">
         <%
+            try {
+                if(request.getSession().getAttribute("error") != null) {
+        %>
+        <script>
+            sweetAlert("Oops! :(", request.getSession().getAttribute("error"), "error");
+        </script>
+        <%
+                request.getSession().removeAttribute("error");
+                }
+
+                if(request.getSession().getAttribute("success") != null) {
+        %>
+        <script>
+            sweetAlert("Yeep! :D", "Os dados foram adicionados ao sistema.", "success");
+        </script>
+        <%
+                request.getSession().removeAttribute("success");
+                }
+            } catch(Exception e) {
+                System.out.println("Error attribute not found.");
+            }
+
             Administrador admin = (Administrador) request.getSession().getAttribute("authUser");
         %>
+        
         <jsp:include page="./assets/components/header/header.html" />
         
         <div class="container">

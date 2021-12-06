@@ -55,6 +55,7 @@ public class AuthController extends HttpServlet {
             response.sendRedirect("settings.jsp");
         } else {
             request.getSession().setAttribute("isLoggedIn", false);
+            request.getSession().setAttribute("error", "Credenciais incorretas");
             response.sendRedirect("/banco");
         }
 

@@ -19,13 +19,17 @@
 --%>
 
 <% 
-    if((boolean) request.getSession().getAttribute("isLoggedIn")) { 
-        if((boolean) request.getSession().getAttribute("isAdmin")) {
-            response.sendRedirect("settings.jsp");
-        } else {
-            response.sendRedirect("dashboard.jsp");
+    try {
+        if((boolean) request.getSession().getAttribute("isLoggedIn")) { 
+            if((boolean) request.getSession().getAttribute("isAdmin")) {
+                response.sendRedirect("settings.jsp");
+            } else {
+                response.sendRedirect("dashboard.jsp");
+            }
         }
-    }
+    } catch(Exception e) {
+        System.out.println("isLoggedIn attribute not found.");
+    } 
 %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -36,7 +40,22 @@
     <title>4U - O banco para voce!</title>
 </head>
 <body>
-
+    
+    <%
+        try {
+            if(request.getSession().getAttribute("error") != null) {
+    %>
+    <script>
+        sweetAlert("Oops! :(", "Credenciais invalidas!", "error");
+    </script>
+    <%
+            request.getSession().removeAttribute("error");
+            }
+        } catch(Exception e) {
+            System.out.println("Error attribute not found.");
+        }
+    %>
+    
     <jsp:include page="./assets/includes/content.html" />
 
     <jsp:include page="./assets/includes/scripts.html" />

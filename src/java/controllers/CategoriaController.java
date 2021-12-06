@@ -39,6 +39,7 @@ public class CategoriaController extends HttpServlet {
         tag.setDescricao(descricao);
         catDAO.store(tag);
         
+        request.getSession().setAttribute("success", "Categoria adicionada ao sistema!");
         response.sendRedirect("settings.jsp");
         
     }

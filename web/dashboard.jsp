@@ -18,7 +18,30 @@
         <title>4U - Dashboard</title>
     </head>
     <body style="background-color: #efefef !important;" class="text-dark">
-        <% 
+        
+        
+        <%
+            try {
+                if(request.getSession().getAttribute("error") != null) {
+        %>
+        <script>
+            sweetAlert("Oops! :(", request.getSession().getAttribute("error"), "error");
+        </script>
+        <%
+                request.getSession().removeAttribute("error");
+                }
+
+                if(request.getSession().getAttribute("success") != null) {
+        %>
+        <script>
+            sweetAlert("Yeep! :D", request.getSession().getAttribute("success"), "success");
+        </script>
+        <%
+                }
+            } catch(Exception e) {
+                System.out.println("Error attribute not found.");
+            }
+
             Usuario user = (Usuario) request.getSession().getAttribute("authUser");  
         %>
         <jsp:include page="./assets/components/header/header.html" />

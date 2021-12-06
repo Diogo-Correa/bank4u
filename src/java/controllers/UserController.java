@@ -63,6 +63,7 @@ public class UserController extends HttpServlet {
                 break;
         }
         
+        request.getSession().setAttribute("success", "Usuario adicionado ao sistema!");
         response.sendRedirect("settings.jsp");
         
     }
