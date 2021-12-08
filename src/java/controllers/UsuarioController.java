@@ -20,18 +20,20 @@ import models.UsuarioDAO;
  *
  * @author Diogo
  */
-@WebServlet(name = "UserStoreController", urlPatterns = {"/userStore"})
+@WebServlet(name = "UserStoreController", urlPatterns = {"/user"})
 public class UsuarioController extends HttpServlet {
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
         
         switch(action) {
             case "suspend":
-                System.out.println(request.getParameter("id"));
+                suspendUser(request,response);
                 break;
         }
+        
     }
 
     /**
@@ -77,5 +79,30 @@ public class UsuarioController extends HttpServlet {
         response.sendRedirect("home");
         
     }
-
+    
+    
+    protected void suspendUser(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            
+            UsuarioDAO userDAO = new UsuarioDAO();
+            Usuario user = userDAO.getByID(id);
+            
+            userDAO.suspendUser(user);
+            
+            request.getSession().setAttribute("success",(user.getSuspenso().equals("N")) ? "Usuario suspenso do sistema!" : "Usuario ativo no sistema!");
+            response.sendRedirect("home");
+            
+            
+        } catch(NumberFormatException e) {
+            
+            request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
+            response.sendRedirect("home");
+            
+        }
+        
+        
+    }
 }

@@ -90,7 +90,6 @@ public class UsuarioDAO {
         return res;
     }
     
-    
     public Usuario getUsuarioAuth(String login, String senha) {
         Connect conn = new Connect();
         Usuario user = new Usuario();
@@ -110,6 +109,48 @@ public class UsuarioDAO {
             }
         } catch(SQLException e) {
             System.out.println("DAO getUsuarioAuth error.");
+            System.out.println(e);
+        } finally {
+            conn.closeConn();
+        }
+        return user;
+    }
+    
+    public Usuario getByID(int id) {
+        Connect conn = new Connect();
+        Usuario user = new Usuario();
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("SELECT * FROM usuarios WHERE id = ? limit 1");
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                user.setId(rs.getInt("id")); 
+                user.setNome(rs.getString("nome")); 
+                user.setCpf(rs.getString("cpf")); 
+                user.setSenha(rs.getString("senha"));
+                user.setSuspenso(rs.getString("suspenso"));
+            } else {
+                user = null;
+            }
+        } catch(SQLException e) {
+            System.out.println("DAO getUsuarioAuth error.");
+            System.out.println(e);
+        } finally {
+            conn.closeConn();
+        }
+        return user;
+    }
+    
+    public Usuario suspendUser(Usuario user) {
+        Connect conn = new Connect();
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("UPDATE usuarios SET suspenso = ? WHERE id = ?");
+            if(user.getSuspenso().equals("N")) stmt.setString(1, "S");
+            if(user.getSuspenso().equals("S")) stmt.setString(1, "N");
+            stmt.setInt(2, user.getId());
+            stmt.execute();
+        } catch(SQLException e) {
+            System.out.println("DAO suspendUser error.");
             System.out.println(e);
         } finally {
             conn.closeConn();

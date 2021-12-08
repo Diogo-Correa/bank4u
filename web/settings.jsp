@@ -139,7 +139,7 @@
                                           </li>
                                           <li><hr class="dropdown-divider"></li>
                                           <li>
-                                            <a class="dropdown-item dropdown-item-danger d-flex gap-2 align-items-center" href="#">
+                                            <a class="dropdown-item dropdown-item-danger d-flex gap-2 align-items-center" href="user?action=suspend&id=${u.id}">
                                               <i class="fas fa-user-slash"></i>
                                               Suspender
                                             </a>

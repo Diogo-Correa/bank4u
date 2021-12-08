@@ -41,7 +41,7 @@
             if(request.getSession().getAttribute("error") != null) {
     %>
     <script>
-        sweetAlert("Oops! :(", "Credenciais invalidas!", "error");
+        sweetAlert("Oops! :(", `${error}`, "error");
     </script>
     <%
             request.getSession().removeAttribute("error");
