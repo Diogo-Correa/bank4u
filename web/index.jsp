@@ -37,17 +37,13 @@
 <body>
     
     <%
-        try {
-            if(request.getSession().getAttribute("error") != null) {
+        if(request.getSession().getAttribute("error") != null) {
     %>
-    <script>
-        sweetAlert("Oops! :(", `${error}`, "error");
-    </script>
+            <script>
+                sweetAlert("Oops! :(", `${error}`, "error");
+            </script>
     <%
             request.getSession().removeAttribute("error");
-            }
-        } catch(Exception e) {
-            System.out.println("Error attribute not found.");
         }
     %>
     

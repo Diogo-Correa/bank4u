@@ -43,7 +43,7 @@ public class AuthController extends HttpServlet {
         UsuarioDAO userDAO = new UsuarioDAO();
         Usuario user = userDAO.getUsuarioAuth(userCPF, userPassword);
 
-        if(user != null && user.getSuspenso().equals("S")) {
+        if(user != null && user.isSuspenso()) {
             request.getSession().setAttribute("isLoggedIn", false);
             request.getSession().setAttribute("error", "Voce esta suspenso do sistema!");
             response.sendRedirect("/banco");

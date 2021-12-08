@@ -32,6 +32,9 @@ public class UsuarioController extends HttpServlet {
             case "suspend":
                 suspendUser(request,response);
                 break;
+            case "delete":
+                deleteUser(request,response);
+                break;
         }
         
     }
@@ -80,7 +83,6 @@ public class UsuarioController extends HttpServlet {
         
     }
     
-    
     protected void suspendUser(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
@@ -92,7 +94,7 @@ public class UsuarioController extends HttpServlet {
             
             userDAO.suspendUser(user);
             
-            request.getSession().setAttribute("success",(user.getSuspenso().equals("N")) ? "Usuario suspenso do sistema!" : "Usuario ativo no sistema!");
+            request.getSession().setAttribute("success",(user.isSuspenso()) ? "Usuario ativo no sistema!" : "Usuario suspenso do sistema!");
             response.sendRedirect("home");
             
             
@@ -101,8 +103,28 @@ public class UsuarioController extends HttpServlet {
             request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
             response.sendRedirect("home");
             
-        }
+        } 
+    }
+    
+    protected void deleteUser(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         
-        
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            
+            UsuarioDAO userDAO = new UsuarioDAO();
+            
+            userDAO.delete(id);
+            
+            request.getSession().setAttribute("success", "Usuario removido do sistema!");
+            response.sendRedirect("home");
+            
+            
+        } catch(NumberFormatException e) {
+            
+            request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
+            response.sendRedirect("home");
+            
+        } 
     }
 }

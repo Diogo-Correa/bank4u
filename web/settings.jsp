@@ -145,7 +145,7 @@
                                             </a>
                                           </li>
                                           <li>
-                                            <a class="dropdown-item dropdown-item-danger d-flex gap-2 align-items-center" href="#">
+                                            <a class="dropdown-item dropdown-item-danger d-flex gap-2 align-items-center" href="user?action=delete&id=${u.id}">
                                               <i class="fas fa-trash"></i>
                                               Deletar
                                             </a>

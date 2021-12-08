@@ -145,8 +145,7 @@ public class UsuarioDAO {
         Connect conn = new Connect();
         try {
             PreparedStatement stmt = conn.getConn().prepareStatement("UPDATE usuarios SET suspenso = ? WHERE id = ?");
-            if(user.getSuspenso().equals("N")) stmt.setString(1, "S");
-            if(user.getSuspenso().equals("S")) stmt.setString(1, "N");
+            stmt.setString(1, (user.isSuspenso()) ? "N" : "S");
             stmt.setInt(2, user.getId());
             stmt.execute();
         } catch(SQLException e) {
@@ -156,5 +155,18 @@ public class UsuarioDAO {
             conn.closeConn();
         }
         return user;
+    }
+    
+    public void delete(int id) {
+        Connect conn = new Connect();
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("DELETE FROM usuarios WHERE id = ?");
+            stmt.setInt(1, id);
+            stmt.execute();
+        } catch(SQLException e) {
+            System.out.println("DAO deleteUser error");
+        } finally {
+            conn.closeConn();
+        }
     }
 }
