@@ -18,8 +18,12 @@
 
 --%>
 <%
-    if((boolean) request.getSession().getAttribute("isLoggedIn")) {
-        response.sendRedirect("home");
+    try {
+        if((boolean) request.getSession().getAttribute("isLoggedIn")) {
+            response.sendRedirect("home");
+        }
+    } catch(Exception e) {
+            System.out.println("isLoggedIn attribute not found.");
     }
 %>
 

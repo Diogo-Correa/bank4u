@@ -7,7 +7,9 @@ package models;
 
 import app.Categoria;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -30,6 +32,54 @@ public class CategoriaDAO {
             conn.closeConn();
         }
         return false;
+    }
+    
+    public ArrayList<Categoria> getAll() {
+        
+        Connect conn = new Connect();    
+        ArrayList<Categoria> res = new ArrayList<>();
+        
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("SELECT * FROM categorias");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Categoria tag = new Categoria();
+                tag.setId(rs.getInt("id"));
+                tag.setDescricao(rs.getString("descricao"));
+                res.add(tag);
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro de SQL: " + e.getMessage());
+        } finally {
+            conn.closeConn();
+        }
+        
+        return res;
+    }
+    
+    public ArrayList<Categoria> getThreeTags() {
+        
+        Connect conn = new Connect();    
+        ArrayList<Categoria> res = new ArrayList<>();
+        
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("SELECT * FROM categorias ORDER BY id DESC limit 3");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Categoria tag = new Categoria();
+                tag.setId(rs.getInt("id"));
+                tag.setDescricao(rs.getString("descricao"));
+                res.add(tag);
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro de SQL: " + e.getMessage());
+        } finally {
+            conn.closeConn();
+        }
+        
+        return res;
     }
     
 }

@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import models.AdministradorDAO;
 import models.CategoriaDAO;
 import models.UsuarioDAO;
 
@@ -42,6 +43,13 @@ public class HomeController extends HttpServlet {
                 
                 request.setAttribute("users", new UsuarioDAO().getThreeUsers());
                 request.setAttribute("usersCount", new UsuarioDAO().getAll().size());
+                
+                request.setAttribute("admins", new AdministradorDAO().getThreeAdmins());
+                request.setAttribute("adminsCount", new AdministradorDAO().getAll().size());
+                
+                request.setAttribute("tags", new CategoriaDAO().getThreeTags());
+                request.setAttribute("tagsCount", new CategoriaDAO().getAll().size());
+                
                 request.setAttribute("authName", admin.getNome());
                 request.getRequestDispatcher("settings.jsp").forward(request, response);
             } else {

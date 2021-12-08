@@ -9,6 +9,7 @@ import app.Administrador;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -58,6 +59,58 @@ public class AdministradorDAO {
             conn.closeConn();
         }
         return admin;
+    }
+    
+    public ArrayList<Administrador> getAll() {
+        
+        Connect conn = new Connect();    
+        ArrayList<Administrador> res = new ArrayList<>();
+        
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("SELECT * FROM administradores");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Administrador admin = new Administrador();
+                admin.setId(rs.getInt("id"));
+                admin.setNome(rs.getString("nome"));
+                admin.setCpf(rs.getString("cpf"));
+                res.add(admin);
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro de SQL: " + e.getMessage());
+        } finally {
+            conn.closeConn();
+        }
+        
+        
+        return res;
+    }
+    
+    public ArrayList<Administrador> getThreeAdmins() {
+        
+        Connect conn = new Connect();    
+        ArrayList<Administrador> res = new ArrayList<>();
+        
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("SELECT * FROM administradores ORDER BY id DESC limit 3");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Administrador admin = new Administrador();
+                admin.setId(rs.getInt("id"));
+                admin.setNome(rs.getString("nome"));
+                admin.setCpf(rs.getString("cpf"));
+                res.add(admin);
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro de SQL: " + e.getMessage());
+        } finally {
+            conn.closeConn();
+        }
+        
+        
+        return res;
     }
     
 }
