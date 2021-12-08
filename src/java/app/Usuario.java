@@ -48,4 +48,9 @@ public class Usuario {
     public void setSuspenso(String value) {
         this.suspenso = value;
     }
+    
+    public boolean isSuspenso() {
+        if(this.suspenso.equals("S")) return true;
+        return false;
+    }
 }

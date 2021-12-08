@@ -3,12 +3,7 @@
     Created on : 18/11/2021, 21:14:43
     Author     : Diogo
 --%>
-<% 
-    if(!(boolean) request.getSession().getAttribute("isAdmin") || !(boolean) request.getSession().getAttribute("isLoggedIn")) { 
-            response.sendRedirect("/banco");
-    }  else {
-%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8" import="app.Administrador"%>
 <!DOCTYPE html>
@@ -23,7 +18,7 @@
                 if(request.getSession().getAttribute("error") != null) {
         %>
         <script>
-            sweetAlert("Oops! :(", request.getSession().getAttribute("error"), "error");
+            sweetAlert("Oops! :(", `${error}`, "error");
         </script>
         <%
                 request.getSession().removeAttribute("error");
@@ -32,7 +27,7 @@
                 if(request.getSession().getAttribute("success") != null) {
         %>
         <script>
-            sweetAlert("Yeep! :D", "Os dados foram adicionados ao sistema.", "success");
+            sweetAlert("Yeep! :D", `${success}`, "success");
         </script>
         <%
                 request.getSession().removeAttribute("success");
@@ -40,8 +35,6 @@
             } catch(Exception e) {
                 System.out.println("Error attribute not found.");
             }
-
-            Administrador admin = (Administrador) request.getSession().getAttribute("authUser");
         %>
         
         <jsp:include page="./assets/components/header/header.html" />
@@ -53,7 +46,7 @@
             
             <div class="alert alert-danger">
                 <i class="fas fa-cog me-2"></i>
-                Ola <%= admin.getNome() %>, essa eh sua area de configuracoes.
+                Ola ${authName}, essa eh sua area de configuracoes.
             </div>
             
             <div class="row">
@@ -183,114 +176,53 @@
                             <h5 class="card-title text-light py-2">
                                 <i class="fas fa-user"></i>
                                 Usuarios
+                                <span class="badge bg-danger">${usersCount}</span>
                             </h5>
                         </div>
                         <div class="card-body">
-                            <div class="d-flex text-muted pt-3">
-                              <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#007bff"></rect><text x="50%" y="50%" fill="#007bff" dy=".3em">32x32</text></svg>
+                            <c:forEach var="u" items="${users}">
+                                <div class="d-flex text-muted pt-3">
+                                  <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#007bff"></rect><text x="50%" y="50%" fill="#007bff" dy=".3em">32x32</text></svg>
 
-                              <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
-                                <div class="d-flex justify-content-between">
-                                  <strong class="text-gray-dark">Full Name</strong>
-                                  <div class="dropdown">
-                                    <a href="" class="link-secondary" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
-                                    
-                                    <ul class="dropdown-menu dropdown-menu-dark mx-0 shadow" style="width: 220px;">
-                                      <li>
-                                        <a class="dropdown-item d-flex gap-2 align-items-center" href="#">
-                                          <i class="fas fa-eye"></i>
-                                          Ver
-                                        </a>
-                                      </li>
-                                      <li>
-                                        <a class="dropdown-item d-flex gap-2 align-items-center" href="#">
-                                          <i class="fas fa-pen"></i>
-                                          Editar
-                                        </a>
-                                      </li>
-                                      <li><hr class="dropdown-divider"></li>
-                                      <li>
-                                        <a class="dropdown-item dropdown-item-danger d-flex gap-2 align-items-center" href="#">
-                                          <i class="fas fa-trash"></i>
-                                          Deletar
-                                        </a>
-                                      </li>
-                                    </ul>
+                                  <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+                                    <div class="d-flex justify-content-between">
+                                      <strong class="text-gray-dark"><c:out value="${u.nome}" /></strong>
+                                      <div class="dropdown">
+                                        <a href="" class="link-secondary" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
+
+                                        <ul class="dropdown-menu dropdown-menu-dark mx-0 shadow" style="width: 220px;">
+                                          <li>
+                                            <a class="dropdown-item d-flex gap-2 align-items-center" href="#">
+                                              <i class="fas fa-eye"></i>
+                                              Ver
+                                            </a>
+                                          </li>
+                                          <li>
+                                            <a class="dropdown-item d-flex gap-2 align-items-center" href="#">
+                                              <i class="fas fa-pen"></i>
+                                              Editar
+                                            </a>
+                                          </li>
+                                          <li><hr class="dropdown-divider"></li>
+                                          <li>
+                                            <a class="dropdown-item dropdown-item-danger d-flex gap-2 align-items-center" href="#">
+                                              <i class="fas fa-user-slash"></i>
+                                              Suspender
+                                            </a>
+                                          </li>
+                                          <li>
+                                            <a class="dropdown-item dropdown-item-danger d-flex gap-2 align-items-center" href="#">
+                                              <i class="fas fa-trash"></i>
+                                              Deletar
+                                            </a>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                    <span class="d-block"><c:out value="${u.cpf}" /></span>
                                   </div>
                                 </div>
-                                <span class="d-block">#cpf</span>
-                              </div>
-                            </div>
-                            <div class="d-flex text-muted pt-3">
-                              <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#007bff"></rect><text x="50%" y="50%" fill="#007bff" dy=".3em">32x32</text></svg>
-
-                              <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
-                                <div class="d-flex justify-content-between">
-                                  <strong class="text-gray-dark">Full Name</strong>
-                                  <div class="dropdown">
-                                    <a href="" class="link-secondary" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
-                                    
-                                    <ul class="dropdown-menu dropdown-menu-dark mx-0 shadow" style="width: 220px;">
-                                      <li>
-                                        <a class="dropdown-item d-flex gap-2 align-items-center" href="#">
-                                          <i class="fas fa-eye"></i>
-                                          Ver
-                                        </a>
-                                      </li>
-                                      <li>
-                                        <a class="dropdown-item d-flex gap-2 align-items-center" href="#">
-                                          <i class="fas fa-pen"></i>
-                                          Editar
-                                        </a>
-                                      </li>
-                                      <li><hr class="dropdown-divider"></li>
-                                      <li>
-                                        <a class="dropdown-item dropdown-item-danger d-flex gap-2 align-items-center" href="#">
-                                          <i class="fas fa-trash"></i>
-                                          Deletar
-                                        </a>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
-                                <span class="d-block">#cpf</span>
-                              </div>
-                            </div>
-                            <div class="d-flex text-muted pt-3">
-                              <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#007bff"></rect><text x="50%" y="50%" fill="#007bff" dy=".3em">32x32</text></svg>
-
-                              <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
-                                <div class="d-flex justify-content-between">
-                                  <strong class="text-gray-dark">Full Name</strong>
-                                  <div class="dropdown">
-                                    <a href="" class="link-secondary" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
-                                    
-                                    <ul class="dropdown-menu dropdown-menu-dark mx-0 shadow" style="width: 220px;">
-                                      <li>
-                                        <a class="dropdown-item d-flex gap-2 align-items-center" href="#">
-                                          <i class="fas fa-eye"></i>
-                                          Ver
-                                        </a>
-                                      </li>
-                                      <li>
-                                        <a class="dropdown-item d-flex gap-2 align-items-center" href="#">
-                                          <i class="fas fa-pen"></i>
-                                          Editar
-                                        </a>
-                                      </li>
-                                      <li><hr class="dropdown-divider"></li>
-                                      <li>
-                                        <a class="dropdown-item dropdown-item-danger d-flex gap-2 align-items-center" href="#">
-                                          <i class="fas fa-trash"></i>
-                                          Deletar
-                                        </a>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
-                                <span class="d-block">#cpf</span>
-                              </div>
-                            </div>
+                            </c:forEach>
                             <small class="d-block text-end mt-3">
                               <a href="#">Todos os usuarios</a>
                             </small>
@@ -432,4 +364,3 @@
         <jsp:include page="./assets/includes/scripts.html" />
     </body>
 </html>
-<% } %>

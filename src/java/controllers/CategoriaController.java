@@ -33,14 +33,20 @@ public class CategoriaController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String descricao = request.getParameter("descricao");
-        CategoriaDAO catDAO = new CategoriaDAO();
-        Categoria tag = new Categoria();
         
-        tag.setDescricao(descricao);
-        catDAO.store(tag);
-        
-        request.getSession().setAttribute("success", "Categoria adicionada ao sistema!");
-        response.sendRedirect("settings.jsp");
+        if(descricao == null || descricao.equals("")) {
+            request.getSession().setAttribute("error", "O campo descricao nao pode ser nulo.");
+            response.sendRedirect("home");
+        } else {
+            CategoriaDAO catDAO = new CategoriaDAO();
+            Categoria tag = new Categoria();
+
+            tag.setDescricao(descricao);
+            catDAO.store(tag);
+
+            request.getSession().setAttribute("success", "Categoria adicionada ao sistema!");
+            response.sendRedirect("home");
+        }
         
     }
 

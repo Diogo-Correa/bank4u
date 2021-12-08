@@ -6,8 +6,6 @@
 package models;
 
 import app.Administrador;
-import configs.Connect;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,35 +15,31 @@ import java.sql.SQLException;
  * @author Diogo
  */
 public class AdministradorDAO {
-    private Connection conexao;
     
-    public AdministradorDAO() {
-        try {
-            conexao = Connect.openConnection();
-        } catch(SQLException e) {
-            System.out.println("DAO connection error.");
-            System.out.println(e);
-        }
-    }
-
     public boolean store(Administrador user) {
+        Connect conn = new Connect();
+        boolean stored = false;
         try {
-            PreparedStatement stmt = conexao.prepareStatement("INSERT INTO administradores (nome, cpf, senha) VALUES (?,?,?)");
+            PreparedStatement stmt = conn.getConn().prepareStatement("INSERT INTO administradores (nome, cpf, senha) VALUES (?,?,?)");
             stmt.setString(1, user.getNome());
             stmt.setString(2, user.getCpf());
             stmt.setString(3, user.getSenha());
             stmt.execute();
+            stored = true;
         } catch(SQLException e) {
             System.out.println("DAO adminStore error.");
             System.out.println(e);
+        } finally {
+            conn.closeConn();
         }
         return false;
     }
     
     public Administrador getAdministradorAuth(String login, String senha) {
+        Connect conn = new Connect();
         Administrador admin = new Administrador();
         try {
-            PreparedStatement stmt = conexao.prepareStatement("SELECT * FROM administradores WHERE cpf = ? AND senha = ? limit 1");
+            PreparedStatement stmt = conn.getConn().prepareStatement("SELECT * FROM administradores WHERE cpf = ? AND senha = ? limit 1");
             stmt.setString(1, login);
             stmt.setString(2, senha);
             ResultSet rs = stmt.executeQuery();
@@ -55,11 +49,13 @@ public class AdministradorDAO {
                 admin.setCpf(rs.getString("cpf")); 
                 admin.setSenha(rs.getString("senha"));
             } else {
-                return null;
+                admin = null;
             }
         } catch(SQLException e) {
             System.out.println("DAO getAdministradorAuth error.");
             System.out.println(e);
+        } finally {
+            conn.closeConn();
         }
         return admin;
     }

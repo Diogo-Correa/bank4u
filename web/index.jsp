@@ -17,19 +17,10 @@
     RF9:
 
 --%>
-
-<% 
-    try {
-        if((boolean) request.getSession().getAttribute("isLoggedIn")) { 
-            if((boolean) request.getSession().getAttribute("isAdmin")) {
-                response.sendRedirect("settings.jsp");
-            } else {
-                response.sendRedirect("dashboard.jsp");
-            }
-        }
-    } catch(Exception e) {
-        System.out.println("isLoggedIn attribute not found.");
-    } 
+<%
+    if((boolean) request.getSession().getAttribute("isLoggedIn")) {
+        response.sendRedirect("home");
+    }
 %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

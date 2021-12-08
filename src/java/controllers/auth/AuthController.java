@@ -43,16 +43,11 @@ public class AuthController extends HttpServlet {
         UsuarioDAO userDAO = new UsuarioDAO();
         Usuario user = userDAO.getUsuarioAuth(userCPF, userPassword);
 
-        if(user != null) {
-            request.getSession().setAttribute("authUser", user);
-            request.getSession().setAttribute("isAdmin", false);
+        if(user != null || admin != null) {
+            request.getSession().setAttribute("authUser", (user != null) ? user : admin);
+            request.getSession().setAttribute("isAdmin", (user != null) ? false : true);
             request.getSession().setAttribute("isLoggedIn", true);
-            response.sendRedirect("dashboard.jsp");
-        } else if(admin != null) { 
-            request.getSession().setAttribute("authUser", admin);
-            request.getSession().setAttribute("isAdmin", true);
-            request.getSession().setAttribute("isLoggedIn", true);
-            response.sendRedirect("settings.jsp");
+            response.sendRedirect("home");
         } else {
             request.getSession().setAttribute("isLoggedIn", false);
             request.getSession().setAttribute("error", "Credenciais incorretas");

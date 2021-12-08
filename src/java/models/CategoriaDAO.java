@@ -6,8 +6,6 @@
 package models;
 
 import app.Categoria;
-import configs.Connect;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -16,25 +14,20 @@ import java.sql.SQLException;
  * @author Diogo
  */
 public class CategoriaDAO {
-    private Connection conexao;
     
-    public CategoriaDAO() {
-        try {
-            conexao = Connect.openConnection();
-        } catch(SQLException e) {
-            System.out.println("DAO connection error.");
-            System.out.println(e);
-        }
-    }
-
     public boolean store(Categoria tag) {
+        Connect conn = new Connect();
+        boolean stored = false;
         try {
-            PreparedStatement stmt = conexao.prepareStatement("INSERT INTO categorias (descricao) VALUES (?)");
+            PreparedStatement stmt = conn.getConn().prepareStatement("INSERT INTO categorias (descricao) VALUES (?)");
             stmt.setString(1, tag.getDescricao());
             stmt.execute();
+            stored = true;
         } catch(SQLException e) {
             System.out.println("DAO categoriaStore error.");
             System.out.println(e);
+        } finally {
+            conn.closeConn();
         }
         return false;
     }

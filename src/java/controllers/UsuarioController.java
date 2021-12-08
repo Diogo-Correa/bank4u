@@ -20,9 +20,19 @@ import models.UsuarioDAO;
  *
  * @author Diogo
  */
-@WebServlet(name = "UserController", urlPatterns = {"/userStore"})
-public class UserController extends HttpServlet {
+@WebServlet(name = "UserStoreController", urlPatterns = {"/userStore"})
+public class UsuarioController extends HttpServlet {
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String action = request.getParameter("action");
+        
+        switch(action) {
+            case "suspend":
+                System.out.println(request.getParameter("id"));
+                break;
+        }
+    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -64,7 +74,7 @@ public class UserController extends HttpServlet {
         }
         
         request.getSession().setAttribute("success", "Usuario adicionado ao sistema!");
-        response.sendRedirect("settings.jsp");
+        response.sendRedirect("home");
         
     }
 
