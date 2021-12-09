@@ -24,12 +24,19 @@ public class CategoriaController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
         
-        switch(action) {
-            case "delete":
-                deleteCategory(request,response);
-                break;
+        if((!(boolean) request.getSession().getAttribute("isAdmin") || request.getSession().getAttribute("isAdmin") == null) || (!(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null)) {
+            request.getSession().setAttribute("error", "Voce nao tem permissao para acessar essa area!");
+            response.sendRedirect("home");
+        } else {
+        
+            String action = request.getParameter("action");
+
+            switch(action) {
+                case "delete":
+                    deleteCategory(request,response);
+                    break;
+            }
         }
         
     }

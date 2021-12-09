@@ -16,7 +16,7 @@
         
         <jsp:include page="./assets/components/modal/alertMsgs.jsp" />
         
-        <jsp:include page="./assets/components/header/header.html" />
+        <jsp:include page="./assets/components/header/header.jsp" />
         
         <div class="container">
             <button type="button" class="float" title="Novo lancamento" data-bs-toggle="modal" data-bs-target="#novoUser">
