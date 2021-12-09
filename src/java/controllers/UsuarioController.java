@@ -38,6 +38,9 @@ public class UsuarioController extends HttpServlet {
                 case "suspend":
                     suspendUser(request,response);
                     break;
+                case "show":
+                    showUser(request,response);
+                    break;
                 case "delete":
                     deleteUser(request,response);
                     break;
@@ -118,13 +121,55 @@ public class UsuarioController extends HttpServlet {
         } 
     }
     
+    protected void showUser(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            
+            if(request.getParameter("admin") == null && request.getParameter("admin") != "true") {
+                UsuarioDAO userDAO = new UsuarioDAO();
+                Usuario user = userDAO.getByID(id);
+                
+                if(user != null) {
+                    request.getSession().setAttribute("nome", user.getNome());
+                    request.getSession().setAttribute("cpf", user.getCpf());
+                    request.getSession().setAttribute("suspenso", user.getSuspenso());
+
+                    request.getRequestDispatcher("showUser.jsp").forward(request, response);
+                } else {
+                    request.getSession().setAttribute("error", "Usuario nao encontrado!");
+                    response.sendRedirect("home");
+                }
+            } else {
+                AdministradorDAO adminDAO = new AdministradorDAO();
+                Administrador admin = adminDAO.getByID(id);
+                
+                if(admin != null) {
+                    request.getSession().setAttribute("nome", admin.getNome());
+                    request.getSession().setAttribute("cpf", admin.getCpf());
+
+                    request.getRequestDispatcher("showUser.jsp").forward(request, response);
+                } else {
+                    request.getSession().setAttribute("error", "Usuario nao encontrado!");
+                    response.sendRedirect("home");
+                }
+                
+            }
+            
+            
+        } catch(NumberFormatException e) {
+            request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
+            response.sendRedirect("home");
+        }
+    }
+    
     protected void deleteUser(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
         try {
             
             int id = Integer.parseInt(request.getParameter("id"));
-            if(request.getParameter("admin") == null) {
+            if(request.getParameter("admin") == null && request.getParameter("admin") != "true") {
 
                 UsuarioDAO userDAO = new UsuarioDAO();
 
@@ -160,7 +205,6 @@ public class UsuarioController extends HttpServlet {
             
             
         } catch(NumberFormatException e) {
-            
             request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
             response.sendRedirect("home");
             

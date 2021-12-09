@@ -52,7 +52,7 @@
 
                                         <ul class="dropdown-menu dropdown-menu-dark mx-0 shadow" style="width: 220px;">
                                           <li>
-                                            <a class="dropdown-item d-flex gap-2 align-items-center" href="#">
+                                            <a class="dropdown-item d-flex gap-2 align-items-center" href="user?action=show&admin=true&id=${a.id}">
                                               <i class="fas fa-eye"></i>
                                               Ver
                                             </a>
@@ -107,7 +107,7 @@
 
                                         <ul class="dropdown-menu dropdown-menu-dark mx-0 shadow" style="width: 220px;">
                                           <li>
-                                            <a class="dropdown-item d-flex gap-2 align-items-center" href="#">
+                                            <a class="dropdown-item d-flex gap-2 align-items-center" href="user?action=show&id=${u.id}">
                                               <i class="fas fa-eye"></i>
                                               Ver
                                             </a>
