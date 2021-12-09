@@ -191,3 +191,7 @@ section {
         height: 100%;
     }
 }
+
+.modal-alert .modal-dialog {
+  width: 380px;
+}

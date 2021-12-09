@@ -139,13 +139,22 @@
                                           </li>
                                           <li><hr class="dropdown-divider"></li>
                                           <li>
-                                            <a class="dropdown-item dropdown-item-danger d-flex gap-2 align-items-center" href="user?action=suspend&id=${u.id}">
-                                              <i class="fas fa-user-slash"></i>
-                                              Suspender
+                                            <a class="dropdown-item dropdown-item-danger d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#confirmaAction" data-href="user?action=suspend&id=${u.id}" href="#">
+                                              
+                                                <c:choose>
+                                                    <c:when test="${u.isSuspenso()}">
+                                                        <i class="fas fa-user-check"></i>
+                                                        Ativar 
+                                                    </c:when>    
+                                                    <c:otherwise>
+                                                        <i class="fas fa-user-slash"></i>
+                                                        Suspender
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </a>
                                           </li>
                                           <li>
-                                            <a class="dropdown-item dropdown-item-danger d-flex gap-2 align-items-center" href="user?action=delete&id=${u.id}">
+                                            <a class="dropdown-item dropdown-item-danger d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#confirmaAction" data-href="user?action=delete&id=${u.id}" href="#">
                                               <i class="fas fa-trash"></i>
                                               Deletar
                                             </a>
@@ -223,9 +232,11 @@
                 </div>
             </div> 
         </div>
-        
+                            
         <jsp:include page="./assets/components/modal/novoUser.html" />
         <jsp:include page="./assets/components/modal/novaCategoria.html" />
+        
+        <jsp:include page="./assets/components/modal/confirmaAction.html" />
         
         <jsp:include page="./assets/includes/scripts.html" />
     </body>

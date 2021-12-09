@@ -26,6 +26,10 @@ $( document ).ready(function() {
          element.mask("(99)9999-9999?9");
      }
  });
+ 
+    $('#confirmaAction').on('show.bs.modal', function(e) {
+        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+    });
 });
 
 function ValidaCPF(cpfEnviado) {
