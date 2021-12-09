@@ -82,4 +82,17 @@ public class CategoriaDAO {
         return res;
     }
     
+    public void delete(int id) {
+        Connect conn = new Connect();
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("DELETE FROM categorias WHERE id = ?");
+            stmt.setInt(1, id);
+            stmt.execute();
+        } catch(SQLException e) {
+            System.out.println("DAO deleteCategories error");
+        } finally {
+            conn.closeConn();
+        }
+    }
+    
 }

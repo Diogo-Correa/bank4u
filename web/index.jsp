@@ -36,16 +36,7 @@
 </head>
 <body>
     
-    <%
-        if(request.getSession().getAttribute("error") != null) {
-    %>
-            <script>
-                sweetAlert("Oops! :(", `${error}`, "error");
-            </script>
-    <%
-            request.getSession().removeAttribute("error");
-        }
-    %>
+    <jsp:include page="./assets/components/modal/alertMsgs.jsp" />
     
     <jsp:include page="./assets/includes/content.html" />
 

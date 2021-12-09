@@ -113,4 +113,41 @@ public class AdministradorDAO {
         return res;
     }
     
+    public Administrador getByID(int id) {
+        Connect conn = new Connect();
+        Administrador admin = new Administrador();
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("SELECT * FROM administradores WHERE id = ? limit 1");
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                admin.setId(rs.getInt("id")); 
+                admin.setNome(rs.getString("nome")); 
+                admin.setCpf(rs.getString("cpf")); 
+                admin.setSenha(rs.getString("senha"));
+            } else {
+                admin = null;
+            }
+        } catch(SQLException e) {
+            System.out.println("DAO getUsuarioAuth error.");
+            System.out.println(e);
+        } finally {
+            conn.closeConn();
+        }
+        return admin;
+    }
+    
+    public void delete(int id) {
+        Connect conn = new Connect();
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("DELETE FROM administradores WHERE id = ?");
+            stmt.setInt(1, id);
+            stmt.execute();
+        } catch(SQLException e) {
+            System.out.println("DAO deleteAdmin error");
+        } finally {
+            conn.closeConn();
+        }
+    }
+    
 }

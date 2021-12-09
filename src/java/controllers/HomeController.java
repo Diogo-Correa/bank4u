@@ -47,8 +47,8 @@ public class HomeController extends HttpServlet {
                 request.setAttribute("admins", new AdministradorDAO().getThreeAdmins());
                 request.setAttribute("adminsCount", new AdministradorDAO().getAll().size());
                 
-                request.setAttribute("tags", new CategoriaDAO().getThreeTags());
-                request.setAttribute("tagsCount", new CategoriaDAO().getAll().size());
+                request.setAttribute("categories", new CategoriaDAO().getThreeTags());
+                request.setAttribute("categoriesCount", new CategoriaDAO().getAll().size());
                 
                 request.setAttribute("authName", admin.getNome());
                 request.getRequestDispatcher("settings.jsp").forward(request, response);

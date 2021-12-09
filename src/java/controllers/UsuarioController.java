@@ -92,10 +92,15 @@ public class UsuarioController extends HttpServlet {
             UsuarioDAO userDAO = new UsuarioDAO();
             Usuario user = userDAO.getByID(id);
             
-            userDAO.suspendUser(user);
+            if(userDAO.getByID(id) != null) {
+                userDAO.suspendUser(user);
             
-            request.getSession().setAttribute("success",(user.isSuspenso()) ? "Usuario ativo no sistema!" : "Usuario suspenso do sistema!");
-            response.sendRedirect("home");
+                request.getSession().setAttribute("success",(user.isSuspenso()) ? "Usuario ativo no sistema!" : "Usuario suspenso do sistema!");
+                response.sendRedirect("home");
+            } else {
+                request.getSession().setAttribute("error", "Usuario nao encontrado!");
+                response.sendRedirect("home");
+            }
             
             
         } catch(NumberFormatException e) {
@@ -110,14 +115,41 @@ public class UsuarioController extends HttpServlet {
             throws ServletException, IOException {
         
         try {
+            
             int id = Integer.parseInt(request.getParameter("id"));
-            
-            UsuarioDAO userDAO = new UsuarioDAO();
-            
-            userDAO.delete(id);
-            
-            request.getSession().setAttribute("success", "Usuario removido do sistema!");
-            response.sendRedirect("home");
+            if(request.getParameter("admin") == null) {
+
+                UsuarioDAO userDAO = new UsuarioDAO();
+
+                if(userDAO.getByID(id) != null) {
+                    userDAO.delete(id);
+
+                    request.getSession().setAttribute("success", "Usuario removido do sistema!");
+                    response.sendRedirect("home");
+                } else {
+                    request.getSession().setAttribute("error", "Usuario nao encontrado!");
+                    response.sendRedirect("home");
+                }
+                
+            } else {
+                Administrador authAdmin = (Administrador) request.getSession().getAttribute("authUser");
+                AdministradorDAO adminDAO = new AdministradorDAO();
+
+                if(adminDAO.getByID(id) != null && id != authAdmin.getId()) {
+                    adminDAO.delete(id);
+
+                    request.getSession().setAttribute("success", "Administrador removido do sistema!");
+                    response.sendRedirect("home");
+                } else {
+                    if(id != authAdmin.getId()) {
+                        request.getSession().setAttribute("error", "Administrador nao encontrado!");
+                        response.sendRedirect("home");
+                    } else {
+                        request.getSession().setAttribute("error", "Voce nao pode se remover do sistema!");
+                        response.sendRedirect("home");
+                    }
+                }
+            }
             
             
         } catch(NumberFormatException e) {

@@ -18,9 +18,22 @@ import models.CategoriaDAO;
  *
  * @author Diogo
  */
-@WebServlet(name = "CategoriaController", urlPatterns = {"/categoriaStore"})
+@WebServlet(name = "CategoriaController", urlPatterns = {"/category"})
 public class CategoriaController extends HttpServlet {
 
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String action = request.getParameter("action");
+        
+        switch(action) {
+            case "delete":
+                deleteCategory(request,response);
+                break;
+        }
+        
+    }
+    
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -48,6 +61,28 @@ public class CategoriaController extends HttpServlet {
             response.sendRedirect("home");
         }
         
+    }
+    
+    protected void deleteCategory(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            
+            CategoriaDAO catDAO = new CategoriaDAO();
+            
+            catDAO.delete(id);
+            
+            request.getSession().setAttribute("success", "Categoria removido do sistema!");
+            response.sendRedirect("home");
+            
+            
+        } catch(NumberFormatException e) {
+            
+            request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
+            response.sendRedirect("home");
+            
+        } 
     }
 
 }
