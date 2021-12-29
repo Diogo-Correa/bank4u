@@ -33,8 +33,14 @@ public class CategoriaController extends HttpServlet {
             String action = request.getParameter("action");
 
             switch(action) {
+                case "show":
+                    show(request,response);
+                    break;
+                case "edit":
+                    edit(request,response);
+                    break;
                 case "delete":
-                    deleteCategory(request,response);
+                    delete(request,response);
                     break;
             }
         }
@@ -52,6 +58,28 @@ public class CategoriaController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        if((!(boolean) request.getSession().getAttribute("isAdmin") || request.getSession().getAttribute("isAdmin") == null) || (!(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null)) {
+            request.getSession().setAttribute("error", "Voce nao tem permissao para acessar essa area!");
+            response.sendRedirect("home");
+        } else {
+        
+            String action = request.getParameter("action");
+
+            switch(action) {
+                case "store":
+                    store(request,response);
+                    break;
+                case "update":
+                    update(request,response);
+                    break;
+            }
+        }
+    }
+    
+    protected void store(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
         String descricao = request.getParameter("descricao");
         
         if(descricao == null || descricao.equals("")) {
@@ -70,7 +98,80 @@ public class CategoriaController extends HttpServlet {
         
     }
     
-    protected void deleteCategory(HttpServletRequest request, HttpServletResponse response)
+    protected void show(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            
+            CategoriaDAO catDAO = new CategoriaDAO();
+            Categoria categoria = catDAO.getByID(id);
+
+            if(categoria != null) {
+                request.getSession().setAttribute("nome", categoria.getDescricao());
+
+                request.getRequestDispatcher("resources/categorias/show.jsp").forward(request, response);
+            } else {
+                request.getSession().setAttribute("error", "Categoria nao encontrada!");
+                response.sendRedirect("home");
+                }
+            
+        } catch(NumberFormatException e) {
+            request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
+            response.sendRedirect("home");
+        }
+    }
+    
+    protected void edit(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            
+            CategoriaDAO catDAO = new CategoriaDAO();
+            Categoria categoria = catDAO.getByID(id);
+
+            if(categoria != null) {
+                request.getSession().setAttribute("id", categoria.getId());
+                request.getSession().setAttribute("nome", categoria.getDescricao());
+
+                request.getRequestDispatcher("resources/categorias/edit.jsp").forward(request, response);
+            } else {
+                request.getSession().setAttribute("error", "Categoria nao encontrada!");
+                response.sendRedirect("home");
+                }
+            
+        } catch(NumberFormatException e) {
+            request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
+            response.sendRedirect("home");
+        }
+    }
+    
+    protected void update(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            String descricao = request.getParameter("descricao");
+            
+                    CategoriaDAO catDAO = new CategoriaDAO();
+                    Categoria cat = catDAO.getByID(id);
+
+                    if(cat != null) {
+                        cat.setDescricao(descricao);
+                        catDAO.update(cat);
+                        
+                        request.getSession().setAttribute("success", "Categoria atualizada no sistema!");
+                        response.sendRedirect("home");
+                    } else {
+                        request.getSession().setAttribute("error", "Categoria nao encontrada!");
+                        response.sendRedirect("home");
+                    }
+            
+        } catch(NumberFormatException e) {
+            request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
+            response.sendRedirect("home");
+        }
+    }
+    
+    protected void delete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
         try {

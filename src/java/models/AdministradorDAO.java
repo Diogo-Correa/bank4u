@@ -36,6 +36,23 @@ public class AdministradorDAO {
         return false;
     }
     
+    public Administrador update(Administrador admin) {
+        Connect conn = new Connect();
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("UPDATE administradores SET nome = ?, cpf = ? WHERE id = ?");
+            stmt.setString(1, admin.getNome());
+            stmt.setString(2, admin.getCpf());
+            stmt.setInt(3, admin.getId());
+            stmt.execute();
+        } catch(SQLException e) {
+            System.out.println("DAO updateUser error.");
+            System.out.println(e);
+        } finally {
+            conn.closeConn();
+        }
+        return admin;
+    }
+    
     public Administrador getAdministradorAuth(String login, String senha) {
         Connect conn = new Connect();
         Administrador admin = new Administrador();
@@ -119,6 +136,30 @@ public class AdministradorDAO {
         try {
             PreparedStatement stmt = conn.getConn().prepareStatement("SELECT * FROM administradores WHERE id = ? limit 1");
             stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                admin.setId(rs.getInt("id")); 
+                admin.setNome(rs.getString("nome")); 
+                admin.setCpf(rs.getString("cpf")); 
+                admin.setSenha(rs.getString("senha"));
+            } else {
+                admin = null;
+            }
+        } catch(SQLException e) {
+            System.out.println("DAO getUsuarioAuth error.");
+            System.out.println(e);
+        } finally {
+            conn.closeConn();
+        }
+        return admin;
+    }
+    
+    public Administrador getByCPF(String cpf) {
+        Connect conn = new Connect();
+        Administrador admin = new Administrador();
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("SELECT * FROM administradores WHERE cpf = ? limit 1");
+            stmt.setString(1, cpf);
             ResultSet rs = stmt.executeQuery();
             if(rs.next()) {
                 admin.setId(rs.getInt("id")); 

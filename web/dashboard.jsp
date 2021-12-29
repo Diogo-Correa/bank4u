@@ -26,7 +26,7 @@
             
             <div class="alert alert-info">
                 <i class="fas fa-wallet me-2"></i>
-                Ola <%= user.getNome()  %>, parece que voce ainda nao tem uma conta cadastrada, clique <a class="alert-link" href=""  data-bs-toggle="modal" data-bs-target="#novaConta">aqui</a> para cadastrar uma.
+                Ola <%= user.getNome() %>, parece que voce ainda nao tem uma conta cadastrada, clique <a class="alert-link" href=""  data-bs-toggle="modal" data-bs-target="#novaConta">aqui</a> para cadastrar uma.
             </div>
             
             <div class="row">

@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package app;
+package app.util.errors;
 
 /**
  *
  * @author Diogo
  */
-public class Administrador extends User {
-    public Administrador() {
-        setAdmin(true);
+public class RoleException extends Exception {
+    public RoleException() {
+        super("Informe um nivel de acesso valido! (Admin ou Usuario)");
     }
 }

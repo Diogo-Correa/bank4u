@@ -58,7 +58,7 @@
                                             </a>
                                           </li>
                                           <li>
-                                            <a class="dropdown-item d-flex gap-2 align-items-center" href="#">
+                                            <a class="dropdown-item d-flex gap-2 align-items-center" href="user?action=edit&admin=true&id=${a.id}">
                                               <i class="fas fa-pen"></i>
                                               Editar
                                             </a>
@@ -113,7 +113,7 @@
                                             </a>
                                           </li>
                                           <li>
-                                            <a class="dropdown-item d-flex gap-2 align-items-center" href="#">
+                                            <a class="dropdown-item d-flex gap-2 align-items-center" href="user?action=edit&id=${u.id}">
                                               <i class="fas fa-pen"></i>
                                               Editar
                                             </a>
@@ -180,13 +180,13 @@
 
                                         <ul class="dropdown-menu dropdown-menu-dark mx-0 shadow" style="width: 220px;">
                                           <li>
-                                            <a class="dropdown-item d-flex gap-2 align-items-center" href="#">
+                                            <a class="dropdown-item d-flex gap-2 align-items-center" href="category?action=show&id=${c.id}">
                                               <i class="fas fa-eye"></i>
                                               Ver
                                             </a>
                                           </li>
                                           <li>
-                                            <a class="dropdown-item d-flex gap-2 align-items-center" href="#">
+                                            <a class="dropdown-item d-flex gap-2 align-items-center" href="category?action=edit&id=${c.id}">
                                               <i class="fas fa-pen"></i>
                                               Editar
                                             </a>
@@ -206,7 +206,7 @@
                                 </div>
                             </c:forEach>
                             <small class="d-block text-end mt-3">
-                              <a href="#">Todos os usuarios</a>
+                              <a href="#">Todos as categorias</a>
                             </small>
                         </div>
                     </div>

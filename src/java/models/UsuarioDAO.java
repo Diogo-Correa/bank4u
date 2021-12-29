@@ -133,7 +133,49 @@ public class UsuarioDAO {
                 user = null;
             }
         } catch(SQLException e) {
-            System.out.println("DAO getUsuarioAuth error.");
+            System.out.println("DAO getUsuarioGetID error.");
+            System.out.println(e);
+        } finally {
+            conn.closeConn();
+        }
+        return user;
+    }
+    
+    public Usuario getByCPF(String cpf) {
+        Connect conn = new Connect();
+        Usuario user = new Usuario();
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("SELECT * FROM usuarios WHERE cpf = ? limit 1");
+            stmt.setString(1, cpf);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                user.setId(rs.getInt("id")); 
+                user.setNome(rs.getString("nome")); 
+                user.setCpf(rs.getString("cpf")); 
+                user.setSenha(rs.getString("senha"));
+                user.setSuspenso(rs.getString("suspenso"));
+            } else {
+                user = null;
+            }
+        } catch(SQLException e) {
+            System.out.println("DAO getUsuarioGetCPF error.");
+            System.out.println(e);
+        } finally {
+            conn.closeConn();
+        }
+        return user;
+    }
+    
+    public Usuario update(Usuario user) {
+        Connect conn = new Connect();
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("UPDATE usuarios SET nome = ?, cpf = ? WHERE id = ?");
+            stmt.setString(1, user.getNome());
+            stmt.setString(2, user.getCpf());
+            stmt.setInt(3, user.getId());
+            stmt.execute();
+        } catch(SQLException e) {
+            System.out.println("DAO updateUser error.");
             System.out.println(e);
         } finally {
             conn.closeConn();

@@ -82,6 +82,44 @@ public class CategoriaDAO {
         return res;
     }
     
+    public Categoria getByID(int id) {
+        Connect conn = new Connect();
+        Categoria user = new Categoria();
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("SELECT * FROM categorias WHERE id = ? limit 1");
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                user.setId(rs.getInt("id")); 
+                user.setDescricao(rs.getString("descricao")); 
+            } else {
+                user = null;
+            }
+        } catch(SQLException e) {
+            System.out.println("DAO getDescricaoAuth error.");
+            System.out.println(e);
+        } finally {
+            conn.closeConn();
+        }
+        return user;
+    }
+    
+    public Categoria update(Categoria cat) {
+        Connect conn = new Connect();
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("UPDATE categorias SET descricao = ? WHERE id = ?");
+            stmt.setString(1, cat.getDescricao());
+            stmt.setInt(2, cat.getId());
+            stmt.execute();
+        } catch(SQLException e) {
+            System.out.println("DAO updateCategory error.");
+            System.out.println(e);
+        } finally {
+            conn.closeConn();
+        }
+        return cat;
+    }
+    
     public void delete(int id) {
         Connect conn = new Connect();
         try {

@@ -38,6 +38,13 @@ public class HomeController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         if(request.getSession().getAttribute("isLoggedIn") != null && (boolean) request.getSession().getAttribute("isLoggedIn") && request.getSession().getAttribute("authUser") != null) {
+            
+            request.getSession().removeAttribute("id");
+            request.getSession().removeAttribute("nome");
+            request.getSession().removeAttribute("cpf");
+            request.getSession().removeAttribute("suspenso");
+            request.getSession().removeAttribute("admin");
+            
             if((boolean) request.getSession().getAttribute("isAdmin")) {
                 Administrador admin = (Administrador) request.getSession().getAttribute("authUser");
                 

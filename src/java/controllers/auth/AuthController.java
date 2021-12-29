@@ -44,7 +44,7 @@ public class AuthController extends HttpServlet {
         Usuario user = userDAO.getUsuarioAuth(userCPF, userPassword);
 
         if(user != null && user.isSuspenso()) {
-            request.getSession().setAttribute("isLoggedIn", false);
+            request.getSession().removeAttribute("isLoggedIn");
             request.getSession().setAttribute("error", "Voce esta suspenso do sistema!");
             response.sendRedirect("/banco");
         } else {
@@ -54,7 +54,7 @@ public class AuthController extends HttpServlet {
                 request.getSession().setAttribute("isLoggedIn", true);
                 response.sendRedirect("home");
             } else {
-                request.getSession().setAttribute("isLoggedIn", false);
+                request.getSession().removeAttribute("isLoggedIn");
                 request.getSession().setAttribute("error", "Credenciais incorretas");
                 response.sendRedirect("/banco");
             }

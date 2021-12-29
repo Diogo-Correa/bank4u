@@ -5,42 +5,14 @@
  */
 package app;
 
-public class Usuario {
-    private int id;
-    private String nome, cpf, senha, suspenso;
-
-    public int getId() {
-        return this.id;
-    }
-
-    public void setId(int value) {
-        this.id = value;
-    }
-
-    public String getNome() {
-        return this.nome;
-    }
-
-    public void setNome(String value) {
-        this.nome = value;
-    }
-
-    public String getCpf() {
-        return this.cpf;
+public class Usuario extends User {
+    
+    public Usuario() {
+        setAdmin(false);
     }
     
-    public void setCpf(String value) {
-        this.cpf = value;
-    }
-
-    public String getSenha() {
-        return this.senha;
-    }
-
-    public void setSenha(String value) {
-        this.senha = value;
-    }
-    
+    private String suspenso;
+   
     public String getSuspenso() {
         return this.suspenso;
     }
