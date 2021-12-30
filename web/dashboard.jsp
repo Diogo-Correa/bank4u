@@ -5,7 +5,7 @@
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8" import="app.Usuario"%>
 <!DOCTYPE html>
-<html>
+<html style="background-color: #efefef !important;">
     <head>
         <jsp:include page="./assets/includes/head.html" />
         <title>4U - Dashboard</title>
@@ -39,7 +39,7 @@
                             </h5>
                         </div>
                         <div class="card-body">
-                            asd
+                            <div id="calendar"></div>
                         </div>
                     </div>
                 </div>
@@ -64,5 +64,45 @@
         
         
         <jsp:include page="./assets/includes/scripts.html" />
+        
+        <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+          var calendarEl = document.getElementById('calendar');
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+            locale: 'pt-br',
+            initialView: 'listMonth',
+            events: [
+            { // this object will be "parsed" into an Event Object
+              title: 'Salario', // a property!
+              start: '2021-11-01', // a property!
+              end: '2021-11-01' // a property! ** see important note below about 'end' **
+            },
+            { // this object will be "parsed" into an Event Object
+              title: 'Salario', // a property!
+              start: '2021-12-01', // a property!
+              end: '2021-12-01' // a property! ** see important note below about 'end' **
+            },
+            { // this object will be "parsed" into an Event Object
+              title: 'Deposito', // a property!
+              start: '2021-12-01', // a property!
+              end: '2021-12-01' // a property! ** see important note below about 'end' **
+            },
+            { // this object will be "parsed" into an Event Object
+              title: 'Transferencia', // a property!
+              start: '2021-12-30', // a property!
+              end: '2021-12-30' // a property! ** see important note below about 'end' **
+            },
+            { // this object will be "parsed" into an Event Object
+              title: 'Saque', // a property!
+              start: '2021-12-31', // a property!
+              end: '2021-12-31' // a property! ** see important note below about 'end' **
+            }
+          ]
+          });
+          calendar.render();
+        });
+
+      </script>
     </body>
 </html>

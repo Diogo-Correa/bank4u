@@ -7,9 +7,11 @@ package controllers;
 
 import app.Administrador;
 import app.Usuario;
+import app.User;
 import app.util.errors.*;
 import app.util.validate.UserFormValidate;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -38,20 +40,24 @@ public class UsuarioController extends HttpServlet {
         
             String action = request.getParameter("action");
 
-            switch(action) {
-                case "suspend":
-                    suspend(request,response);
-                    break;
-                case "show":
-                    show(request,response);
-                    break;
-                case "edit":
-                    edit(request,response);
-                    break;
-                case "delete":
-                    delete(request,response);
-                    break;
+            if(action == null) index(request, response);
+            else {
+                switch(action) {
+                    case "suspend":
+                        suspend(request,response);
+                        break;
+                    case "show":
+                        show(request,response);
+                        break;
+                    case "edit":
+                        edit(request,response);
+                        break;
+                    case "delete":
+                        delete(request,response);
+                        break;
+                }
             }
+            
         }
         
     }
@@ -85,6 +91,30 @@ public class UsuarioController extends HttpServlet {
             }
         }
     }
+    
+    
+    // Controle de rota GET para index route.
+    protected void index(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+            ArrayList<Object> res = new ArrayList<>();    
+        
+            AdministradorDAO adminDAO = new AdministradorDAO();
+            UsuarioDAO userDAO = new UsuarioDAO();
+            
+            adminDAO.getAll().forEach((admin) -> {
+                res.add(admin);
+            });
+            
+            userDAO.getAll().forEach((user) -> {
+                res.add(user);
+            });
+        
+            request.getSession().setAttribute("users", res);
+            
+            request.getRequestDispatcher(this.resource + "index.jsp").forward(request, response);
+    }
+    
     
     // Controle de rota POST para armazenar no bd.
     protected void store(HttpServletRequest request, HttpServletResponse response)
@@ -269,45 +299,45 @@ public class UsuarioController extends HttpServlet {
     protected void update(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            UsuarioDAO userDAO = new UsuarioDAO();
+            AdministradorDAO adminDAO = new AdministradorDAO();
+            User user;
+            UserFormValidate validate = new UserFormValidate();
+            
             int id = Integer.parseInt(request.getParameter("id"));
             String nome = request.getParameter("nome");
             String cpf = request.getParameter("cpf");
 
+            
             if(request.getParameter("admin") == null && request.getParameter("admin") != "true") {
-                    UsuarioDAO userDAO = new UsuarioDAO();
-                    Usuario user = userDAO.getByID(id);
-
-                    if(user != null) {
-                        user.setNome(nome);
-                        user.setCpf(cpf);
-                        userDAO.update(user);
-                        
-                        request.getSession().setAttribute("success", "Usuario atualizado no sistema!");
-                        response.sendRedirect("home");
-                    } else {
-                        request.getSession().setAttribute("error", "Usuario nao encontrado!");
-                        response.sendRedirect("home");
-                    }
-
+                user = userDAO.getByID(id);
             } else {
-                    AdministradorDAO adminDAO = new AdministradorDAO();
-                    Administrador admin = adminDAO.getByID(id);
-
-                    if(admin != null) {
-                        admin.setNome(nome);
-                        admin.setCpf(cpf);
-                        adminDAO.update(admin);
-                        
-                        request.getSession().setAttribute("success", "Admin atualizado no sistema!");
-                        response.sendRedirect("home");
-                    } else {
-                        request.getSession().setAttribute("error", "Usuario nao encontrado!");
-                        response.sendRedirect("home");
-                    }
+                user = adminDAO.getByID(id);
             }
+            
+            if(user == null) throw new UserNotFoundException();
+            
+            if(adminDAO.getByCPF(cpf) != null && id != adminDAO.getByCPF(cpf).getId() || userDAO.getByCPF(cpf) != null && id != userDAO.getByCPF(cpf).getId()) throw new CPFCadastradoException();
+            
+            // Validar campos do formulario
+            if(!validate.validateNull(nome)) throw new NullTextInputException("nome");
+            if(!validate.validateNull(cpf)) throw new NullTextInputException("cpf");
+            if(!validate.validateText(nome, 20)) throw new MaxLengthTextInputException("nome", 20);
+            if(!validate.validateTextEqualsLength(cpf, 14)) throw new EqualsLengthTextInputException("cpf", 11);
+            
+            user.setNome(nome);
+            user.setCpf(cpf);
+            if(user.isAdmin()) adminDAO.update((Administrador) user); 
+            else userDAO.update((Usuario) user);
+
+            request.getSession().setAttribute("success", "Usuario atualizado no sistema!");
+            response.sendRedirect("home");
             
         } catch(NumberFormatException e) {
             request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
+            response.sendRedirect("home");
+        } catch(UserNotFoundException | CPFCadastradoException | NullTextInputException | MaxLengthTextInputException | EqualsLengthTextInputException err) {
+            request.getSession().setAttribute("error", err.getMessage());
             response.sendRedirect("home");
         }
     }
@@ -329,8 +359,7 @@ public class UsuarioController extends HttpServlet {
                     request.getSession().setAttribute("success", "Usuario removido do sistema!");
                     response.sendRedirect("home");
                 } else {
-                    request.getSession().setAttribute("error", "Usuario nao encontrado!");
-                    response.sendRedirect("home");
+                    throw new UserNotFoundException();
                 }
                 
             } else {
@@ -344,8 +373,7 @@ public class UsuarioController extends HttpServlet {
                     response.sendRedirect("home");
                 } else {
                     if(id != authAdmin.getId()) {
-                        request.getSession().setAttribute("error", "Administrador nao encontrado!");
-                        response.sendRedirect("home");
+                        throw new UserNotFoundException();
                     } else {
                         request.getSession().setAttribute("error", "Voce nao pode se remover do sistema!");
                         response.sendRedirect("home");
@@ -357,7 +385,9 @@ public class UsuarioController extends HttpServlet {
         } catch(NumberFormatException e) {
             request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
             response.sendRedirect("home");
-            
-        } 
+        } catch(UserNotFoundException err) {
+            request.getSession().setAttribute("error", err.getMessage());
+            response.sendRedirect("home");
+        }
     }
 }

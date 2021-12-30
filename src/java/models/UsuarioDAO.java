@@ -50,7 +50,9 @@ public class UsuarioDAO {
                 //que vieram do BD
                 Usuario usuario = new Usuario();
                 usuario.setId(rs.getInt("id"));
+                usuario.setCpf(rs.getString("cpf"));
                 usuario.setNome(rs.getString("nome"));
+                usuario.setSuspenso(rs.getString("suspenso"));
                 res.add(usuario);
             }
         } catch (SQLException e) {

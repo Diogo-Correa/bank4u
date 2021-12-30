@@ -35,17 +35,20 @@ public class CategoriaController extends HttpServlet {
         } else {
         
             String action = request.getParameter("action");
-
-            switch(action) {
-                case "show":
-                    show(request,response);
-                    break;
-                case "edit":
-                    edit(request,response);
-                    break;
-                case "delete":
-                    delete(request,response);
-                    break;
+            
+            if(action == null) index(request, response);
+            else {
+                switch(action) {
+                    case "show":
+                        show(request,response);
+                        break;
+                    case "edit":
+                        edit(request,response);
+                        break;
+                    case "delete":
+                        delete(request,response);
+                        break;
+                }
             }
         }
         
@@ -79,6 +82,17 @@ public class CategoriaController extends HttpServlet {
                     break;
             }
         }
+    }
+    
+    // Controle de rota GET para index route.
+    protected void index(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+          
+            CategoriaDAO catDAO = new CategoriaDAO();
+        
+            request.getSession().setAttribute("categories", catDAO.getAll());
+            
+            request.getRequestDispatcher(this.resource + "index.jsp").forward(request, response);
     }
     
     protected void store(HttpServletRequest request, HttpServletResponse response)
@@ -164,22 +178,34 @@ public class CategoriaController extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
             String descricao = request.getParameter("descricao");
             
-                    CategoriaDAO catDAO = new CategoriaDAO();
-                    Categoria cat = catDAO.getByID(id);
-
-                    if(cat != null) {
-                        cat.setDescricao(descricao);
-                        catDAO.update(cat);
-                        
-                        request.getSession().setAttribute("success", "Categoria atualizada no sistema!");
-                        response.sendRedirect("home");
-                    } else {
-                        request.getSession().setAttribute("error", "Categoria nao encontrada!");
-                        response.sendRedirect("home");
-                    }
+            CategoriaDAO catDAO = new CategoriaDAO();
+            Categoria cat = catDAO.getByID(id);
+            Categoria catDesc = catDAO.getByDescricao(descricao);
             
-        } catch(NumberFormatException e) {
+            if(catDesc != null && id != catDesc.getId()) throw new DescricaoCategoriaException();
+            else {
+                CategoriaFormValidate validate = new CategoriaFormValidate();
+
+                if(!validate.validateText(descricao, 20)) throw new MaxLengthTextInputException("descricao", 20);
+                if(!validate.validateNull(descricao)) throw new NullTextInputException("descricao");
+
+
+                if(cat != null) {
+                    cat.setDescricao(descricao);
+                    catDAO.update(cat);
+
+                    request.getSession().setAttribute("success", "Categoria atualizada no sistema!");
+                    response.sendRedirect("home");
+                } else {
+                    throw new CategoryNotFoundException();
+                }
+            }
+            
+        } catch(NumberFormatException err) {
             request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
+            response.sendRedirect("home");
+        } catch (MaxLengthTextInputException | NullTextInputException | CategoryNotFoundException | DescricaoCategoriaException err) {
+            request.getSession().setAttribute("error", err.getMessage());
             response.sendRedirect("home");
         }
     }
@@ -191,19 +217,22 @@ public class CategoriaController extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
             
             CategoriaDAO catDAO = new CategoriaDAO();
+            Categoria cat = catDAO.getByID(id);
             
-            catDAO.delete(id);
-            
-            request.getSession().setAttribute("success", "Categoria removido do sistema!");
-            response.sendRedirect("home");
-            
-            
+            if(cat == null) throw new CategoryNotFoundException();
+            else {
+                catDAO.delete(id);
+
+                request.getSession().setAttribute("success", "Categoria removido do sistema!");
+                response.sendRedirect("home");
+            }
         } catch(NumberFormatException e) {
-            
             request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
             response.sendRedirect("home");
-            
-        } 
+        } catch(CategoryNotFoundException err) {
+            request.getSession().setAttribute("error", err.getMessage());
+            response.sendRedirect("home");
+        }
     }
 
 }

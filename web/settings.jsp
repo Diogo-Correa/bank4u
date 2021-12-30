@@ -80,7 +80,7 @@
                                 </div>
                             </c:forEach>
                             <small class="d-block text-end mt-3">
-                              <a href="#">Todos os admins</a>
+                              <a href="user">Todos os usuarios</a>
                             </small>
                         </div>
                     </div>
@@ -148,7 +148,7 @@
                                 </div>
                             </c:forEach>
                             <small class="d-block text-end mt-3">
-                              <a href="#">Todos os usuarios</a>
+                              <a href="user">Todos os usuarios</a>
                             </small>
                         </div>
                     </div>
@@ -206,7 +206,7 @@
                                 </div>
                             </c:forEach>
                             <small class="d-block text-end mt-3">
-                              <a href="#">Todos as categorias</a>
+                              <a href="category">Todos as categorias</a>
                             </small>
                         </div>
                     </div>
