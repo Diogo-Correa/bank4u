@@ -10,8 +10,6 @@ import app.Usuario;
 import app.util.errors.*;
 import app.util.validate.UserFormValidate;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,6 +24,8 @@ import models.UsuarioDAO;
  */
 @WebServlet(name = "UserController", urlPatterns = {"/user"})
 public class UsuarioController extends HttpServlet {
+    
+    private final String resource = "resources/usuarios/";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -86,6 +86,7 @@ public class UsuarioController extends HttpServlet {
         }
     }
     
+    // Controle de rota POST para armazenar no bd.
     protected void store(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
@@ -103,15 +104,17 @@ public class UsuarioController extends HttpServlet {
         
         
         try {
-            if(user != null || admin != null) { 
-                throw new CPFCadastradoException();
-            } else {
+            if(user != null || admin != null) throw new CPFCadastradoException();
+            else {
                 
                 // Validar campos do formulario
+                if(!validate.validateNull(nome)) throw new NullTextInputException("nome");
+                if(!validate.validateNull(cpf)) throw new NullTextInputException("cpf");
+                if(!validate.validateNull(senha)) throw new NullTextInputException("senha");
+                if(userRole == null) throw new RoleException();
                 if(!validate.validateText(nome, 20)) throw new MaxLengthTextInputException("nome", 20);
                 if(!validate.validateTextEqualsLength(cpf, 14)) throw new EqualsLengthTextInputException("cpf", 11);
                 if(validate.validateText(senha, 2)) throw new MinLengthTextInputException("senha", 2);
-                if(userRole == null) throw new RoleException();
                 
                 switch (userRole) {
                     case "admin":
@@ -135,12 +138,13 @@ public class UsuarioController extends HttpServlet {
                 response.sendRedirect("home");
             }
             
-        } catch (CPFCadastradoException | MaxLengthTextInputException | EqualsLengthTextInputException | MinLengthTextInputException | RoleException err) {
+        } catch (CPFCadastradoException | MaxLengthTextInputException | EqualsLengthTextInputException | MinLengthTextInputException | RoleException | NullTextInputException err) {
             request.getSession().setAttribute("error", err.getMessage());
             response.sendRedirect("home");
         }
     }
     
+    // Controle de rota GET para suspender usuario.
     protected void suspend(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
@@ -169,6 +173,7 @@ public class UsuarioController extends HttpServlet {
         } 
     }
     
+    // Controle de rota GET para exibir usuario.
     protected void show(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -184,7 +189,7 @@ public class UsuarioController extends HttpServlet {
                     request.getSession().setAttribute("cpf", user.getCpf());
                     request.getSession().setAttribute("suspenso", user.getSuspenso());
 
-                    request.getRequestDispatcher("resources/usuarios/show.jsp").forward(request, response);
+                    request.getRequestDispatcher(this.resource + "show.jsp").forward(request, response);
                 } else {
                     request.getSession().setAttribute("error", "Usuario nao encontrado!");
                     response.sendRedirect("home");
@@ -197,7 +202,7 @@ public class UsuarioController extends HttpServlet {
                     request.getSession().setAttribute("nome", admin.getNome());
                     request.getSession().setAttribute("cpf", admin.getCpf());
 
-                    request.getRequestDispatcher("resources/usuarios/show.jsp").forward(request, response);
+                    request.getRequestDispatcher(this.resource + "show.jsp").forward(request, response);
                 } else {
                     request.getSession().setAttribute("error", "Usuario nao encontrado!");
                     response.sendRedirect("home");
@@ -212,6 +217,7 @@ public class UsuarioController extends HttpServlet {
         }
     }
     
+    // Controle de rota GET para pagina de edicao.
     protected void edit(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -229,7 +235,7 @@ public class UsuarioController extends HttpServlet {
                     request.getSession().setAttribute("suspenso", user.getSuspenso());
                     request.getSession().setAttribute("admin", "false");
 
-                    request.getRequestDispatcher("resources/usuarios/edit.jsp").forward(request, response);
+                    request.getRequestDispatcher(this.resource + "edit.jsp").forward(request, response);
                 } else {
                     request.getSession().setAttribute("error", "Usuario nao encontrado!");
                     response.sendRedirect("home");
@@ -244,7 +250,7 @@ public class UsuarioController extends HttpServlet {
                     request.getSession().setAttribute("cpf", admin.getCpf());
                     request.getSession().setAttribute("admin", "true");
 
-                    request.getRequestDispatcher("resources/usuarios/edit.jsp").forward(request, response);
+                    request.getRequestDispatcher(this.resource + "edit.jsp").forward(request, response);
                 } else {
                     request.getSession().setAttribute("error", "Usuario nao encontrado!");
                     response.sendRedirect("home");
@@ -259,6 +265,7 @@ public class UsuarioController extends HttpServlet {
         }
     }
     
+    // Controle de rota GET para atualizar no bd.
     protected void update(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -305,6 +312,7 @@ public class UsuarioController extends HttpServlet {
         }
     }
     
+    // Controle de rota POST para remover no bd.
     protected void delete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         

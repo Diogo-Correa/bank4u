@@ -84,16 +84,16 @@ public class CategoriaDAO {
     
     public Categoria getByID(int id) {
         Connect conn = new Connect();
-        Categoria user = new Categoria();
+        Categoria cat = new Categoria();
         try {
             PreparedStatement stmt = conn.getConn().prepareStatement("SELECT * FROM categorias WHERE id = ? limit 1");
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if(rs.next()) {
-                user.setId(rs.getInt("id")); 
-                user.setDescricao(rs.getString("descricao")); 
+                cat.setId(rs.getInt("id")); 
+                cat.setDescricao(rs.getString("descricao")); 
             } else {
-                user = null;
+                cat = null;
             }
         } catch(SQLException e) {
             System.out.println("DAO getDescricaoAuth error.");
@@ -101,7 +101,29 @@ public class CategoriaDAO {
         } finally {
             conn.closeConn();
         }
-        return user;
+        return cat;
+    }
+    
+    public Categoria getByDescricao(String value) {
+        Connect conn = new Connect();
+        Categoria cat = new Categoria();
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("SELECT * FROM categorias WHERE descricao = ? limit 1");
+            stmt.setString(1, value);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                cat.setId(rs.getInt("id")); 
+                cat.setDescricao(rs.getString("descricao")); 
+            } else {
+                cat = null;
+            }
+        } catch(SQLException e) {
+            System.out.println("DAO getDescricaoAuth error.");
+            System.out.println(e);
+        } finally {
+            conn.closeConn();
+        }
+        return cat;
     }
     
     public Categoria update(Categoria cat) {

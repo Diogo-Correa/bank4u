@@ -9,15 +9,15 @@
                 <form action="user?action=store" method="POST" onsubmit="$('.loader').show(); $('.enter_txt').hide();">
                 <div class="mb-3">
                   <label for="nome" class="col-form-label">Nome:</label>
-                  <input type="text" class="form-control" id="nome" name="nome" maxlength="20"/>
+                  <input type="text" class="form-control" id="nome" name="nome" maxlength="20" required />
                 </div>
                 <div class="mb-3">
                   <label for="cpf" class="col-form-label">CPF:</label>
-                  <input type="text" class="form-control mascara-cpf" id="cpf" name="cpf" maxlength="14"/>
+                  <input type="text" class="form-control mascara-cpf" id="cpf" name="cpf" maxlength="14" required />
                 </div>
                 <div class="mb-3">
                   <label for="senha" class="col-form-label">Senha:</label>
-                  <input type="password" class="form-control mascara-cpf" id="senha" name="senha" />
+                  <input type="password" class="form-control mascara-cpf" id="senha" name="senha" required />
                 </div>
                 <div class="mb-3">
                     <input class="list-group-item-check" type="radio" name="role" id="admin" value="admin">

@@ -6,6 +6,8 @@
 package controllers;
 
 import app.Categoria;
+import app.util.errors.*;
+import app.util.validate.CategoriaFormValidate;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,6 +23,8 @@ import models.CategoriaDAO;
 @WebServlet(name = "CategoriaController", urlPatterns = {"/category"})
 public class CategoriaController extends HttpServlet {
 
+    private final String resource = "resources/categorias/";
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -81,18 +85,27 @@ public class CategoriaController extends HttpServlet {
             throws ServletException, IOException {
         
         String descricao = request.getParameter("descricao");
+        CategoriaDAO catDAO = new CategoriaDAO();
+        Categoria cat = catDAO.getByDescricao(descricao);
         
-        if(descricao == null || descricao.equals("")) {
-            request.getSession().setAttribute("error", "O campo descricao nao pode ser nulo.");
-            response.sendRedirect("home");
-        } else {
-            CategoriaDAO catDAO = new CategoriaDAO();
-            Categoria tag = new Categoria();
+        try {
+            if(cat != null) throw new DescricaoCategoriaException();
+            else {
+                CategoriaFormValidate validate = new CategoriaFormValidate();
 
-            tag.setDescricao(descricao);
-            catDAO.store(tag);
+                if(!validate.validateText(descricao, 20)) throw new MaxLengthTextInputException("descricao", 20);
+                if(!validate.validateNull(descricao)) throw new NullTextInputException("descricao");
 
-            request.getSession().setAttribute("success", "Categoria adicionada ao sistema!");
+                cat = new Categoria();
+                cat.setDescricao(descricao);
+                catDAO.store(cat);
+
+                request.getSession().setAttribute("success", "Categoria adicionada ao sistema!");
+                response.sendRedirect("home");
+            }
+            
+        } catch (DescricaoCategoriaException | MaxLengthTextInputException | NullTextInputException err) {
+            request.getSession().setAttribute("error", err.getMessage());
             response.sendRedirect("home");
         }
         
@@ -109,7 +122,7 @@ public class CategoriaController extends HttpServlet {
             if(categoria != null) {
                 request.getSession().setAttribute("nome", categoria.getDescricao());
 
-                request.getRequestDispatcher("resources/categorias/show.jsp").forward(request, response);
+                request.getRequestDispatcher(this.resource + "show.jsp").forward(request, response);
             } else {
                 request.getSession().setAttribute("error", "Categoria nao encontrada!");
                 response.sendRedirect("home");
@@ -133,7 +146,7 @@ public class CategoriaController extends HttpServlet {
                 request.getSession().setAttribute("id", categoria.getId());
                 request.getSession().setAttribute("nome", categoria.getDescricao());
 
-                request.getRequestDispatcher("resources/categorias/edit.jsp").forward(request, response);
+                request.getRequestDispatcher(this.resource + "edit.jsp").forward(request, response);
             } else {
                 request.getSession().setAttribute("error", "Categoria nao encontrada!");
                 response.sendRedirect("home");

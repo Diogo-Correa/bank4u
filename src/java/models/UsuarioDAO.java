@@ -63,6 +63,33 @@ public class UsuarioDAO {
         return res;
     }
     
+    public ArrayList<Usuario> getSuspendUsers() {
+        
+        Connect conn = new Connect();    
+        ArrayList<Usuario> res = new ArrayList<>();
+        
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("SELECT * FROM usuarios WHERE suspenso = 'S'");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                //Cria o objeto da classe Contato para armazenar os dados
+                //que vieram do BD
+                Usuario usuario = new Usuario();
+                usuario.setId(rs.getInt("id"));
+                usuario.setNome(rs.getString("nome"));
+                res.add(usuario);
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro de SQL: " + e.getMessage());
+        } finally {
+            conn.closeConn();
+        }
+        
+        
+        return res;
+    }
+    
     public ArrayList<Usuario> getThreeUsers() {
         
         Connect conn = new Connect();    

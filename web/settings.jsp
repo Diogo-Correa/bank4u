@@ -5,7 +5,7 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%@page contentType="text/html" pageEncoding="UTF-8" import="app.Administrador"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html style="background-color: #efefef !important;">
     <head>
@@ -212,7 +212,7 @@
                     </div>
                 </div>
             </div> 
-        </div>
+        </div>                  
                             
         <jsp:include page="./assets/components/modal/novoUser.html" />
         <jsp:include page="./assets/components/modal/novaCategoria.html" />

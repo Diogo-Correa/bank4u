@@ -10,7 +10,7 @@ package app.util.validate;
  *
  * @author Diogo
  */
-public class UserFormValidate implements FormValidate {
+public class CategoriaFormValidate implements FormValidate {
 
     @Override
     public boolean validateText(String value, int maxLength) {

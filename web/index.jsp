@@ -4,13 +4,15 @@
     Author     : Diogo
 
     ----- Casos de Usos - Admin -----
+    Entrega: 09.01.2022
     RF1: OK
     RF2: OK
     RF3: OK
-    RF4:
+    RF4: OK
     RF5: OK
 
     ----- Casos de Usos - Usuario -----
+    Entrega: 30.01.2022
     RF6:
     RF7:
     RF8:

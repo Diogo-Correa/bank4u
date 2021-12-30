@@ -11,7 +11,7 @@
     <ul class="nav me-auto">
       <li class="nav-item"><a href="home" class="nav-link link-dark px-2 active" aria-current="page"><i class="fas fa-th-large"></i></a></li>
       <c:if test="${isAdmin}">
-        <li class="nav-item"><a href="home" class="nav-link link-dark px-2 active" aria-current="page"><i class="fas fa-chart-bar"></i></a></li>
+        <li class="nav-item"><a href="charts" class="nav-link link-dark px-2 active" aria-current="page"><i class="fas fa-chart-bar"></i></a></li>
       </c:if>
     </ul>
     <ul class="nav">

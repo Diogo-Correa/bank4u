@@ -13,4 +13,5 @@ public interface FormValidate {
     public boolean validateText(String value, int maxLength);
     public boolean validateTextEqualsLength(String value, int maxLength);
     public boolean validateNumber();
+    public boolean validateNull(String value);
 }
