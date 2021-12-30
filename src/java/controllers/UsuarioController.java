@@ -308,15 +308,17 @@ public class UsuarioController extends HttpServlet {
             String nome = request.getParameter("nome");
             String cpf = request.getParameter("cpf");
 
-            
+            // Busca usuario ou admin.
             if(request.getParameter("admin") == null && request.getParameter("admin") != "true") {
                 user = userDAO.getByID(id);
             } else {
                 user = adminDAO.getByID(id);
             }
             
+            // Verifica se o usuario foi encontrado.
             if(user == null) throw new UserNotFoundException();
             
+            // verifica se existe um CPF cadastrado (excluindo o do usuario editado).
             if(adminDAO.getByCPF(cpf) != null && id != adminDAO.getByCPF(cpf).getId() || userDAO.getByCPF(cpf) != null && id != userDAO.getByCPF(cpf).getId()) throw new CPFCadastradoException();
             
             // Validar campos do formulario
@@ -325,6 +327,7 @@ public class UsuarioController extends HttpServlet {
             if(!validate.validateText(nome, 20)) throw new MaxLengthTextInputException("nome", 20);
             if(!validate.validateTextEqualsLength(cpf, 14)) throw new EqualsLengthTextInputException("cpf", 11);
             
+            // Atualiza o usuario.
             user.setNome(nome);
             user.setCpf(cpf);
             if(user.isAdmin()) adminDAO.update((Administrador) user); 
