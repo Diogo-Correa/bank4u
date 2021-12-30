@@ -13,7 +13,10 @@
                 </div>
                 <div class="mb-3">
                   <label for="cpf" class="col-form-label">CPF:</label>
-                  <input type="text" class="form-control mascara-cpf" id="cpf" name="cpf" maxlength="14" required />
+                  <input type="text" class="form-control mascara-cpf" id="cpf" name="cpf" maxlength="14" oninput="validateCPF(this.value)" required />
+                  <div id="cpf" class="invalid-feedback">
+                    Por favor, digite um CPF valido.
+                  </div>
                 </div>
                 <div class="mb-3">
                   <label for="senha" class="col-form-label">Senha:</label>
@@ -33,7 +36,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-              <button type="submit" class="btn btn-success">
+              <button type="submit" class="btn btn-success" id="btnDisabled" disabled>
                     <span class="spinner-border spinner-border-sm loader" role="status" style="display:none;">
                         <span class="visually-hidden">Loading...</span>
                     </span>
@@ -46,3 +49,20 @@
         </div>
     </div>
 </div>
+
+<script>
+    function validateCPF(value) {
+        const cpfInput = document.getElementById('cpf');
+        const btn = document.getElementById('btnDisabled');
+        const isValid = new ValidaCPF(value).valida();
+
+        if(isValid) {
+          cpfInput.classList.remove('is-invalid');
+          cpfInput.classList.add('is-valid');
+          btn.disabled = false;
+        } else {
+          cpfInput.classList.add('is-invalid'); 
+          btn.disabled = true;
+        }
+    }
+</script>
