@@ -13,10 +13,10 @@
 
     ----- Casos de Usos - Usuario -----
     Entrega: 30.01.2022
-    RF6:
+    RF6: OK
     RF7:
     RF8:
-    RF9:
+    RF9: OK
 
 --%>
 <%

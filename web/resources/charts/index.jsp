@@ -52,7 +52,7 @@
                             </h5>
                         </div>
                         <div class="card-body">
-                            <canvas id="suspendUsers" width="50" height="50"></canvas>
+                            <canvas id="suspendUsers" width="5" height="5"></canvas>
                         </div>
                     </div>
                 </div>
@@ -80,8 +80,8 @@
                     label: 'Total',
                     data: [`${adminsCount}`, `${usersCount}`],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)'
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)'
                     ],
                     borderColor: [
                         'rgba(255, 99, 132, 1)',
@@ -106,8 +106,8 @@
                 datasets: [{
                     data: [`${usersSuspendCount}`, `${usersCount - usersSuspendCount}`],
                     backgroundColor: [
-                        'rgba(0, 0, 0, 0.2)',
-                        'rgba(54, 162, 235, 0.2)'
+                        'rgba(0, 0, 0, 0.6)',
+                        'rgba(54, 162, 235, 0.6)'
                     ],
                     borderColor: [
                         'rgba(0, 0, 0, 1)',

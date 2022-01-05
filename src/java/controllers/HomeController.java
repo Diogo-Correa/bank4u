@@ -6,6 +6,7 @@
 package controllers;
 
 import app.Administrador;
+import app.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import models.AdministradorDAO;
 import models.CategoriaDAO;
+import models.ContaDAO;
 import models.UsuarioDAO;
 
 /**
@@ -37,7 +39,10 @@ public class HomeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+       
         if(request.getSession().getAttribute("isLoggedIn") != null && (boolean) request.getSession().getAttribute("isLoggedIn") && request.getSession().getAttribute("authUser") != null) {
+            
+            User authUser = (User) request.getSession().getAttribute("authUser");
             
             request.getSession().removeAttribute("id");
             request.getSession().removeAttribute("nome");
@@ -46,7 +51,6 @@ public class HomeController extends HttpServlet {
             request.getSession().removeAttribute("admin");
             
             if((boolean) request.getSession().getAttribute("isAdmin")) {
-                Administrador admin = (Administrador) request.getSession().getAttribute("authUser");
                 
                 request.setAttribute("users", new UsuarioDAO().getThreeUsers());
                 request.setAttribute("usersCount", new UsuarioDAO().getAll().size());
@@ -57,9 +61,12 @@ public class HomeController extends HttpServlet {
                 request.setAttribute("categories", new CategoriaDAO().getThreeTags());
                 request.setAttribute("categoriesCount", new CategoriaDAO().getAll().size());
                 
-                request.setAttribute("authName", admin.getNome());
                 request.getRequestDispatcher("settings.jsp").forward(request, response);
             } else {
+                
+                request.setAttribute("contas", new ContaDAO().getByUserID(authUser.getId()));
+                request.setAttribute("categorias", new CategoriaDAO().getAll());
+                
                 request.getRequestDispatcher("dashboard.jsp").forward(request, response);
             }
         } else {

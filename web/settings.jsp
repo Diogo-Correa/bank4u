@@ -19,9 +19,6 @@
         <jsp:include page="./assets/components/header/header.jsp" />
         
         <div class="container">
-            <button type="button" class="float" title="Novo lancamento" data-bs-toggle="modal" data-bs-target="#novoUser">
-                <i class="fa fa-plus my-float"></i>
-            </button>
             
             <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
                 <ol class="breadcrumb bg-white p-3 rounded shadow-sm">
@@ -215,7 +212,6 @@
             </div> 
         </div>                  
                             
-        <jsp:include page="./assets/components/modal/novoUser.html" />
         <jsp:include page="./assets/components/modal/novaCategoria.html" />
         
         <jsp:include page="./assets/components/modal/confirmaAction.html" />

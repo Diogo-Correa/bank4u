@@ -9,7 +9,7 @@
 <nav class="py-2 bg-light border-bottom">
   <div class="container d-flex flex-wrap">
     <ul class="nav me-auto">
-      <li class="nav-item"><a href="home" class="nav-link link-dark px-2 active" aria-current="page"><i class="fas fa-th-large"></i></a></li>
+      <li class="nav-item"><a href="home" class="nav-link link-dark px-2 active" aria-current="page"><i class="fas ${isAdmin ? 'fa-th-large' : 'fa-home'}"></i></a></li>
       <c:if test="${isAdmin}">
         <li class="nav-item"><a href="user" class="nav-link link-dark px-2 active" aria-current="page"><i class="fas fa-user"></i></a></li>
         <li class="nav-item"><a href="category" class="nav-link link-dark px-2 active" aria-current="page"><i class="fas fa-tags"></i></a></li>
