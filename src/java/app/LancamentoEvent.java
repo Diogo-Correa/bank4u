@@ -12,16 +12,28 @@ import java.sql.Date;
  * @author Diogo
  */
 public class LancamentoEvent {
-    private String title, start, end, color;
+    private int id, categoria;
+    private String title, start, end, color, operacao, descricao;
     private float valor;
-    private boolean allDaySlot = true;
     
-    public LancamentoEvent(String title, Date start, Date end, String color, float valor){
+    public LancamentoEvent(int id, int categoria_id, String title, Date start, Date end, String color, float valor, String operacao, String descricao){
+        this.id = id;
+        this.categoria = categoria_id;
         this.title = title + " -> R$" + Float.toString(valor);
         this.start = start.toString();
         this.end = end.toString();
         this.color = color;
         this.valor = valor;
+        this.operacao = operacao;
+        this.descricao = descricao;
+    }
+    
+    public int getId() {
+        return this.id;
+    }
+    
+    public int getCategoria() {
+        return this.categoria;
     }
     
     public String getTitle() {
@@ -42,5 +54,13 @@ public class LancamentoEvent {
     
     public float getValor() {
         return this.valor;
+    }
+    
+    public String getOperacao() {
+        return this.operacao;
+    }
+    
+    public String getDescricao() {
+        return this.descricao;
     }
 }

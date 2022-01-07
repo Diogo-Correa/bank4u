@@ -75,44 +75,13 @@
             </div> 
         </div>
         
-        <div id="createEventModal" class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span> <span class="sr-only">close</span></button>
-                        <h4>Add an Event</h4>
-                    </div>
-                    <div id="modalBody" class="modal-body">
-                       <div class="form-group">
-                            <input class="form-control" type="text" placeholder="Event Name" id="eventName">
-                        </div>
-
-                        <div class="form-group form-inline">
-                            <div class="input-group date" data-provide="datepicker">
-                                <input type="text" id="eventDueDate" class="form-control" placeholder="Due Date mm/dd/yyyy">
-                                <div class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <textarea class="form-control" type="text" rows="4" placeholder="Event Description" id= "eventDescription"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                        <button type="submit" class="btn btn-primary" id="submitButton">Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
         <jsp:include page="./assets/components/modal/novoLancamento.jsp" />
         <jsp:include page="./assets/components/modal/novaConta.html" />
         
         
         <jsp:include page="./assets/includes/scripts.html" />
+        
+        <jsp:include page="./assets/components/modal/editarLancamento.jsp" />
         
         <script>
             $(document).on("change", "#conta", function() {
@@ -138,12 +107,21 @@
                                 method: 'GET',
                                 extraParams: function(){
                                     return {
-                                      valor: valor
+                                      valor: valor,
+                                      operacao: operacao,
+                                      categoria: categoria,
+                                      descricao: descricao
                                     }
                                 },
                             },
                             eventClick: function (args) {
-                                $('#createEventModal').modal('show');
+                                if (args.event.extendedProps.valor < 0) $("#editValor").val(args.event.extendedProps.valor * -1);
+                                else $("#editValor").val(args.event.extendedProps.valor);
+                                $("#editData").val(args.event.start.toISOString().split('T')[0]);
+                                $("#editOperacao").val(args.event.extendedProps.operacao);
+                                $("#editCategoria").val(args.event.extendedProps.categoria);
+                                $("#editDescricao").val(args.event.extendedProps.descricao);
+                                $('#eventModal').modal('show');
                                 return false;
                             }
                         });

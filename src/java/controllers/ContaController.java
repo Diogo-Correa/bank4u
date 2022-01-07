@@ -104,7 +104,7 @@ public class ContaController extends HttpServlet {
         ArrayList<LancamentoEvent> lancamentos = new ArrayList<>();
         
         for(Lancamento lanc : lancDAO.getByContaID(Integer.parseInt(request.getParameter("conta")))) {
-            LancamentoEvent event = new LancamentoEvent(lanc.getCategoria().getDescricao(), lanc.getData(), lanc.getData() , (lanc.isCredit()) ? "#4ff04f" : "#f04f62", (lanc.isCredit()) ? lanc.getValor() : -lanc.getValor());
+            LancamentoEvent event = new LancamentoEvent(lanc.getId(), lanc.getCategoriaId(), lanc.getCategoria().getDescricao(), lanc.getData(), lanc.getData() , (lanc.isCredit()) ? "#4ff04f" : "#f04f62", (lanc.isCredit()) ? lanc.getValor() : -lanc.getValor(), lanc.getOperacao(), lanc.getDescricao());
             total += event.getValor();
             if(lanc.isCredit()) totalCreditos += event.getValor();
             else totalDebitos += event.getValor();
