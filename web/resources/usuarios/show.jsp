@@ -56,6 +56,32 @@
                             </div>
                         </c:if>
                     </div>
+                    <div class="d-flex text-muted pt-3">
+                        <c:if test="${contas != null}">
+                            <i class="fas fa-piggy-bank me-2"></i>
+                            <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+                              <div class="d-flex justify-content-between">
+                                <strong class="text-gray-dark"> Contas</strong>
+                              </div>
+                                <c:choose>
+                                    <c:when test="${contas.size() > 0}">
+                                        <c:forEach var="c" items="${contas}">
+                                            <span class="d-block pt-3 text-uppercase">
+                                                <i class="fas fa-money-check-alt me-2"></i>
+                                                (${c.getBanco()} - ${c.getBancoNome()}) 
+                                                ${c.nome} - 
+                                                ${c.agencia}/${c.getConta()}
+                                            </span>
+                                        </c:forEach> 
+                                    </c:when>    
+                                    <c:otherwise>
+                                        <span class="text-muted">Nenhuma conta encontrada.</span>
+                                    </c:otherwise>
+                                </c:choose>      
+                              
+                            </div>
+                        </c:if>
+                    </div>
                 </div>
             </div>
         </div>

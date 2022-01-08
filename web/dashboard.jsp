@@ -105,7 +105,7 @@
                             events: {
                                 url: 'wallet?action=lancamentos&conta='+contaId,
                                 method: 'GET',
-                                extraParams: function(){
+                                extraParams: function() {
                                     return {
                                       valor: valor,
                                       operacao: operacao,

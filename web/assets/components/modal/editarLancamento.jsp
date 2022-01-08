@@ -95,7 +95,6 @@
             let data = $("#editData");
             let descricao = $("#editDescricao");
             let header = $("#header");
-            let headerTitle = $("#exampleModalLabel");
             let editButton = $("#editButton");
             let footer = $("#footer");
             

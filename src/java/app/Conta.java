@@ -46,6 +46,11 @@ public class Conta {
         this.banco = value;
     }
     
+    public String getBancoNome() {
+        if(this.conta_corrente == "341") return "Banco Itau";
+        return "Banco do Brasil";
+    }
+    
     public String getAgencia() {
         return this.agencia;
     }

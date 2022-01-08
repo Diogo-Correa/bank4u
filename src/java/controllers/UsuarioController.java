@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import models.AdministradorDAO;
+import models.ContaDAO;
 import models.UsuarioDAO;
 
 /**
@@ -34,6 +35,7 @@ public class UsuarioController extends HttpServlet {
             throws ServletException, IOException {
         
         if((!(boolean) request.getSession().getAttribute("isAdmin") || request.getSession().getAttribute("isAdmin") == null) || (!(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null)) {
+            request.getSession().invalidate();
             request.getSession().setAttribute("error", "Voce nao tem permissao para acessar essa area!");
             response.sendRedirect("home");
         } else {
@@ -75,7 +77,8 @@ public class UsuarioController extends HttpServlet {
             throws ServletException, IOException {
         
         if((!(boolean) request.getSession().getAttribute("isAdmin") || request.getSession().getAttribute("isAdmin") == null) || (!(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null)) {
-            request.getSession().setAttribute("error", "Voce nao tem permissao para acessar essa area!");
+            request.getSession().invalidate();
+            request.getSession().setAttribute("error", "Voce nao tem permissao para acessar essa areaa!");
             response.sendRedirect("home");
         } else {
         
@@ -209,15 +212,18 @@ public class UsuarioController extends HttpServlet {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
             request.getSession().removeAttribute("suspenso");
+            request.getSession().removeAttribute("contas");
             
             if(request.getParameter("admin") == null && request.getParameter("admin") != "true") {
                 UsuarioDAO userDAO = new UsuarioDAO();
                 Usuario user = userDAO.getByID(id);
                 
                 if(user != null) {
+                    ContaDAO contaDAO = new ContaDAO();
                     request.getSession().setAttribute("nome", user.getNome());
                     request.getSession().setAttribute("cpf", user.getCpf());
                     request.getSession().setAttribute("suspenso", user.getSuspenso());
+                    request.getSession().setAttribute("contas", contaDAO.getByUserID(id));
 
                     request.getRequestDispatcher(this.resource + "show.jsp").forward(request, response);
                 } else {
