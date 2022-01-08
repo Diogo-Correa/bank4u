@@ -38,10 +38,13 @@
 </head>
 <body>
     
+    <jsp:include page="./assets/components/modal/infos.html" />
+    
     <jsp:include page="./assets/components/modal/alertMsgs.jsp" />
     
     <jsp:include page="./assets/includes/content.html" />
 
     <jsp:include page="./assets/includes/scripts.html" />
+    
 </body>
 </html>
