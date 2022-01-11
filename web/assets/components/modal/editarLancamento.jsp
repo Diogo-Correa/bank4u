@@ -44,7 +44,8 @@
                 </div>
             </div>
             <button type="button" class="btn btn-sm btn-warning float-end m-1 editButton" id="editButton"><i class="fas fa-pen"></i> Editar</button>
-            <button type="button" class="btn btn-sm btn-danger float-end m-1" id="deleteButton"><i class="fas fa-trash"></i> Excluir</button>
+            <div id="deleteLink" class="float-end m-1">
+            </div>
             <div class="modal-footer d-none" id="footer">
               <button type="submit" class="btn btn-warning">
                     <span class="spinner-border spinner-border-sm loader" role="status" style="display:none;">

@@ -37,7 +37,7 @@
                                 <i class="fas fa-money-check-alt"></i>
                                 Extrato
                             </h5>
-                            <select class="form-select bg-dark text-white border-0" id="conta" name="conta">
+                            <select class="form-select bg-dark text-white border-0" id="contaSelect">
                                 <option value="-1">Selecione uma conta</option>
                                 <c:forEach var="c" items="${contas}">
                                 <option value="${c.getId()}">${c.getNome()}</option>
@@ -81,15 +81,17 @@
         
         <jsp:include page="./assets/includes/scripts.html" />
         
+        <jsp:include page="./assets/components/modal/confirmaAction.html" />
+        
         <jsp:include page="./assets/components/modal/editarLancamento.jsp" />
         
         <script>
-            $(document).on("change", "#conta", function() {
-                let contaId = $("#conta").val();
+            $(document).on("change", "#contaSelect", function() {
+                let contaId = $("#contaSelect").val();
                 if(contaId > -1) {
                     $.get('wallet?action=total&conta='+contaId, function(total) {
                         $("#saldo").addClass("h3");
-                        $("#saldo").text(total[0]);
+                        $("#saldo").text("R$ " + total[0]);
                         $("#totalDebito").text(total[1]);
                         $("#totalCredito").text(total[2]);
 
@@ -103,7 +105,7 @@
                             initialView: 'listMonth',
                             allDayText: "",
                             events: {
-                                url: 'wallet?action=lancamentos&conta='+contaId,
+                                url: 'entries?action=lancamentos&conta='+contaId,
                                 method: 'GET',
                                 extraParams: function() {
                                     return {
@@ -115,12 +117,14 @@
                                 },
                             },
                             eventClick: function (args) {
+                                let urlDelete = "<a class='btn btn-sm btn-danger w-100' id='deleteButton' data-bs-toggle='modal' data-bs-target='#confirmaAction' data-href='entries?action=delete&id="+args.event.id+"' href='#'><i class='fas fa-trash'></i> Excluir</a>";
                                 if (args.event.extendedProps.valor < 0) $("#editValor").val(args.event.extendedProps.valor * -1);
                                 else $("#editValor").val(args.event.extendedProps.valor);
                                 $("#editData").val(args.event.start.toISOString().split('T')[0]);
                                 $("#editOperacao").val(args.event.extendedProps.operacao);
                                 $("#editCategoria").val(args.event.extendedProps.categoria);
                                 $("#editDescricao").val(args.event.extendedProps.descricao);
+                                $("#deleteLink").html(urlDelete);
                                 $('#eventModal').modal('show');
                                 return false;
                             }
