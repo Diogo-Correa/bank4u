@@ -125,6 +125,26 @@ public class LancamentoDAO {
         return res;
     }
     
+    public Lancamento update(Lancamento lanc) {
+        Connect conn = new Connect();
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("UPDATE lancamentos SET id_categoria = ?, valor = ?, operacao = ?, data = ?, descricao = ? WHERE id = ?");
+            stmt.setInt(1, lanc.getCategoriaId());
+            stmt.setFloat(2, lanc.getValor());
+            stmt.setString(3, lanc.getOperacao());
+            stmt.setDate(4, lanc.getData());
+            stmt.setString(5, lanc.getDescricao());
+            stmt.setInt(6, lanc.getId());
+            stmt.execute();
+        } catch(SQLException e) {
+            System.out.println("DAO updateLancamento error.");
+            System.out.println(e);
+        } finally {
+            conn.closeConn();
+        }
+        return lanc;
+    }
+    
     public void delete(int id) {
         Connect conn = new Connect();
         try {

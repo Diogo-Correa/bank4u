@@ -14,7 +14,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="" method="" onsubmit="$('.loader').show(); $('.enter_txt').hide();">
+                <form action="" method="POST" id="formEdit" onsubmit="$('.loader').show(); $('.enter_txt').hide();">
                 <div class="mb-3">
                   <label for="editCategoria" class="col-form-label">Categorias:</label>
                   <select class="form-select" id="editCategoria" name="id_categoria" disabled>
@@ -25,7 +25,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="editValor" class="col-form-label">Valor:</label>
-                  <input type="number" id="editValor" class="form-control" min="0" max="10000" step="0.1" value="0.00" name="valor" disabled />
+                  <input type="number" id="editValor" class="form-control" min="0" max="10000" step="0.01" value="0.00" name="valor" disabled />
                 </div>
                 <div class="mb-3">
                   <label for="editOperacao" class="col-form-label">Operacao:</label>
@@ -36,7 +36,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="editData" class="col-form-label">Data:</label>
-                  <input type="date" class="form-control" id="editData" disabled />
+                  <input type="date" class="form-control" id="editData" name="data" disabled />
                 </div>
                 <div class="mb-3">
                   <label for="editDescricao" class="col-form-label">Descricao:</label>

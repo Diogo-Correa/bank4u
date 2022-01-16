@@ -125,6 +125,7 @@
                                 $("#editCategoria").val(args.event.extendedProps.categoria);
                                 $("#editDescricao").val(args.event.extendedProps.descricao);
                                 $("#deleteLink").html(urlDelete);
+                                $("#formEdit").attr("action", "entries?action=update&id="+args.event.id);
                                 $('#eventModal').modal('show');
                                 return false;
                             }
