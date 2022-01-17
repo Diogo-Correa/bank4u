@@ -15,51 +15,51 @@
             </div>
             <div class="modal-body">
                 <form action="entries?action=store" method="POST" onsubmit="$('.loader').show(); $('.enter_txt').hide();">
-                <div class="mb-3">
-                  <label for="conta" class="col-form-label">Contas</label>
-                  <select class="form-select" id="id_conta" name="id_conta">
-                      <c:forEach var="c" items="${contas}">
-                      <option value="${c.getId()}">${c.getNome()}</option>
-                      </c:forEach>
-                  </select>
+                    <div class="mb-3">
+                      <label for="conta" class="col-form-label">Contas</label>
+                      <select class="form-select" id="id_conta" name="id_conta">
+                          <c:forEach var="c" items="${contas}">
+                          <option value="${c.getId()}">${c.getNome()}</option>
+                          </c:forEach>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="categoria" class="col-form-label">Categorias:</label>
+                      <select class="form-select" id="categoria" name="id_categoria">
+                          <c:forEach var="c" items="${categorias}">
+                          <option value="${c.getId()}">${c.getDescricao()}</option>
+                          </c:forEach>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="valor" class="col-form-label">Valor:</label>
+                      <input type="number" class="form-control" min="0" max="10000" step="0.01" value="0.00" id="valor" name="valor"/>
+                    </div>
+                    <div class="mb-3">
+                      <label for="operacao" class="col-form-label">Operacao:</label>
+                      <select class="form-select" id="operacao" name="operacao">
+                          <option value="C">Credito</option>
+                          <option value="D">Debito</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="data" class="col-form-label">Data:</label>
+                      <input type="date" class="form-control" id="data" name="data" value="data"/>
+                    </div>
+                    <div class="mb-3">
+                      <label for="descricao" class="col-form-label">Descricao:</label>
+                      <textarea class="form-control" id="descricao" name="descricao"></textarea>
+                    </div>
                 </div>
-                <div class="mb-3">
-                  <label for="categoria" class="col-form-label">Categorias:</label>
-                  <select class="form-select" id="categoria" name="id_categoria">
-                      <c:forEach var="c" items="${categorias}">
-                      <option value="${c.getId()}">${c.getDescricao()}</option>
-                      </c:forEach>
-                  </select>
-                </div>
-                <div class="mb-3">
-                  <label for="valor" class="col-form-label">Valor:</label>
-                  <input type="number" class="form-control" min="0" max="10000" step="0.01" value="0.00" id="valor" name="valor"/>
-                </div>
-                <div class="mb-3">
-                  <label for="operacao" class="col-form-label">Operacao:</label>
-                  <select class="form-select" id="operacao" name="operacao">
-                      <option value="C">Credito</option>
-                      <option value="D">Debito</option>
-                  </select>
-                </div>
-                <div class="mb-3">
-                  <label for="data" class="col-form-label">Data:</label>
-                  <input type="date" class="form-control" id="data" name="data" value="data"/>
-                </div>
-                <div class="mb-3">
-                  <label for="descricao" class="col-form-label">Descricao:</label>
-                  <textarea class="form-control" id="descricao" name="descricao"></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-success">
-                    <span class="spinner-border spinner-border-sm loader" role="status" style="display:none;">
-                        <span class="visually-hidden">Loading...</span>
-                    </span>
-                    <span class="enter_txt">
-                        <i class="fas fa-paper-plane"></i>
-                    </span>
-              </button>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-success">
+                        <span class="spinner-border spinner-border-sm loader" role="status" style="display:none;">
+                            <span class="visually-hidden">Loading...</span>
+                        </span>
+                        <span class="enter_txt">
+                            <i class="fas fa-paper-plane"></i>
+                        </span>
+                  </button>
               </form>
             </div>
         </div>

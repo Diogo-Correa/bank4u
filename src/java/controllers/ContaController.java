@@ -7,7 +7,9 @@ package controllers;
 
 import app.Conta;
 import app.Lancamento;
-import app.LancamentoEvent;
+import app.User;
+import app.util.errors.*;
+import app.util.validate.ContaFormValidate;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,8 +63,67 @@ public class ContaController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        String action = request.getParameter("action");
+        
+        switch(action) {
+                    case "store":
+                        store(request,response);
+                        break;
+        }
     }
     
+    protected void store(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        try {
+            ContaDAO accDAO = new ContaDAO();
+            
+            User usuario = (User) request.getSession().getAttribute("authUser");
+            int id_usuario = usuario.getId();
+            String nome_conta = request.getParameter("nome_conta");
+            String banco = request.getParameter("banco");
+            String agencia = request.getParameter("agencia");
+            String conta_corrente = request.getParameter("conta_corrente")+ "-" + request.getParameter("digito");
+            
+            Conta acc = accDAO.getByAgenciaConta(agencia, conta_corrente);
+            
+            if(acc != null) throw new ContaCadastradaException();
+            
+            ContaFormValidate validate = new ContaFormValidate();
+
+            if(!validate.validateNull(nome_conta)) throw new NullTextInputException("nome");
+            if(!validate.validateText(nome_conta, 20)) throw new MaxLengthTextInputException("nome", 20);
+            
+            if(!validate.validateNull(banco)) throw new NullTextInputException("banco");
+            if(!validate.validateText(banco, 3)) throw new MaxLengthTextInputException("banco", 3);
+            
+            if(!validate.validateNull(agencia)) throw new NullTextInputException("agencia");
+            if(!validate.validateText(agencia, 6)) throw new MaxLengthTextInputException("agencia", 6);
+            
+            if(!validate.validateNull(request.getParameter("conta_corrente"))) throw new NullTextInputException("conta");
+            if(!validate.validateText(request.getParameter("conta_corrente"), 4)) throw new MaxLengthTextInputException("conta", 4);
+            
+            if(!validate.validateNull(request.getParameter("digito"))) throw new NullTextInputException("digito");
+            if(!validate.validateText(request.getParameter("digito"), 1)) throw new MaxLengthTextInputException("digito", 1);
+            
+            acc = new Conta();
+            
+            acc.setUserId(id_usuario);
+            acc.setNome(nome_conta);
+            acc.setBanco(banco);
+            acc.setAgencia(agencia);
+            acc.setConta(conta_corrente);
+            accDAO.store(acc);
+
+            request.getSession().setAttribute("success", "Conta adicionada ao sistema!");
+            response.sendRedirect("home");
+            
+        } catch(NullTextInputException | MaxLengthTextInputException | ContaCadastradaException err) {
+            request.getSession().setAttribute("error", err.getMessage());
+            response.sendRedirect("home");
+        }
+        
+    }
     protected void getTotal(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         

@@ -119,6 +119,33 @@ public class ContaDAO {
         }
         
         return res;
+    }  
+    
+    public Conta getByAgenciaConta(String agencia, String conta) {
+        Connect conn = new Connect();
+        Conta acc = new Conta();
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("SELECT * FROM contas WHERE agencia = ? and conta_corrente = ? limit 1");
+            stmt.setString(1, agencia);
+            stmt.setString(2, conta);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                acc.setId(rs.getInt("id"));
+                acc.setUserId(rs.getInt("id_usuario"));
+                acc.setNome(rs.getString("nome_conta"));
+                acc.setBanco(rs.getString("banco"));
+                acc.setAgencia(rs.getString("agencia"));
+                acc.setConta(rs.getString("conta_corrente"));
+            } else {
+                acc = null;
+            }
+        } catch(SQLException e) {
+            System.out.println("DAO getByAgenciaConta error.");
+            System.out.println(e);
+        } finally {
+            conn.closeConn();
+        }
+        return acc;
     }
     
     public void delete(int id) {
