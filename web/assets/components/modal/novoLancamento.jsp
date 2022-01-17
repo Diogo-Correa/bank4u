@@ -14,10 +14,10 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="" method="" onsubmit="$('.loader').show(); $('.enter_txt').hide();">
+                <form action="entries?action=store" method="POST" onsubmit="$('.loader').show(); $('.enter_txt').hide();">
                 <div class="mb-3">
                   <label for="conta" class="col-form-label">Contas</label>
-                  <select class="form-select" id="conta" name="conta">
+                  <select class="form-select" id="id_conta" name="id_conta">
                       <c:forEach var="c" items="${contas}">
                       <option value="${c.getId()}">${c.getNome()}</option>
                       </c:forEach>
@@ -33,7 +33,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="valor" class="col-form-label">Valor:</label>
-                  <input type="number" class="form-control" min="0" max="10000" step="0.1" value="0.00" id="valor" name="valor"/>
+                  <input type="number" class="form-control" min="0" max="10000" step="0.01" value="0.00" id="valor" name="valor"/>
                 </div>
                 <div class="mb-3">
                   <label for="operacao" class="col-form-label">Operacao:</label>
@@ -44,7 +44,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="data" class="col-form-label">Data:</label>
-                  <input type="date" class="form-control" id="data" value="data"/>
+                  <input type="date" class="form-control" id="data" name="data" value="data"/>
                 </div>
                 <div class="mb-3">
                   <label for="descricao" class="col-form-label">Descricao:</label>

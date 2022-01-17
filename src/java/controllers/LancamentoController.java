@@ -67,6 +67,9 @@ public class LancamentoController extends HttpServlet {
         String action = request.getParameter("action");
         
         switch(action) {
+                    case "store":
+                        store(request,response);
+                        break;
                     case "update":
                         update(request,response);
                         break;
@@ -76,18 +79,12 @@ public class LancamentoController extends HttpServlet {
     protected void getLancamentos(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        float total = 0, totalDebitos = 0, totalCreditos = 0;
-        
         LancamentoDAO lancDAO = new LancamentoDAO();
         ArrayList<LancamentoEvent> lancamentos = new ArrayList<>();
         
-        for(Lancamento lanc : lancDAO.getByContaID(Integer.parseInt(request.getParameter("conta")))) {
-            LancamentoEvent event = new LancamentoEvent(lanc.getId(), lanc.getCategoriaId(), lanc.getCategoria().getDescricao(), lanc.getData(), lanc.getData() , (lanc.isCredit()) ? "#4ff04f" : "#f04f62", (lanc.isCredit()) ? lanc.getValor() : -lanc.getValor(), lanc.getOperacao(), lanc.getDescricao());
-            total += event.getValor();
-            if(lanc.isCredit()) totalCreditos += event.getValor();
-            else totalDebitos += event.getValor();
+        lancDAO.getByContaID(Integer.parseInt(request.getParameter("conta"))).stream().map((lanc) -> new LancamentoEvent(lanc.getId(), lanc.getCategoriaId(), lanc.getCategoria().getDescricao(), lanc.getData(), lanc.getData() , (lanc.isCredit()) ? "#4ff04f" : "#f04f62", (lanc.isCredit()) ? lanc.getValor() : -lanc.getValor(), lanc.getOperacao(), lanc.getDescricao())).forEachOrdered((event) -> {
             lancamentos.add(event);
-        }
+        });
         
         String json = new Gson().toJson(lancamentos);
         
@@ -96,6 +93,55 @@ public class LancamentoController extends HttpServlet {
         response.getWriter().write(json);
     }
     
+    protected void store(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            int id_conta = Integer.parseInt(request.getParameter("id_conta")); // tratar NumberFormatException e ContaNotFoundException
+            int id_categoria = Integer.parseInt(request.getParameter("id_categoria")); // tratar NumberFormatException e CategoryNotFoundException
+            float valor = Float.parseFloat(request.getParameter("valor")); // tratar NumberFormatException
+            String operacao = request.getParameter("operacao");
+            Date data = Date.valueOf(request.getParameter("data"));
+            String descricao = request.getParameter("descricao");
+            
+            LancamentoDAO lancDAO = new LancamentoDAO();
+            
+            LancamentoFormValidate validate = new LancamentoFormValidate();
+
+            if(!validate.validateNull(request.getParameter("id_conta"))) throw new NullTextInputException("conta");
+            if(!validate.validateNull(request.getParameter("id_categoria"))) throw new NullTextInputException("categoria");
+            
+            if(!validate.validateNull(request.getParameter("valor"))) throw new NullTextInputException("valor");
+            if(!validate.validateNull(request.getParameter("data"))) throw new NullTextInputException("data");
+            
+            
+            if(!validate.validateOperation(operacao)) throw new OperacaoNotFoundException();
+            if(!validate.validateNull(operacao)) throw new NullTextInputException("operacao");
+            
+            
+            if(!validate.validateText(descricao, 100)) throw new MaxLengthTextInputException("descricao", 100);
+            
+            
+            Lancamento lanc = new Lancamento();
+            
+            lanc.setContaId(id_conta);
+            lanc.setCategoriaId(id_categoria);
+            lanc.setValor(valor);
+            lanc.setData(data);
+            lanc.setOperacao(operacao);
+            lanc.setDescricao(descricao);
+            lancDAO.store(lanc);
+
+            request.getSession().setAttribute("success", "Lancamento adicionado na conta!");
+            response.sendRedirect("home");
+            
+        } catch(NumberFormatException err) {
+            request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
+            response.sendRedirect("home");
+        } catch (MaxLengthTextInputException | NullTextInputException | OperacaoNotFoundException err) {
+            request.getSession().setAttribute("error", err.getMessage());
+            response.sendRedirect("home");
+        }
+    }
     
     protected void update(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

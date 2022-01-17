@@ -47,6 +47,10 @@
                         
                         <div class="card-body">
                             
+                            <p class="alert bg-danger text-light d-none" id="negativeAlert">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                O saldo da sua conta esta negativo.
+                            </p>
                             <p id="msgSelecionar" class="p-5 text-center text-muted">Nenhuma conta selecionada.</p>
                             <div class="pb-3 text-end d-none" id="totais">
                                 <span class="text-danger h6 d-block">Total de despesas: <span id='totalDebito'></span></span>
@@ -94,6 +98,13 @@
                         $("#saldo").text("R$ " + total[0]);
                         $("#totalDebito").text(total[1]);
                         $("#totalCredito").text(total[2]);
+                        
+                        if(total[0] < 0) {
+                            $("#negativeAlert").removeClass("d-none");
+                        } else {
+                            $("#negativeAlert").addClass("d-none");
+                        }
+
 
                         $("#msgSelecionar").addClass('d-none');
                         $("#totais").removeClass('d-none');
