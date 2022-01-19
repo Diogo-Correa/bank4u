@@ -17,6 +17,7 @@
       </c:if>
     </ul>
     <ul class="nav">
+      <li class="nav-item"><a href="profile" class="nav-link link-dark px-2 active" aria-current="page"><i class="fas fa-user-circle"></i></a></li>
       <li class="nav-item"><a href="logout" class="nav-link link-dark px-2"><i class="fas fa-sign-out-alt"></i></a></li>
     </ul>
   </div>

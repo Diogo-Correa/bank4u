@@ -308,6 +308,7 @@ public class UsuarioController extends HttpServlet {
             UsuarioDAO userDAO = new UsuarioDAO();
             AdministradorDAO adminDAO = new AdministradorDAO();
             User user;
+            User authUser = (User) request.getSession().getAttribute("authUser");
             UserFormValidate validate = new UserFormValidate();
             
             int id = Integer.parseInt(request.getParameter("id"));
@@ -338,6 +339,12 @@ public class UsuarioController extends HttpServlet {
             user.setCpf(cpf);
             if(user.isAdmin()) adminDAO.update((Administrador) user); 
             else userDAO.update((Usuario) user);
+            
+            // atualiza o usuario logado
+            if(id == authUser.getId()) {
+                authUser.setNome(nome);
+                authUser.setCpf(cpf);
+            }
 
             request.getSession().setAttribute("success", "Usuario atualizado no sistema!");
             response.sendRedirect("home");

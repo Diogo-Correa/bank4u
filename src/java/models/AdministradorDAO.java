@@ -39,10 +39,11 @@ public class AdministradorDAO {
     public Administrador update(Administrador admin) {
         Connect conn = new Connect();
         try {
-            PreparedStatement stmt = conn.getConn().prepareStatement("UPDATE administradores SET nome = ?, cpf = ? WHERE id = ?");
+            PreparedStatement stmt = conn.getConn().prepareStatement("UPDATE administradores SET nome = ?, cpf = ?, senha = ? WHERE id = ?");
             stmt.setString(1, admin.getNome());
             stmt.setString(2, admin.getCpf());
-            stmt.setInt(3, admin.getId());
+            stmt.setString(3, admin.getSenha());
+            stmt.setInt(4, admin.getId());
             stmt.execute();
         } catch(SQLException e) {
             System.out.println("DAO updateUser error.");

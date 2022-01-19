@@ -47,8 +47,10 @@ public class HomeController extends HttpServlet {
             request.getSession().removeAttribute("id");
             request.getSession().removeAttribute("nome");
             request.getSession().removeAttribute("cpf");
+            request.getSession().removeAttribute("senha");
             request.getSession().removeAttribute("suspenso");
             request.getSession().removeAttribute("admin");
+            request.getSession().removeAttribute("contas");
             
             if((boolean) request.getSession().getAttribute("isAdmin")) {
                 

@@ -47,7 +47,7 @@ public class Conta {
     }
     
     public String getBancoNome() {
-        if(this.conta_corrente == "341") return "Banco Itau";
+        if(this.banco.equals("341")) return "Banco Itau";
         return "Banco do Brasil";
     }
     

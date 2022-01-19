@@ -198,10 +198,11 @@ public class UsuarioDAO {
     public Usuario update(Usuario user) {
         Connect conn = new Connect();
         try {
-            PreparedStatement stmt = conn.getConn().prepareStatement("UPDATE usuarios SET nome = ?, cpf = ? WHERE id = ?");
+            PreparedStatement stmt = conn.getConn().prepareStatement("UPDATE usuarios SET nome = ?, cpf = ?, senha = ? WHERE id = ?");
             stmt.setString(1, user.getNome());
             stmt.setString(2, user.getCpf());
-            stmt.setInt(3, user.getId());
+            stmt.setString(3, user.getSenha());
+            stmt.setInt(4, user.getId());
             stmt.execute();
         } catch(SQLException e) {
             System.out.println("DAO updateUser error.");

@@ -195,3 +195,33 @@ section {
 .modal-alert .modal-dialog {
   width: 380px;
 }
+
+.user-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-avatar p {
+    width: 150px;
+    height:150px;
+    border-radius: 50%;
+    margin-bottom: 1.3rem;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.0)), url('../images/user-avatar.png');
+    background-size: cover;
+    background-position: center;
+    transition: all 3s;
+    border: #000 3px solid;
+}
+
+.user-avatar p:hover {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../images/user-avatar.png');
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    transition: all 3s;
+}
+
+.pointer {
+    cursor: pointer;
+}
