@@ -102,6 +102,8 @@
             
         </div>
         <jsp:include page="./assets/includes/scripts.html" />
+        
+        <jsp:include page="./assets/components/modal/confirmaAction.html" />
         <script>
             $(document).on("click", "#perfil", function() {
                 $("#perfil").addClass("active");
@@ -203,7 +205,6 @@
                                                                                 <i class="fas fa-money-check-alt me-2"></i>
                                                                                 (${c.getBanco()} - ${c.getBancoNome()}) 
                                                                             </span>
-
                                                                             <div class="dropdown">
                                                                               <a href="" class="link-secondary" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
 
@@ -216,7 +217,13 @@
                                                                                 </li>
                                                                                 <li><hr class="dropdown-divider"></li>
                                                                                 <li>
-                                                                                  <a class="dropdown-item dropdown-item-danger d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#confirmaAction" data-href="user?action=delete&admin=true&id=${a.id}" href="#">
+                                                                                  <a class="dropdown-item dropdown-item-danger d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#confirmaAction" data-href="entries?action=deleteAll&id=${c.id}" href="#">
+                                                                                    <i class="fas fa-times"></i>
+                                                                                    Apagar lancamentos
+                                                                                  </a>
+                                                                                </li>
+                                                                                <li>
+                                                                                  <a class="dropdown-item dropdown-item-danger d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#confirmaAction" data-href="wallet?action=delete&id=${c.id}" href="#">
                                                                                     <i class="fas fa-trash"></i>
                                                                                     Deletar
                                                                                   </a>

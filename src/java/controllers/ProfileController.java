@@ -6,8 +6,10 @@
 package controllers;
 
 import app.Administrador;
+import app.Lancamento;
 import app.User;
 import app.Usuario;
+import app.util.errors.EntryNotFoundException;
 import app.util.errors.EqualsLengthTextInputException;
 import app.util.errors.MaxLengthTextInputException;
 import app.util.errors.MinLengthTextInputException;
@@ -15,6 +17,7 @@ import app.util.errors.NullTextInputException;
 import app.util.errors.UserNotFoundException;
 import app.util.validate.UserFormValidate;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import models.AdministradorDAO;
 import models.ContaDAO;
+import models.LancamentoDAO;
 import models.UsuarioDAO;
 
 /**

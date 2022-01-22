@@ -6,6 +6,7 @@
 package controllers;
 
 import app.Lancamento;
+import app.Conta;
 import app.LancamentoEvent;
 import app.util.errors.*;
 import app.util.validate.LancamentoFormValidate;
@@ -13,11 +14,14 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import models.ContaDAO;
 import models.LancamentoDAO;
 
 /**
@@ -40,15 +44,24 @@ public class LancamentoController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String action = request.getParameter("action");
-        
-        switch(action) {
-                    case "lancamentos":
-                        getLancamentos(request,response);
-                        break;
-                    case "delete":
-                        delete(request,response);
-                        break;
+        if(!(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null) {
+            request.getSession().invalidate();
+            request.getSession().setAttribute("error", "Voce nao tem permissao para acessar essa area!");
+            response.sendRedirect("home");
+        } else {
+            String action = request.getParameter("action");
+
+            switch(action) {
+                        case "lancamentos":
+                            getLancamentos(request,response);
+                            break;
+                        case "deleteAll":
+                            deleteAll(request,response);
+                            break;
+                        case "delete":
+                            delete(request,response);
+                            break;
+            }
         }
     }
 
@@ -64,33 +77,43 @@ public class LancamentoController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String action = request.getParameter("action");
-        
-        switch(action) {
-                    case "store":
-                        store(request,response);
-                        break;
-                    case "update":
-                        update(request,response);
-                        break;
+        if(!(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null) {
+            request.getSession().invalidate();
+            request.getSession().setAttribute("error", "Voce nao tem permissao para acessar essa area!");
+            response.sendRedirect("home");
+        } else {
+            String action = request.getParameter("action");
+
+            switch(action) {
+                        case "store":
+                            store(request,response);
+                            break;
+                        case "update":
+                            update(request,response);
+                            break;
+            }
         }
-}
+    }
     
     protected void getLancamentos(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        LancamentoDAO lancDAO = new LancamentoDAO();
-        ArrayList<LancamentoEvent> lancamentos = new ArrayList<>();
-        
-        lancDAO.getByContaID(Integer.parseInt(request.getParameter("conta"))).stream().map((lanc) -> new LancamentoEvent(lanc.getId(), lanc.getCategoriaId(), lanc.getCategoria().getDescricao(), lanc.getData(), lanc.getData() , (lanc.isCredit()) ? "#4ff04f" : "#f04f62", (lanc.isCredit()) ? lanc.getValor() : -lanc.getValor(), lanc.getOperacao(), lanc.getDescricao())).forEachOrdered((event) -> {
-            lancamentos.add(event);
-        });
-        
-        String json = new Gson().toJson(lancamentos);
-        
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(json);
+            
+            ContaDAO contaDAO = new ContaDAO();
+            int id = Integer.parseInt(request.getParameter("conta"));
+            Conta conta = contaDAO.getByID(id);
+            
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            LancamentoDAO lancDAO = new LancamentoDAO();
+            ArrayList<LancamentoEvent> lancamentos = new ArrayList<>();
+
+            lancDAO.getByContaID(id).stream().map((lanc) -> new LancamentoEvent(lanc.getId(), lanc.getCategoriaId(), lanc.getCategoria().getDescricao(), lanc.getData(), lanc.getData() , (lanc.isCredit()) ? "#4ff04f" : "#f04f62", (lanc.isCredit()) ? lanc.getValor() : -lanc.getValor(), lanc.getOperacao(), lanc.getDescricao())).forEachOrdered((event) -> {
+                lancamentos.add(event);
+            });
+
+            String json = new Gson().toJson(lancamentos);
+
+            response.getWriter().write(json);
     }
     
     protected void store(HttpServletRequest request, HttpServletResponse response)
@@ -190,6 +213,34 @@ public class LancamentoController extends HttpServlet {
         } catch (MaxLengthTextInputException | NullTextInputException | EntryNotFoundException | OperacaoNotFoundException err) {
             request.getSession().setAttribute("error", err.getMessage());
             response.sendRedirect("home");
+        }
+    }
+    
+    
+    protected void deleteAll(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            
+            LancamentoDAO lancDAO = new LancamentoDAO();
+            ArrayList<Lancamento> lancs = lancDAO.getByContaID(id);
+            
+            if(lancs.isEmpty()) throw new EntryNotFoundException();
+            else {
+                
+                lancs.forEach((lanc) -> {
+                    lancDAO.delete(lanc.getId());
+                });
+
+                request.getSession().setAttribute("success", "Lancamentos removidos da conta!");
+                response.sendRedirect("profile");
+            }
+        } catch(NumberFormatException e) {
+            request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
+            response.sendRedirect("profile");
+        } catch(EntryNotFoundException err) {
+            request.getSession().setAttribute("error", err.getMessage());
+            response.sendRedirect("profile");
         }
     }
     

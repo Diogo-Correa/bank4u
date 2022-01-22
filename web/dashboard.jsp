@@ -37,17 +37,21 @@
                                 <i class="fas fa-money-check-alt"></i>
                                 Extrato
                             </h5>
-                            <select class="form-select bg-dark text-white border-0" id="contaSelect">
-                                <option value="">Selecione uma conta</option>
-                                <optgroup label="Adicionar">
-                                <option value="-1"> <i class="fas fa-plus"></i> Nova conta</option>
-                                </optgroup>
-                                <optgroup label="Suas contas">
-                                    <c:forEach var="c" items="${contas}">
-                                    <option value="${c.getId()}">${c.getNome()}</option>
-                                    </c:forEach>
-                                </optgroup>
-                            </select>
+                            
+                            <div class="input-group">
+                                <i class="fas fa-wallet text-white my-2"></i>
+                                <select class="form-select bg-dark text-white border-0" id="contaSelect">
+                                    <option value="">Selecione uma conta</option>
+                                    <optgroup label="Adicionar">
+                                    <option value="-1"> <i class="fas fa-plus"></i> Nova conta</option>
+                                    </optgroup>
+                                    <optgroup label="Suas contas">
+                                        <c:forEach var="c" items="${contas}">
+                                        <option value="${c.getId()}">${c.getNome()}</option>
+                                        </c:forEach>
+                                    </optgroup>
+                                </select>
+                            </div>
                         </div>
                         
                         <div class="card-body">
@@ -163,57 +167,65 @@
                         $("#formConta").remove();
                         break;
                     default:
-                        $.get('wallet?action=total&conta='+contaId, function(total) {
-                            $("#saldo").addClass("h3");
-                            $("#saldo").text("R$ " + total[0]);
-                            $("#totalDebito").text(total[1]);
-                            $("#totalCredito").text(total[2]);
+                        var urlTotal = 'wallet?action=total&conta='+contaId;
+                        $.ajax({
+                            type:'GET',
+                            url: urlTotal,
+                            success: function(total) {
+                                console.log(total);
+                                $("#saldo").addClass("h3");
+                                $("#saldo").text("R$ " + total[0]);
+                                $("#totalDebito").text(total[1]);
+                                $("#totalCredito").text(total[2]);
 
-                            if(total[0] < 0) {
-                                $("#negativeAlert").removeClass("d-none");
-                            } else {
-                                $("#negativeAlert").addClass("d-none");
-                            }
-
-
-                            $("#msgSelecionar").addClass('d-none');
-                            $("#totais").removeClass('d-none');
-                            $("#calendar").removeClass('d-none');
-                            $("#formConta").remove();
-
-                            var calendarEl = document.getElementById('calendar');
-                            var calendar = new FullCalendar.Calendar(calendarEl, {
-                                locale: 'pt-br',
-                                initialView: 'listMonth',
-                                allDayText: "",
-                                events: {
-                                    url: 'entries?action=lancamentos&conta='+contaId,
-                                    method: 'GET',
-                                    extraParams: function() {
-                                        return {
-                                          valor: valor,
-                                          operacao: operacao,
-                                          categoria: categoria,
-                                          descricao: descricao
-                                        };
-                                    }
-                                },
-                                eventClick: function (args) {
-                                    let urlDelete = "<a class='btn btn-sm btn-danger w-100' id='deleteButton' data-bs-toggle='modal' data-bs-target='#confirmaAction' data-href='entries?action=delete&id="+args.event.id+"' href='#'><i class='fas fa-trash'></i> Excluir</a>";
-                                    if (args.event.extendedProps.valor < 0) $("#editValor").val(args.event.extendedProps.valor * -1);
-                                    else $("#editValor").val(args.event.extendedProps.valor);
-                                    $("#editData").val(args.event.start.toISOString().split('T')[0]);
-                                    $("#editOperacao").val(args.event.extendedProps.operacao);
-                                    $("#editCategoria").val(args.event.extendedProps.categoria);
-                                    $("#editDescricao").val(args.event.extendedProps.descricao);
-                                    $("#deleteLink").html(urlDelete);
-                                    $("#formEdit").attr("action", "entries?action=update&id="+args.event.id);
-                                    $('#eventModal').modal('show');
-                                    return false;
+                                if(total[0] < 0) {
+                                    $("#negativeAlert").removeClass("d-none");
+                                } else {
+                                    $("#negativeAlert").addClass("d-none");
                                 }
-                            });
 
-                            calendar.render();
+
+                                $("#msgSelecionar").addClass('d-none');
+                                $("#totais").removeClass('d-none');
+                                $("#calendar").removeClass('d-none');
+                                $("#formConta").remove();
+
+                                var calendarEl = document.getElementById('calendar');
+                                var calendar = new FullCalendar.Calendar(calendarEl, {
+                                    locale: 'pt-br',
+                                    initialView: 'listMonth',
+                                    allDayText: "",
+                                    events: {
+                                        url: 'entries?action=lancamentos&conta='+contaId,
+                                        method: 'GET',
+                                        extraParams: function() {
+                                            return {
+                                              valor: valor,
+                                              operacao: operacao,
+                                              categoria: categoria,
+                                              descricao: descricao
+                                            };
+                                        }
+                                    },
+                                    eventClick: function (args) {
+                                        let urlDelete = "<a class='btn btn-sm btn-danger w-100' id='deleteButton' data-bs-toggle='modal' data-bs-target='#confirmaAction' data-href='entries?action=delete&id="+args.event.id+"' href='#'><i class='fas fa-trash'></i> Excluir</a>";
+                                        if (args.event.extendedProps.valor < 0) $("#editValor").val(args.event.extendedProps.valor * -1);
+                                        else $("#editValor").val(args.event.extendedProps.valor);
+                                        $("#editData").val(args.event.start.toISOString().split('T')[0]);
+                                        $("#editOperacao").val(args.event.extendedProps.operacao);
+                                        $("#editCategoria").val(args.event.extendedProps.categoria);
+                                        $("#editDescricao").val(args.event.extendedProps.descricao);
+                                        $("#deleteLink").html(urlDelete);
+                                        $("#formEdit").attr("action", "entries?action=update&id="+args.event.id);
+                                        $('#eventModal').modal('show');
+                                        return false;
+                                    }
+                                });
+
+                                calendar.render();
+                            }, error: function() {
+                                sweetAlert("Oops! :(", "Algum errro ocorreu no servidor!", "error");
+                            }
                         });
                         break;
                     

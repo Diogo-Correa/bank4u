@@ -48,6 +48,9 @@ public class ContaController extends HttpServlet {
                     case "total":
                         getTotal(request,response);
                         break;
+                    case "delete":
+                        delete(request,response);
+                        break;
         }
     }
 
@@ -153,4 +156,35 @@ public class ContaController extends HttpServlet {
         response.getWriter().write(json);
     }
 
+        
+    protected void delete(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            
+            ContaDAO contaDAO = new ContaDAO();
+            Conta acc = contaDAO.getByID(id);
+            
+            if(acc == null) throw new ContaNotFoundException();
+            
+            LancamentoDAO lancDAO = new LancamentoDAO();
+            ArrayList<Lancamento> lancs = lancDAO.getByContaID(id);
+            
+            if(!lancs.isEmpty()) throw new RestrictEntriesException();
+            
+            else {
+                contaDAO.delete(id);
+
+                request.getSession().setAttribute("success", "Conta removida do sistema!");
+                response.sendRedirect("profile");
+            }
+        } catch(NumberFormatException e) {
+            request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
+            response.sendRedirect("profile");
+        } catch(ContaNotFoundException | RestrictEntriesException err) {
+            request.getSession().setAttribute("error", err.getMessage());
+            response.sendRedirect("profile");
+        }
+    }
+    
 }
