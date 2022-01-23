@@ -72,6 +72,9 @@ public class ContaController extends HttpServlet {
                     case "store":
                         store(request,response);
                         break;
+                    case "update":
+                        update(request,response);
+                        break;
         }
     }
     
@@ -127,6 +130,63 @@ public class ContaController extends HttpServlet {
         }
         
     }
+    
+    protected void update(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            
+            ContaDAO accDAO = new ContaDAO();
+            Conta conta = accDAO.getByID(id);
+            
+            if(conta == null) throw new ContaNotFoundException();
+            
+            String nome_conta = request.getParameter("nome_conta");
+            String banco = request.getParameter("banco");
+            String agencia = request.getParameter("agencia");
+            String conta_corrente = request.getParameter("conta_corrente")+ "-" + request.getParameter("digito");
+            
+            Conta acc = accDAO.getByAgenciaConta(agencia, conta_corrente);
+            
+            if(acc != null && acc.getId() != id) throw new ContaCadastradaException();
+            
+            ContaFormValidate validate = new ContaFormValidate();
+
+            if(!validate.validateNull(nome_conta)) throw new NullTextInputException("nome");
+            if(!validate.validateText(nome_conta, 20)) throw new MaxLengthTextInputException("nome", 20);
+            
+            if(!validate.validateNull(banco)) throw new NullTextInputException("banco");
+            if(!validate.validateText(banco, 3)) throw new MaxLengthTextInputException("banco", 3);
+            
+            if(!validate.validateNull(agencia)) throw new NullTextInputException("agencia");
+            if(!validate.validateText(agencia, 6)) throw new MaxLengthTextInputException("agencia", 6);
+            
+            if(!validate.validateNull(request.getParameter("conta_corrente"))) throw new NullTextInputException("conta");
+            if(!validate.validateText(request.getParameter("conta_corrente"), 4)) throw new MaxLengthTextInputException("conta", 4);
+            
+            if(!validate.validateNull(request.getParameter("digito"))) throw new NullTextInputException("digito");
+            if(!validate.validateText(request.getParameter("digito"), 1)) throw new MaxLengthTextInputException("digito", 1);
+            
+            conta.setNome(nome_conta);
+            conta.setBanco(banco);
+            conta.setAgencia(agencia);
+            conta.setConta(conta_corrente);
+            accDAO.update(conta);
+
+            request.getSession().setAttribute("success", "Conta atualizada no sistema!");
+            response.sendRedirect("profile");
+            
+        } catch(NumberFormatException e) {
+            request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
+            response.sendRedirect("profile");
+        } catch(NullTextInputException | MaxLengthTextInputException | ContaNotFoundException | ContaCadastradaException err) {
+            request.getSession().setAttribute("error", err.getMessage());
+            response.sendRedirect("profile");
+        }
+        
+    }
+    
     protected void getTotal(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         

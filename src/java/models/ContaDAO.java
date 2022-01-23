@@ -148,6 +148,25 @@ public class ContaDAO {
         return acc;
     }
     
+    public Conta update(Conta conta) {
+        Connect conn = new Connect();
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("UPDATE contas SET nome_conta = ?, banco = ?, agencia = ?, conta_corrente = ? WHERE id = ?");
+            stmt.setString(1, conta.getNome());
+            stmt.setString(2, conta.getBanco());
+            stmt.setString(3, conta.getAgencia());
+            stmt.setString(4, conta.getConta());
+            stmt.setInt(5, conta.getId());
+            stmt.execute();
+        } catch(SQLException e) {
+            System.out.println("DAO updateConta error.");
+            System.out.println(e);
+        } finally {
+            conn.closeConn();
+        }
+        return conta;
+    }
+    
     public void delete(int id) {
         Connect conn = new Connect();
         try {

@@ -19,6 +19,7 @@
         <jsp:include page="./assets/components/header/header.jsp" />
         
         <div class="container">
+            <jsp:include page="./assets/components/modal/novaConta.html" />
             
             <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
                 <ol class="breadcrumb bg-white p-3 rounded shadow-sm">
@@ -210,7 +211,7 @@
 
                                                                               <ul class="dropdown-menu dropdown-menu-dark mx-0 shadow" style="width: 220px;">
                                                                                 <li>
-                                                                                  <a class="dropdown-item d-flex gap-2 align-items-center" href="">
+                                                                                  <a class="dropdown-item d-flex gap-2 align-items-center" href="#" data-bs-toggle="modal" data-bs-target="#editConta" onclick="openEdit(${c.id}, '${c.nome}', '${c.banco}', '${c.agencia}', '${c.conta}')">
                                                                                     <i class="fas fa-pen"></i>
                                                                                     Editar
                                                                                   </a>
@@ -314,6 +315,15 @@
                     $("#labelSenha").text("Senha invalida.");
                 }
             });
+            
+            function openEdit(id, nome, banco, agencia, conta) {
+                $("#nome_conta").val(nome);
+                $("#banco").val(banco);
+                $("#agencia").val(agencia);
+                $("#conta_corrente").val(conta.slice(0, 4));
+                $("#digito").val(conta.slice(5, 6));
+                $("#formEditConta").attr("action", "wallet?action=update&id="+id);
+            }
         </script>
         
     </body>
