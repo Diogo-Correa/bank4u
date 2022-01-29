@@ -8,12 +8,12 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8" import="app.Administrador"%>
 <!DOCTYPE html>
-<html style="background-color: #efefef !important;">
+<html ${applicationDarkTheme ? '' : 'style="background-color: #efefef !important;"'}>
     <head>
         <jsp:include page="../../assets/includes/head.html" />
         <title>4U - Show ${nome}</title>
     </head>
-    <body style="background-color: #efefef !important;" class="text-dark">
+    <body ${applicationDarkTheme ? '' : 'style="background-color: #efefef !important;" class="text-dark"'}>
         
         <jsp:include page="../../assets/components/modal/alertMsgs.jsp" />
         
@@ -22,7 +22,7 @@
         <div class="container">
             
             <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
-                <ol class="breadcrumb bg-white p-3 rounded shadow-sm">
+                <ol class="breadcrumb ${applicationDarkTheme ? 'bg-dark' : 'bg-white'} p-3 rounded shadow-sm">
                     <li class="breadcrumb-item"><a href="home"><i class="fas fa-th-large"></i></a></li>
                     <li class="breadcrumb-item"><a href="user"><i class="fas fa-user"></i></a></li>
                     <li class="breadcrumb-item active" aria-current="page">Visualizar</li>
@@ -30,7 +30,7 @@
                 </ol>
             </nav>
                 
-            <div class="card text-dark border-0 mb-3 bg-body rounded shadow-sm">
+            <div class="card border-0 mb-3 ${applicationDarkTheme ? 'bg-dark' : 'bg-body text-dark'} rounded shadow-sm">
                 <div class="card-header bg-primary">
                     <h5 class="card-title text-light py-2">
                         <i class="fas fa-user"></i>
@@ -40,7 +40,7 @@
                 <div class="card-body">
                     <div class="d-flex text-muted pt-3">
                       <i class="fas fa-user-shield me-2"></i> 
-                      <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+                      <div class="pb-3 mb-0 small lh-sm border-bottom w-100" ${applicationDarkTheme ? 'style="border-color: #1d2024 !important;"' : ''}>
                         <div class="d-flex justify-content-between">
                           <strong class="text-gray-dark"> CPF</strong>
                         </div>
@@ -48,7 +48,7 @@
                       </div>
                         <c:if test="${suspenso != null}">
                             <i class="fas fa-user-slash me-2"></i> 
-                            <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+                            <div class="pb-3 mb-0 small lh-sm border-bottom w-100" ${applicationDarkTheme ? 'style="border-color: #1d2024 !important;"' : ''}>
                               <div class="d-flex justify-content-between">
                                 <strong class="text-gray-dark"> Suspenso?</strong>
                               </div>
@@ -57,7 +57,7 @@
                         </c:if>
                     </div>
                          <c:if test="${contas != null}">
-                            <div class="bg-dark text-light p-2 rounded my-4">
+                            <div class="bg-black text-light p-2 rounded my-4">
                                 <strong>
                                     <i class="fas fa-piggy-bank me-2"></i> Contas
                                 </strong>
@@ -66,7 +66,7 @@
                                 <c:when test="${contas.size() > 0}">
                                     <c:forEach var="c" items="${contas}">
                                         <div class="d-flex pt-3">
-                                            <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+                                            <div class="pb-3 mb-0 small lh-sm border-bottom w-100" ${applicationDarkTheme ? 'style="border-color: #1d2024 !important;"' : ''}>
                                                 <div class="d-flex justify-content-between">
                                                     <span class="d-block pt-3 text-uppercase">
                                                         <i class="fas fa-money-check-alt me-2"></i>
@@ -111,9 +111,6 @@
                     </c:if>
             </div>
         </div>
-                            
-        <jsp:include page="../../assets/components/modal/novoUser.html" />
-        <jsp:include page="../../assets/components/modal/novaCategoria.html" />
         
         <jsp:include page="../../assets/components/modal/confirmaAction.html" />
         

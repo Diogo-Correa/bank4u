@@ -77,6 +77,8 @@ Listar/Consultar, incluir, alterar e excluir - CRUD.
 #### descricao - Explicação adicional sobre a operação (opcional)
 
 # O que foi utilizado na aplicação?
+Bootstrap
+Fontawesome
 SweetAlert  
 DataTables  
 Fullcalendar  

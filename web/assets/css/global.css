@@ -131,7 +131,7 @@ section {
 	color:#FFF;
 	border-radius:50px;
 	text-align:center;
-	box-shadow: 2px 2px 3px #999;
+	box-shadow: 2px 2px 3px #000;
         transition: all ease-in-out .5s;
         border: none;
         z-index: 9;
@@ -223,5 +223,10 @@ section {
 }
 
 .pointer {
+    cursor: pointer;
+}
+
+.fc-list-event-title:hover {
+    color: #000 !important;
     cursor: pointer;
 }

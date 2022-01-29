@@ -66,12 +66,14 @@ public class AuthController extends HttpServlet {
 
                 boolean allowModalInfoOnLogin = Boolean.parseBoolean(appProps.getProperty("AllowModalInfoOnLogin"));
                 boolean showAlertNegativeAccounts = Boolean.parseBoolean(appProps.getProperty("ShowAlertNegativeAccounts"));
+                boolean applicationDarkTheme = Boolean.parseBoolean(appProps.getProperty("ApplicationDarkTheme"));
                 
                 request.getSession().setAttribute("allowAdminDeleteBankAcc", allowAdminDeleteBankAcc);
                 request.getSession().setAttribute("allowAdminDeleteEntries", allowAdminDeleteEntries);
                 request.getSession().setAttribute("allowModalInfoOnLogin", allowModalInfoOnLogin);
                 request.getSession().setAttribute("show", true);
                 request.getSession().setAttribute("showAlertNegativeAccounts", showAlertNegativeAccounts);
+                request.getSession().setAttribute("applicationDarkTheme", applicationDarkTheme);
                 
                 response.sendRedirect("home");
             } else {

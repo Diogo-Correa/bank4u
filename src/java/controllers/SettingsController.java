@@ -8,6 +8,7 @@ package controllers;
 import app.configs.Configurations;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URISyntaxException;
 import java.util.Properties;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -44,6 +45,11 @@ public class SettingsController extends HttpServlet {
         } else {
             String action = request.getParameter("action");
             if(action == null) request.getRequestDispatcher(this.resource + "index.jsp").forward(request, response);
+            
+            switch(action) {
+                case "update":
+                    update(request, response);
+            }
         }
     }
 
@@ -66,10 +72,6 @@ public class SettingsController extends HttpServlet {
             String action = request.getParameter("action");
             if(action == null) request.getRequestDispatcher(this.resource + "index.jsp").forward(request, response);
 
-            switch(action) {
-                case "update":
-                    update(request, response);
-            }
         }
         
     }
@@ -77,40 +79,41 @@ public class SettingsController extends HttpServlet {
     protected void update(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        
         try {
             
             Properties appProps = Configurations.getProps(appConfig);
             Properties adminProps = Configurations.getProps(adminConfig);
             
-            if(request.getParameter("AllowModalInfoOnLogin") != null) {
-                Configurations.setProps(appConfig, "AllowModalInfoOnLogin", request.getParameter("AllowModalInfoOnLogin"));
-                
-                boolean allowModalInfoOnLogin = Boolean.parseBoolean(appProps.getProperty("AllowModalInfoOnLogin"));
-                request.getSession().setAttribute("allowModalInfoOnLogin", allowModalInfoOnLogin);
+            if(request.getParameter("allowModalInfoOnLogin") != null) {
+                Configurations.setProps(appConfig, "AllowModalInfoOnLogin", request.getParameter("allowModalInfoOnLogin"));
+                request.getSession().setAttribute("allowModalInfoOnLogin", request.getParameter("allowModalInfoOnLogin"));
             }
             
-            if(request.getParameter("ShowAlertNegativeAccounts") != null) {
-                Configurations.setProps(appConfig, "ShowAlertNegativeAccounts", request.getParameter("ShowAlertNegativeAccounts"));
-                
-                boolean showAlertNegativeAccounts = Boolean.parseBoolean(appProps.getProperty("ShowAlertNegativeAccounts"));
-                request.getSession().setAttribute("showAlertNegativeAccounts", showAlertNegativeAccounts);
+            else if(request.getParameter("showAlertNegativeAccounts") != null) {
+                Configurations.setProps(appConfig, "ShowAlertNegativeAccounts", request.getParameter("showAlertNegativeAccounts"));
+                request.getSession().setAttribute("showAlertNegativeAccounts", request.getParameter("showAlertNegativeAccounts"));
             }
-
-            if(request.getParameter("AllowAdminDeleteBankAcc") != null) {
-                Configurations.setProps(adminConfig, "AllowAdminDeleteBankAcc", request.getParameter("AllowAdminDeleteBankAcc"));
-                
-                boolean allowAdminDeleteBankAcc = Boolean.parseBoolean(adminProps.getProperty("AllowAdminDeleteBankAcc"));
-                request.getSession().setAttribute("allowAdminDeleteBankAcc", allowAdminDeleteBankAcc);
-            }
-
-            if(request.getParameter("AllowAdminDeleteEntries") != null) {
-                Configurations.setProps(adminConfig, "AllowAdminDeleteEntries", request.getParameter("AllowAdminDeleteEntries"));
-                
-                boolean allowAdminDeleteEntries = Boolean.parseBoolean(adminProps.getProperty("AllowAdminDeleteEntries"));
-                request.getSession().setAttribute("allowAdminDeleteEntries", allowAdminDeleteEntries);
-            }
-        } catch(Exception err) {
             
+            else if(request.getParameter("applicationDarkTheme") != null) {
+                Configurations.setProps(appConfig, "ApplicationDarkTheme", request.getParameter("applicationDarkTheme"));
+                request.getSession().setAttribute("applicationDarkTheme", request.getParameter("applicationDarkTheme"));
+            }
+
+            else if(request.getParameter("allowAdminDeleteBankAcc") != null) {
+                Configurations.setProps(adminConfig, "AllowAdminDeleteBankAcc", request.getParameter("allowAdminDeleteBankAcc"));
+                request.getSession().setAttribute("allowAdminDeleteBankAcc", request.getParameter("allowAdminDeleteBankAcc"));
+            }
+
+            else if(request.getParameter("allowAdminDeleteEntries") != null) {
+                Configurations.setProps(adminConfig, "AllowAdminDeleteEntries", request.getParameter("allowAdminDeleteEntries"));
+                request.getSession().setAttribute("allowAdminDeleteEntries", request.getParameter("allowAdminDeleteEntries"));
+            }
+            response.getWriter().write("ok!"); 
+        } catch(IOException | URISyntaxException err) {
+        response.getWriter().write(err.getMessage()); 
         }
         
     }

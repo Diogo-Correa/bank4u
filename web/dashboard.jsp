@@ -7,12 +7,12 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
-<html style="background-color: #efefef !important;">
+<html ${applicationDarkTheme ? '' : 'style="background-color: #efefef !important;"'}>
     <head>
         <jsp:include page="./assets/includes/head.html" />
         <title>4U - Dashboard</title>
     </head>
-    <body style="background-color: #efefef !important;" class="text-dark">
+    <body ${applicationDarkTheme ? '' : 'style="background-color: #efefef !important;" class="text-dark"'}>
         
         <jsp:include page="./assets/components/modal/alertMsgs.jsp" />
         
@@ -24,14 +24,14 @@
             </button>
             
             <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
-                <ol class="breadcrumb bg-white p-3 rounded shadow-sm">
+                <ol class="breadcrumb ${applicationDarkTheme ? 'bg-dark' : 'bg-white'} p-3 rounded shadow-sm">
                     <li class="breadcrumb-item active" aria-current="page"><i class="fas fa-home"></i></li>
                 </ol>
             </nav>
             
             <div class="row">
                 <div class="col-lg-9">
-                    <div class="card text-dark border-0 mb-3">
+                    <div class="card ${applicationDarkTheme ? 'bg-dark' : 'bg-body text-dark'} border-0 mb-3">
                         <div class="card-header bg-dark">
                             <h5 class="card-title text-light py-2">
                                 <i class="fas fa-money-check-alt"></i>
@@ -77,7 +77,7 @@
                     </div>
                 </div>
                 <div class="col-lg-3">
-                    <div class="card text-dark border-0 mb-3">
+                    <div class="card ${applicationDarkTheme ? 'bg-dark' : 'bg-body text-dark'} border-0 mb-3">
                         <div class="card-header bg-dark">
                             <h5 class="card-title text-light py-2">
                                 <i class="fas fa-money-bill-alt"></i>
@@ -95,9 +95,6 @@
         </div>
         
         <jsp:include page="./assets/components/modal/novoLancamento.jsp" />
-        <jsp:include page="./assets/components/modal/novaConta.html" />
-        
-        
         <jsp:include page="./assets/includes/scripts.html" />
         
         <jsp:include page="./assets/components/modal/confirmaAction.html" />
@@ -124,29 +121,28 @@
                             <form action="wallet?action=store" method="POST" id="formConta" onsubmit="$('.loaderConta').show(); $('.conta_txt').hide();">
                                 <div class="mb-3">
                                   <label for="nome_conta" class="col-form-label">Nome da conta:</label>
-                                  <input type="text" class="form-control" id="nome_conta" name="nome_conta" maxlength="20" required/>
+                                  <input type="text" class="form-control ${applicationDarkTheme ? 'bg-black text-white border-dark' : ''}" id="nome_conta" name="nome_conta" maxlength="20" required/>
                                 </div>
                                 <div class="mb-3">
                                   <label for="banco" class="col-form-label">Banco:</label>
-                                  <select class="form-select" id="banco" name="banco" required>
+                                  <select class="form-select ${applicationDarkTheme ? 'bg-black text-white border-dark' : ''}" id="banco" name="banco" required>
                                       <option value="001">Banco do Brasil</option>
                                       <option value="341">Itau</option>
                                   </select>
                                 </div>
                                 <div class="mb-3">
                                   <label for="agencia" class="col-form-label">Agencia:</label>
-                                  <input type="number" class="form-control" min="000000" max="999999" step="000001" id="agencia" name="agencia" required/>
+                                  <input type="number" class="form-control ${applicationDarkTheme ? 'bg-black text-white border-dark' : ''}" min="000000" max="999999" step="000001" id="agencia" name="agencia" required/>
                                 </div>
                                 <div class="mb-3">
                                   <label for="conta_corrente" class="col-form-label">C/C</label>
-                                  <input type="number" class="form-control" min="0000" max="9999" step="0001" id="conta_corrente" name="conta_corrente" required/>
+                                  <input type="number" class="form-control ${applicationDarkTheme ? 'bg-black text-white border-dark' : ''}" min="0000" max="9999" step="0001" id="conta_corrente" name="conta_corrente" required/>
                                 </div>
                                 <div class="mb-3">
                                   <label for="digito" class="col-form-label">Digito</label>
-                                  <input type="number" class="form-control" min="0" max="9" id="digito" name="digito" required/>
+                                  <input type="number" class="form-control ${applicationDarkTheme ? 'bg-black text-white border-dark' : ''}" min="0" max="9" id="digito" name="digito" required/>
                                 </div>
                                 </div>
-                                <div class="modal-footer">
                                 <button type="submit" class="btn btn-success">
                                     <span class="spinner-border spinner-border-sm loaderConta" role="status" style="display:none;">
                                         <span class="visually-hidden">Loading...</span>
@@ -256,7 +252,7 @@
         
         <c:if test="${allowModalInfoOnLogin}">
             <c:if test="${show}">
-                <jsp:include page="./assets/components/modal/userInfo.html" />
+                <jsp:include page="./assets/components/modal/userInfo.jsp" />
                 <script>
                     $("#infosModal").show();
                 </script>

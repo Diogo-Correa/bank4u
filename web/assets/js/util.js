@@ -2,7 +2,6 @@ $( document ).ready(function() {
     
     $("#infosModal").modal("show");
     
-    
     /* global bootstrap: false */
     (function () {
       'use strict'

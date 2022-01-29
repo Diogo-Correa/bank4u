@@ -8,12 +8,12 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html style="background-color: #efefef !important;">
+<html ${applicationDarkTheme ? '' : 'style="background-color: #efefef !important;"'}>
     <head>
         <jsp:include page="../../assets/includes/head.html" />
         <title>4U - Users</title>
     </head>
-    <body style="background-color: #efefef !important;" class="text-dark">
+    <body ${applicationDarkTheme ? '' : 'style="background-color: #efefef !important;" class="text-dark"'}>
         
         <jsp:include page="../../assets/components/modal/alertMsgs.jsp" />
         
@@ -26,16 +26,16 @@
             </button>
             
             <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
-                <ol class="breadcrumb bg-white p-3 rounded shadow-sm">
+                <ol class="breadcrumb ${applicationDarkTheme ? 'bg-dark' : 'bg-white'} p-3 rounded shadow-sm">
                     <li class="breadcrumb-item"><a href="home"><i class="fas fa-th-large"></i></a></li>
                   <li class="breadcrumb-item active" aria-current="page">Usuarios</li>
                 </ol>
             </nav>
             
-            <div class="card">
+            <div class="card ${applicationDarkTheme ? 'bg-dark' : 'bg-white text-dark'} rounded shadow-sm">
                 <div class="card-body p-3">
-                    <table id="data" class="table table-striped table-hover" style="width:100%">
-                        <thead class="table-dark">
+                    <table id="data" class="table table-hover ${applicationDarkTheme ? 'table-dark' : 'table-light'} table-striped" style="width:100%">
+                        <thead class="${applicationDarkTheme ? 'table-active' : 'table-dark'}">
                             <tr>
                                 <th>Nome</th>
                                 <th>CPF</th>
@@ -137,20 +137,12 @@
                                 </tr>
                             </c:forEach>
                         </tbody>
-                        <tbody class="table-dark">
-                            <tr>
-                                <th>Nome</th>
-                                <th>CPF</th>
-                                <th>Nivel</th>
-                                <th colspan="2"></th>
-                            </tr>
-                        </tbody>
                     </table>
                 </div>
             </div>
         </div>
         
-        <jsp:include page="../../assets/components/modal/novoUser.html" />
+        <jsp:include page="../../assets/components/modal/novoUser.jsp" />
         
         <jsp:include page="../../assets/components/modal/confirmaAction.html" />
         
@@ -174,6 +166,29 @@
                 order: [[0, "asc"]]
                 });
             } );
+            
         </script>
+        <c:if test="${applicationDarkTheme}">
+            <script>
+                $( document ).ready(function() {
+                    $('.form-control-sm').addClass('bg-black border-dark text-white');
+                    $('.form-select-sm').addClass('bg-black border-dark text-white');
+                });
+            
+                $(document).on("change", "#admin", function() {
+                    if($("#admin").is(':checked')) {
+                        $("#adminLabel").removeClass("bg-black");
+                        $("#userLabel").addClass("bg-black");
+                    }
+                });
+
+                $(document).on("change", "#user", function() {
+                    if($("#user").is(':checked')) {
+                        $("#userLabel").removeClass("bg-black");
+                        $("#adminLabel").addClass("bg-black");
+                    }
+                });
+            </script>
+        </c:if>
     </body>
 </html>

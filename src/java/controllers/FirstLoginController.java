@@ -28,7 +28,7 @@ import models.Connect;
  *
  * @author Diogo
  */
-@WebServlet(name = "FirstLoginController", urlPatterns = {"/firstAccess"})
+@WebServlet(name = "FirstLoginController", urlPatterns = {"/setup"})
 public class FirstLoginController extends HttpServlet {
     private final String appConfig = "app.properties";
     private final String dbConfig = "database.properties";
@@ -69,11 +69,13 @@ public class FirstLoginController extends HttpServlet {
 
                 boolean allowModalInfoOnLogin = Boolean.parseBoolean(appProps.getProperty("AllowModalInfoOnLogin"));
                 boolean showAlertNegativeAccounts = Boolean.parseBoolean(appProps.getProperty("ShowAlertNegativeAccounts"));
+                boolean applicationDarkTheme = Boolean.parseBoolean(appProps.getProperty("ApplicationDarkTheme"));
 
                 request.getSession().setAttribute("allowAdminDeleteBankAcc", allowAdminDeleteBankAcc);
                 request.getSession().setAttribute("allowAdminDeleteEntries", allowAdminDeleteEntries);
                 request.getSession().setAttribute("allowModalInfoOnLogin", allowModalInfoOnLogin);
                 request.getSession().setAttribute("showAlertNegativeAccounts", showAlertNegativeAccounts);
+                request.getSession().setAttribute("applicationDarkTheme", applicationDarkTheme);
 
                 request.getRequestDispatcher("firstAccess.jsp").forward(request, response);
             }
@@ -200,35 +202,47 @@ public class FirstLoginController extends HttpServlet {
     protected void update(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        
         try {
-            if(request.getParameter("AllowModalInfoOnLogin") != null) {
-                Configurations.setProps(appConfig, "AllowModalInfoOnLogin", request.getParameter("AllowModalInfoOnLogin"));
+            if(request.getParameter("showModalInfoOnLogin") != null) {
+                Configurations.setProps(appConfig, "AllowModalInfoOnLogin", request.getParameter("allowModalInfoOnLogin"));
                 
-                boolean allowModalInfoOnLogin = Boolean.parseBoolean(request.getParameter("AllowModalInfoOnLogin"));
+                boolean allowModalInfoOnLogin = Boolean.parseBoolean(request.getParameter("allowModalInfoOnLogin"));
                 request.getSession().setAttribute("allowModalInfoOnLogin", allowModalInfoOnLogin);
             }
             
-            if(request.getParameter("ShowAlertNegativeAccounts") != null) {
-                Configurations.setProps(appConfig, "ShowAlertNegativeAccounts", request.getParameter("ShowAlertNegativeAccounts"));
+            if(request.getParameter("showAlertNegativeAccounts") != null) {
+                Configurations.setProps(appConfig, "ShowAlertNegativeAccounts", request.getParameter("showAlertNegativeAccounts"));
                 
-                boolean showAlertNegativeAccounts = Boolean.parseBoolean(request.getParameter("ShowAlertNegativeAccounts"));
+                boolean showAlertNegativeAccounts = Boolean.parseBoolean(request.getParameter("showAlertNegativeAccounts"));
                 request.getSession().setAttribute("showAlertNegativeAccounts", showAlertNegativeAccounts);
             }
-
-            if(request.getParameter("AllowAdminDeleteBankAcc") != null) {
-                Configurations.setProps(adminConfig, "AllowAdminDeleteBankAcc", request.getParameter("AllowAdminDeleteBankAcc"));
+            
+            if(request.getParameter("applicationDarkTheme") != null) {
+                Configurations.setProps(appConfig, "ApplicationDarkTheme", request.getParameter("applicationDarkTheme"));
                 
-                boolean allowAdminDeleteBankAcc = Boolean.parseBoolean(request.getParameter("AllowAdminDeleteBankAcc"));
+                boolean applicationDarkTheme = Boolean.parseBoolean(request.getParameter("applicationDarkTheme"));
+                request.getSession().setAttribute("applicationDarkTheme", applicationDarkTheme);
+            }
+
+            if(request.getParameter("allowAdminDeleteBankAcc") != null) {
+                Configurations.setProps(adminConfig, "AllowAdminDeleteBankAcc", request.getParameter("allowAdminDeleteBankAcc"));
+                
+                boolean allowAdminDeleteBankAcc = Boolean.parseBoolean(request.getParameter("allowAdminDeleteBankAcc"));
                 request.getSession().setAttribute("allowAdminDeleteBankAcc", allowAdminDeleteBankAcc);
             }
 
-            if(request.getParameter("AllowAdminDeleteEntries") != null) {
-                Configurations.setProps(adminConfig, "AllowAdminDeleteEntries", request.getParameter("AllowAdminDeleteEntries"));
+            if(request.getParameter("allowAdminDeleteEntries") != null) {
+                Configurations.setProps(adminConfig, "AllowAdminDeleteEntries", request.getParameter("allowAdminDeleteEntries"));
                 
-                boolean allowAdminDeleteEntries = Boolean.parseBoolean(request.getParameter("AllowAdminDeleteEntries"));
+                boolean allowAdminDeleteEntries = Boolean.parseBoolean(request.getParameter("allowAdminDeleteEntries"));
                 request.getSession().setAttribute("allowAdminDeleteEntries", allowAdminDeleteEntries);
             }
+            response.getWriter().write("ok!"); 
         } catch(Exception err) {
+            response.getWriter().write(err.getMessage()); 
             
         }
         

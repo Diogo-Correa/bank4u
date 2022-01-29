@@ -26,7 +26,7 @@
     Properties appProps = Configurations.getProps("app.properties");
     
     boolean firstAccess = Boolean.parseBoolean(appProps.getProperty("FirstLogin"));
-    if(firstAccess) response.sendRedirect("firstAccess");
+    if(firstAccess) response.sendRedirect("setup");
     
     try {
         if((boolean) request.getSession().getAttribute("isLoggedIn")) {
@@ -46,7 +46,7 @@
 </head>
 <body>
     
-    <jsp:include page="./assets/components/modal/infos.html" />
+    <jsp:include page="./assets/components/modal/infos.jsp" />
     
     <jsp:include page="./assets/components/modal/alertMsgs.jsp" />
     

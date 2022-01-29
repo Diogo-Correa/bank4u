@@ -8,12 +8,12 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html style="background-color: #efefef !important;">
+<html ${applicationDarkTheme ? '' : 'style="background-color: #efefef !important;"'}>
     <head>
         <jsp:include page="../../assets/includes/head.html" />
         <title>4U - Edit ${nome}</title>
     </head>
-    <body style="background-color: #efefef !important;" class="text-dark">
+    <body ${applicationDarkTheme ? '' : 'style="background-color: #efefef !important;" class="text-dark"'}>
         
         <jsp:include page="../../assets/components/modal/alertMsgs.jsp" />
         
@@ -22,7 +22,7 @@
         <div class="container">
             
             <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
-                <ol class="breadcrumb bg-white p-3 rounded shadow-sm">
+                <ol class="breadcrumb ${applicationDarkTheme ? 'bg-dark' : 'bg-white'} p-3 rounded shadow-sm">
                     <li class="breadcrumb-item"><a href="home"><i class="fas fa-th-large"></i></a></li>
                     <li class="breadcrumb-item"><a href="category"><i class="fas fa-tags"></i></a></li>
                     <li class="breadcrumb-item active" aria-current="page">Editar</li>
@@ -30,7 +30,7 @@
                 </ol>
             </nav>
                 
-            <div class="card text-dark border-0 mb-3 bg-body rounded shadow-sm">
+            <div class="card text-dark border-0 mb-3 ${applicationDarkTheme ? 'bg-dark' : 'bg-body text-dark'} rounded shadow-sm">
                 <div class="card-header bg-warning">
                     <h5 class="card-title py-2">
                         <i class="fas fa-tag"></i>
@@ -45,11 +45,11 @@
                         
                         <div class="d-flex text-muted pt-3">
                           <i class="fas fa-user me-2"></i> 
-                          <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+                          <div class="pb-3 mb-0 small lh-sm border-bottom w-100" ${applicationDarkTheme ? 'style="border-color: #1d2024 !important;"' : ''}>
                             <div class="d-flex justify-content-between">
                               <strong class="text-gray-dark"> Nome</strong>
                             </div>
-                              <span class="d-block"><input type="text" name="descricao" value="${nome}" class="form-control" oninput="changeTitle(this.value)" maxlength="20"/></span>
+                              <span class="d-block"><input type="text" name="descricao" value="${nome}" class="form-control ${applicationDarkTheme ? 'bg-black text-white border-dark' : ''}" oninput="changeTitle(this.value)" maxlength="20"/></span>
                           </div>
                         </div>
 
@@ -71,9 +71,6 @@
                 </div>
             </div>
         </div>
-                            
-        <jsp:include page="../../assets/components/modal/novoUser.html" />
-        <jsp:include page="../../assets/components/modal/novaCategoria.html" />
         
         <jsp:include page="../../assets/components/modal/confirmaAction.html" />
         

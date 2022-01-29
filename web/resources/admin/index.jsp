@@ -7,12 +7,12 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html style="background-color: #efefef !important;">
+<html ${applicationDarkTheme ? '' : 'style="background-color: #efefef !important;"'}>
     <head>
         <jsp:include page="../../assets/includes/head.html" />
         <title>4U - Settings</title>
     </head>
-    <body style="background-color: #efefef !important;" class="text-dark">
+    <body ${applicationDarkTheme ? '' : 'style="background-color: #efefef !important;" class="text-dark"'}>
         
         <jsp:include page="../../assets/components/modal/alertMsgs.jsp" />
         
@@ -21,14 +21,14 @@
         <div class="container">
             
             <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
-                <ol class="breadcrumb bg-white p-3 rounded shadow-sm">
+                <ol class="breadcrumb ${applicationDarkTheme ? 'bg-dark' : 'bg-white'} p-3 rounded shadow-sm">
                     <li class="breadcrumb-item active" aria-current="page"><i class="fas fa-th-large"></i></li>
                 </ol>
             </nav>
             
             <div class="row">
                 <div class="col-lg-6">
-                    <div class="card text-dark border-0 mb-3 bg-body rounded shadow-sm">
+                    <div class="card border-0 mb-3 ${applicationDarkTheme ? 'bg-dark' : 'bg-white text-dark'} rounded shadow-sm">
                         <div class="card-header bg-dark">
                             <h5 class="card-title text-light py-2">
                                 <i class="fas fa-crown"></i>
@@ -39,10 +39,10 @@
                         <div class="card-body">
                             
                             <c:forEach var="a" items="${admins}">
-                                <div class="d-flex text-muted pt-3">
+                                <div class="d-flex ${applicationDarkTheme ? '' : 'text-muted'} pt-3">
                                   <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#a83242"></rect><text x="50%" y="50%" fill="#007bff" dy=".3em"></text></svg>
 
-                                  <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+                                  <div class="pb-3 mb-0 small lh-sm border-bottom w-100" ${applicationDarkTheme ? 'style="border-color: #1d2024 !important;"' : ''}>
                                     <div class="d-flex justify-content-between">
                                       <strong class="text-gray-dark"><c:out value="${a.nome}" /></strong>
                                       <div class="dropdown">
@@ -78,13 +78,13 @@
                                 </div>
                             </c:forEach>
                             <small class="d-block text-end mt-3">
-                              <a href="user">Todos os usuarios</a>
+                              <a href="user" class="${applicationDarkTheme ? 'link-danger' : ''}">Todos os usuarios</a>
                             </small>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="card text-dark border-0 mb-3 bg-body rounded shadow-sm">
+                    <div class="card border-0 mb-3 ${applicationDarkTheme ? 'bg-dark' : 'bg-white text-dark'} rounded shadow-sm">
                         <div class="card-header bg-dark">
                             <h5 class="card-title text-light py-2">
                                 <i class="fas fa-user"></i>
@@ -94,10 +94,10 @@
                         </div>
                         <div class="card-body">
                             <c:forEach var="u" items="${users}">
-                                <div class="d-flex text-muted pt-3">
+                                <div class="d-flex ${applicationDarkTheme ? '' : 'text-muted'} pt-3">
                                   <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#007bff"></rect><text x="50%" y="50%" fill="#007bff" dy=".3em"></text></svg>
 
-                                  <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+                                  <div class="pb-3 mb-0 small lh-sm border-bottom w-100" ${applicationDarkTheme ? 'style="border-color: #1d2024 !important;"' : ''}>
                                     <div class="d-flex justify-content-between">
                                       <strong class="text-gray-dark"><c:out value="${u.nome}" /></strong>
                                       <div class="dropdown">
@@ -146,13 +146,13 @@
                                 </div>
                             </c:forEach>
                             <small class="d-block text-end mt-3">
-                              <a href="user">Todos os usuarios</a>
+                              <a href="user" class="${applicationDarkTheme ? 'link-danger' : ''}">Todos os usuarios</a>
                             </small>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="card text-dark border-0 mb-3 bg-body rounded shadow-sm">
+                    <div class="card text-dark border-0 mb-3 ${applicationDarkTheme ? 'bg-dark' : 'bg-white text-dark'} rounded shadow-sm">
                         <div class="card-header bg-dark">
                             <h5 class="card-title text-light py-2">
                                 <i class="fas fa-tags"></i>
@@ -162,10 +162,10 @@
                         </div>
                         <div class="card-body">
                             <c:forEach var="c" items="${categories}">
-                                <div class="d-flex text-muted pt-3">
+                                <div class="d-flex ${applicationDarkTheme ? 'text-white' : 'text-muted'} pt-3">
                                   <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#00ffa6"></rect><text x="50%" y="50%" fill="#00ffa6" dy=".3em"></text></svg>
 
-                                  <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+                                  <div class="pb-3 mb-0 small lh-sm border-bottom w-100" ${applicationDarkTheme ? 'style="border-color: #1d2024 !important;"' : ''}>
                                     <div class="d-flex justify-content-between">
                                       <strong class="text-gray-dark"><c:out value="${c.descricao}" /></strong>
                                       <div class="dropdown">
@@ -199,23 +199,21 @@
                                 </div>
                             </c:forEach>
                             <small class="d-block text-end mt-3">
-                              <a href="category">Todos as categorias</a>
+                              <a href="category" class="${applicationDarkTheme ? 'link-danger' : ''}">Todos as categorias</a>
                             </small>
                         </div>
                     </div>
                 </div>
             </div> 
-        </div>                  
+        </div>              
                             
-        <jsp:include page="../../assets/components/modal/novaCategoria.html" />
-        
         <jsp:include page="../../assets/components/modal/confirmaAction.html" />
         
         <jsp:include page="../../assets/includes/scripts.html" />
         
         <c:if test="${allowModalInfoOnLogin}">
             <c:if test="${show}">
-                <jsp:include page="../../assets/components/modal/adminInfo.html" />
+                <jsp:include page="../../assets/components/modal/adminInfo.jsp" />
                 <script>
                     $("#infosModal").show();
                 </script>

@@ -1,7 +1,14 @@
+<%-- 
+    Document   : adminInfo
+    Created on : 29/01/2022, 17:06:22
+    Author     : Diogo
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div class="modal text-dark modal-dialog-scrollable" tabindex="-1" id="infosModal">
   <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
+    <div class="modal-content ${applicationDarkTheme ? 'bg-dark text-white' : 'bg-white text-dark'}">
+      <div class="modal-header" ${applicationDarkTheme ? 'style="border-color: #1d2024 !important;"' : ''}>
         <h5 class="modal-title">Infos</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
