@@ -33,6 +33,7 @@ public class LogoutController extends HttpServlet {
         request.getSession().removeAttribute("authUser");
         request.getSession().setAttribute("isAdmin", false);
         request.getSession().setAttribute("isLoggedIn", false);
+        request.getSession().invalidate();
         response.sendRedirect("/banco");
     }
 

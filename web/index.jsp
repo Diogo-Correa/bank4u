@@ -14,12 +14,20 @@
     ----- Casos de Usos - Usuario -----
     Entrega: 30.01.2022
     RF6: OK
-    RF7:
+    RF7: OK
     RF8: OK
     RF9: OK
 
 --%>
+<%@page import="java.util.Properties, app.configs.Configurations"%>
 <%
+    
+    
+    Properties appProps = Configurations.getProps("app.properties");
+    
+    boolean firstAccess = Boolean.parseBoolean(appProps.getProperty("FirstLogin"));
+    if(firstAccess) response.sendRedirect("firstAccess");
+    
     try {
         if((boolean) request.getSession().getAttribute("isLoggedIn")) {
             response.sendRedirect("home");

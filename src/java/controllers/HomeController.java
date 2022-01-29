@@ -25,6 +25,7 @@ import models.UsuarioDAO;
  */
 @WebServlet(name = "HomeController", urlPatterns = {"/home"})
 public class HomeController extends HttpServlet {
+    private final String adminResource = "resources/admin/";
 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -63,7 +64,7 @@ public class HomeController extends HttpServlet {
                 request.setAttribute("categories", new CategoriaDAO().getThreeTags());
                 request.setAttribute("categoriesCount", new CategoriaDAO().getAll().size());
                 
-                request.getRequestDispatcher("settings.jsp").forward(request, response);
+                request.getRequestDispatcher(adminResource + "index.jsp").forward(request, response);
             } else {
                 
                 request.setAttribute("contas", new ContaDAO().getByUserID(authUser.getId()));

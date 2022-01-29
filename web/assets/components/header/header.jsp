@@ -14,6 +14,7 @@
         <li class="nav-item"><a href="user" class="nav-link link-dark px-2 active" aria-current="page"><i class="fas fa-user"></i></a></li>
         <li class="nav-item"><a href="category" class="nav-link link-dark px-2 active" aria-current="page"><i class="fas fa-tags"></i></a></li>
         <li class="nav-item"><a href="charts" class="nav-link link-dark px-2 active" aria-current="page"><i class="fas fa-chart-bar"></i></a></li>
+        <li class="nav-item"><a href="settings" class="nav-link link-dark px-2 active" aria-current="page"><i class="fas fa-cog"></i></a></li>
       </c:if>
     </ul>
     <ul class="nav">

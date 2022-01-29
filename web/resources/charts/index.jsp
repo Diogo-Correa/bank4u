@@ -35,11 +35,10 @@
                             <h5 class="card-title text-light py-2">
                                 <i class="fas fa-crown"></i>
                                 Usuarios
-                                <span class="badge bg-danger">${adminsCount + usersCount}</span>
                             </h5>
                         </div>
                         <div class="card-body">
-                            <canvas id="usersBar" width="50" height="50"></canvas>
+                            <canvas id="usersBar" height="250"></canvas>
                         </div>
                     </div>
                 </div>
@@ -52,7 +51,20 @@
                             </h5>
                         </div>
                         <div class="card-body">
-                            <canvas id="suspendUsers" width="5" height="5"></canvas>
+                            <canvas id="suspendUsers" height="250"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card text-dark border-0 mb-3 bg-body rounded shadow-sm">
+                        <div class="card-header bg-dark">
+                            <h5 class="card-title text-light py-2">
+                                <i class="fas fa-wallet"></i>
+                                Contas
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="contas" height="250"></canvas>
                         </div>
                     </div>
                 </div>
@@ -95,7 +107,9 @@
                     y: {
                         beginAtZero: true
                     }
-                }
+                },
+                responsive: true,
+                maintainAspectRatio: false
             }
         });
         
@@ -121,7 +135,37 @@
                     y: {
                         beginAtZero: true
                     }
-                }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+        
+        const contasPie = new Chart(contas, {
+            type: 'pie',
+            data: {
+                labels: ['Itau', 'BB'],
+                datasets: [{
+                    data: [`${itauCount}`, `${bbCount}`],
+                    backgroundColor: [
+                        'rgba(235, 128, 52, 0.6)',
+                        'rgba(232, 235, 52, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(235, 128, 52, 1)',
+                        'rgba(232, 235, 52, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
             }
         });
         </script>  

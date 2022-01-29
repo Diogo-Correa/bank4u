@@ -34,7 +34,7 @@ public class UsuarioController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        if((!(boolean) request.getSession().getAttribute("isAdmin") || request.getSession().getAttribute("isAdmin") == null) || (!(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null)) {
+        if(request.getSession().getAttribute("authUser") == null || (request.getSession().getAttribute("isAdmin") == null || !(boolean) request.getSession().getAttribute("isAdmin")) || (!(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null)) {
             request.getSession().invalidate();
             request.getSession().setAttribute("error", "Voce nao tem permissao para acessar essa area!");
             response.sendRedirect("home");
@@ -76,7 +76,7 @@ public class UsuarioController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        if((!(boolean) request.getSession().getAttribute("isAdmin") || request.getSession().getAttribute("isAdmin") == null) || (!(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null)) {
+        if(request.getSession().getAttribute("authUser") == null || (request.getSession().getAttribute("isAdmin") == null || !(boolean) request.getSession().getAttribute("isAdmin")) || (!(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null)) {
             request.getSession().invalidate();
             request.getSession().setAttribute("error", "Voce nao tem permissao para acessar essa areaa!");
             response.sendRedirect("home");
@@ -168,12 +168,12 @@ public class UsuarioController extends HttpServlet {
                 }
 
                 request.getSession().setAttribute("success", "Usuario adicionado ao sistema!");
-                response.sendRedirect("home");
+                response.sendRedirect("user");
             }
             
         } catch (CPFCadastradoException | MaxLengthTextInputException | EqualsLengthTextInputException | MinLengthTextInputException | RoleException | NullTextInputException err) {
             request.getSession().setAttribute("error", err.getMessage());
-            response.sendRedirect("home");
+            response.sendRedirect("user");
         }
     }
     
@@ -191,17 +191,17 @@ public class UsuarioController extends HttpServlet {
                 userDAO.suspendUser(user);
             
                 request.getSession().setAttribute("success",(user.isSuspenso()) ? "Usuario ativo no sistema!" : "Usuario suspenso do sistema!");
-                response.sendRedirect("home");
+                response.sendRedirect("user");
             } else {
                 request.getSession().setAttribute("error", "Usuario nao encontrado!");
-                response.sendRedirect("home");
+                response.sendRedirect("user");
             }
             
             
         } catch(NumberFormatException e) {
             
             request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
-            response.sendRedirect("home");
+            response.sendRedirect("user");
             
         } 
     }
@@ -228,7 +228,7 @@ public class UsuarioController extends HttpServlet {
                     request.getRequestDispatcher(this.resource + "show.jsp").forward(request, response);
                 } else {
                     request.getSession().setAttribute("error", "Usuario nao encontrado!");
-                    response.sendRedirect("home");
+                    response.sendRedirect("user");
                 }
             } else {
                 AdministradorDAO adminDAO = new AdministradorDAO();
@@ -241,7 +241,7 @@ public class UsuarioController extends HttpServlet {
                     request.getRequestDispatcher(this.resource + "show.jsp").forward(request, response);
                 } else {
                     request.getSession().setAttribute("error", "Usuario nao encontrado!");
-                    response.sendRedirect("home");
+                    response.sendRedirect("user");
                 }
                 
             }
@@ -249,7 +249,7 @@ public class UsuarioController extends HttpServlet {
             
         } catch(NumberFormatException e) {
             request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
-            response.sendRedirect("home");
+            response.sendRedirect("user");
         }
     }
     
@@ -260,7 +260,7 @@ public class UsuarioController extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
             request.getSession().removeAttribute("suspenso");
             
-            if(request.getParameter("admin") == null && request.getParameter("admin") != "true") {
+            if(request.getParameter("admin") == null && !"true".equals(request.getParameter("admin"))) {
                 UsuarioDAO userDAO = new UsuarioDAO();
                 Usuario user = userDAO.getByID(id);
                 
@@ -289,7 +289,7 @@ public class UsuarioController extends HttpServlet {
                     request.getRequestDispatcher(this.resource + "edit.jsp").forward(request, response);
                 } else {
                     request.getSession().setAttribute("error", "Usuario nao encontrado!");
-                    response.sendRedirect("home");
+                    response.sendRedirect("user");
                 }
                 
             }
@@ -297,7 +297,7 @@ public class UsuarioController extends HttpServlet {
             
         } catch(NumberFormatException e) {
             request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
-            response.sendRedirect("home");
+            response.sendRedirect("user");
         }
     }
     
@@ -347,14 +347,14 @@ public class UsuarioController extends HttpServlet {
             }
 
             request.getSession().setAttribute("success", "Usuario atualizado no sistema!");
-            response.sendRedirect("home");
+            response.sendRedirect("user");
             
         } catch(NumberFormatException e) {
             request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
-            response.sendRedirect("home");
+            response.sendRedirect("user");
         } catch(UserNotFoundException | CPFCadastradoException | NullTextInputException | MaxLengthTextInputException | EqualsLengthTextInputException err) {
             request.getSession().setAttribute("error", err.getMessage());
-            response.sendRedirect("home");
+            response.sendRedirect("user");
         }
     }
     
@@ -365,15 +365,18 @@ public class UsuarioController extends HttpServlet {
         try {
             
             int id = Integer.parseInt(request.getParameter("id"));
-            if(request.getParameter("admin") == null && request.getParameter("admin") != "true") {
+            if(request.getParameter("admin") == null && !"true".equals(request.getParameter("admin"))) {
 
                 UsuarioDAO userDAO = new UsuarioDAO();
 
                 if(userDAO.getByID(id) != null) {
+                    ContaDAO contaDAO = new ContaDAO();
+                    if(contaDAO.getByUserID(id) != null) throw new RestrictContaException(); 
+                    
                     userDAO.delete(id);
 
                     request.getSession().setAttribute("success", "Usuario removido do sistema!");
-                    response.sendRedirect("home");
+                    response.sendRedirect("user");
                 } else {
                     throw new UserNotFoundException();
                 }
@@ -386,13 +389,13 @@ public class UsuarioController extends HttpServlet {
                     adminDAO.delete(id);
 
                     request.getSession().setAttribute("success", "Administrador removido do sistema!");
-                    response.sendRedirect("home");
+                    response.sendRedirect("user");
                 } else {
                     if(id != authAdmin.getId()) {
                         throw new UserNotFoundException();
                     } else {
                         request.getSession().setAttribute("error", "Voce nao pode se remover do sistema!");
-                        response.sendRedirect("home");
+                        response.sendRedirect("user");
                     }
                 }
             }
@@ -400,10 +403,10 @@ public class UsuarioController extends HttpServlet {
             
         } catch(NumberFormatException e) {
             request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
-            response.sendRedirect("home");
-        } catch(UserNotFoundException err) {
+            response.sendRedirect("user");
+        } catch(UserNotFoundException | RestrictContaException err) {
             request.getSession().setAttribute("error", err.getMessage());
-            response.sendRedirect("home");
+            response.sendRedirect("user");
         }
     }
 }

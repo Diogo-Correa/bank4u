@@ -119,7 +119,36 @@ public class ContaDAO {
         }
         
         return res;
-    }  
+    }
+    
+    public ArrayList<Conta> getByBanco(String banco) {
+        
+        Connect conn = new Connect();    
+        ArrayList<Conta> res = new ArrayList<>();
+        
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("SELECT * FROM contas WHERE banco = ?");
+            stmt.setString(1, banco);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Conta acc = new Conta();
+                acc.setId(rs.getInt("id"));
+                acc.setUserId(rs.getInt("id_usuario"));
+                acc.setNome(rs.getString("nome_conta"));
+                acc.setBanco(rs.getString("banco"));
+                acc.setAgencia(rs.getString("agencia"));
+                acc.setConta(rs.getString("conta_corrente"));
+                res.add(acc);
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro de SQL: " + e.getMessage());
+        } finally {
+            conn.closeConn();
+        }
+        
+        return res;
+    }    
     
     public Conta getByAgenciaConta(String agencia, String conta) {
         Connect conn = new Connect();

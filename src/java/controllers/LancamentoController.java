@@ -8,6 +8,7 @@ package controllers;
 import app.Lancamento;
 import app.Conta;
 import app.LancamentoEvent;
+import app.User;
 import app.util.errors.*;
 import app.util.validate.LancamentoFormValidate;
 import com.google.gson.Gson;
@@ -44,7 +45,7 @@ public class LancamentoController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        if(!(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null) {
+        if(request.getSession().getAttribute("authUser") == null || !(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null) {
             request.getSession().invalidate();
             request.getSession().setAttribute("error", "Voce nao tem permissao para acessar essa area!");
             response.sendRedirect("home");
@@ -77,7 +78,7 @@ public class LancamentoController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        if(!(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null) {
+        if(request.getSession().getAttribute("authUser") == null || !(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null) {
             request.getSession().invalidate();
             request.getSession().setAttribute("error", "Voce nao tem permissao para acessar essa area!");
             response.sendRedirect("home");
@@ -220,10 +221,13 @@ public class LancamentoController extends HttpServlet {
     protected void deleteAll(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            User authUser = (User) request.getSession().getAttribute("authUser");
             int id = Integer.parseInt(request.getParameter("id"));
             
             LancamentoDAO lancDAO = new LancamentoDAO();
             ArrayList<Lancamento> lancs = lancDAO.getByContaID(id);
+            
+            if(authUser.isAdmin() && request.getSession().getAttribute("allowAdminDeleteEntries") != null && !(boolean) request.getSession().getAttribute("allowAdminDeleteEntries")) throw new AdminDeleteEntriesException();
             
             if(lancs.isEmpty()) throw new EntryNotFoundException();
             else {
@@ -233,38 +237,59 @@ public class LancamentoController extends HttpServlet {
                 });
 
                 request.getSession().setAttribute("success", "Lancamentos removidos da conta!");
-                response.sendRedirect("profile");
+                if(authUser.isAdmin()) response.sendRedirect("user");
+                else response.sendRedirect("home");
             }
         } catch(NumberFormatException e) {
+            User authUser = (User) request.getSession().getAttribute("authUser");
+            
             request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
-            response.sendRedirect("profile");
-        } catch(EntryNotFoundException err) {
+            if(authUser.isAdmin()) response.sendRedirect("user");
+            else response.sendRedirect("profile");
+        } catch(EntryNotFoundException | AdminDeleteEntriesException err) {
+            User authUser = (User) request.getSession().getAttribute("authUser");
+            
             request.getSession().setAttribute("error", err.getMessage());
-            response.sendRedirect("profile");
+            
+            if(authUser.isAdmin() &&  request.getSession().getAttribute("allowAdminDeleteEntries") != null && !(boolean) request.getSession().getAttribute("allowAdminDeleteEntries")) response.sendRedirect("settings");
+            else if(authUser.isAdmin()) response.sendRedirect("user");
+            else response.sendRedirect("profile");
         }
     }
     
     protected void delete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            User authUser = (User) request.getSession().getAttribute("authUser");
             int id = Integer.parseInt(request.getParameter("id"));
             
             LancamentoDAO lancDAO = new LancamentoDAO();
             Lancamento lanc = lancDAO.getByID(id);
+            
+            if(authUser.isAdmin() && request.getSession().getAttribute("allowAdminDeleteEntries") != null && !(boolean) request.getSession().getAttribute("allowAdminDeleteEntries")) throw new AdminDeleteEntriesException();
             
             if(lanc == null) throw new EntryNotFoundException();
             else {
                 lancDAO.delete(id);
 
                 request.getSession().setAttribute("success", "Lancamento removido do sistema!");
-                response.sendRedirect("home");
+                if(authUser.isAdmin()) response.sendRedirect("user");
+                else response.sendRedirect("home");
             }
         } catch(NumberFormatException e) {
+            User authUser = (User) request.getSession().getAttribute("authUser");
+            
             request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
-            response.sendRedirect("home");
-        } catch(EntryNotFoundException err) {
+            if(authUser.isAdmin()) response.sendRedirect("user");
+            else response.sendRedirect("home");
+        } catch(EntryNotFoundException | AdminDeleteEntriesException err) {
+            User authUser = (User) request.getSession().getAttribute("authUser");
+            
             request.getSession().setAttribute("error", err.getMessage());
-            response.sendRedirect("home");
+            
+            if(authUser.isAdmin() && request.getSession().getAttribute("allowAdminDeleteEntries") != null && !(boolean) request.getSession().getAttribute("allowAdminDeleteEntries")) response.sendRedirect("settings");
+            if(authUser.isAdmin()) response.sendRedirect("user");
+            else response.sendRedirect("home");
         }
     }
 

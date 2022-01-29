@@ -6,6 +6,7 @@
 package controllers;
 
 import app.Categoria;
+import app.Lancamento;
 import app.util.errors.*;
 import app.util.validate.CategoriaFormValidate;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import models.CategoriaDAO;
+import models.LancamentoDAO;
 
 /**
  *
@@ -29,7 +31,7 @@ public class CategoriaController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        if((!(boolean) request.getSession().getAttribute("isAdmin") || request.getSession().getAttribute("isAdmin") == null) || (!(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null)) {
+        if(request.getSession().getAttribute("authUser") == null || (request.getSession().getAttribute("isAdmin") == null || !(boolean) request.getSession().getAttribute("isAdmin")) || (!(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null)) {
             request.getSession().setAttribute("error", "Voce nao tem permissao para acessar essa area!");
             response.sendRedirect("home");
         } else {
@@ -66,7 +68,7 @@ public class CategoriaController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        if((!(boolean) request.getSession().getAttribute("isAdmin") || request.getSession().getAttribute("isAdmin") == null) || (!(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null)) {
+        if(request.getSession().getAttribute("authUser") == null || (request.getSession().getAttribute("isAdmin") == null || !(boolean) request.getSession().getAttribute("isAdmin")) || (!(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null)) {
             request.getSession().setAttribute("error", "Voce nao tem permissao para acessar essa area!");
             response.sendRedirect("home");
         } else {
@@ -115,12 +117,12 @@ public class CategoriaController extends HttpServlet {
                 catDAO.store(cat);
 
                 request.getSession().setAttribute("success", "Categoria adicionada ao sistema!");
-                response.sendRedirect("home");
+                response.sendRedirect("category");
             }
             
         } catch (DescricaoCategoriaException | MaxLengthTextInputException | NullTextInputException err) {
             request.getSession().setAttribute("error", err.getMessage());
-            response.sendRedirect("home");
+            response.sendRedirect("category");
         }
         
     }
@@ -139,12 +141,12 @@ public class CategoriaController extends HttpServlet {
                 request.getRequestDispatcher(this.resource + "show.jsp").forward(request, response);
             } else {
                 request.getSession().setAttribute("error", "Categoria nao encontrada!");
-                response.sendRedirect("home");
+                response.sendRedirect("category");
                 }
             
         } catch(NumberFormatException e) {
             request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
-            response.sendRedirect("home");
+            response.sendRedirect("category");
         }
     }
     
@@ -163,12 +165,12 @@ public class CategoriaController extends HttpServlet {
                 request.getRequestDispatcher(this.resource + "edit.jsp").forward(request, response);
             } else {
                 request.getSession().setAttribute("error", "Categoria nao encontrada!");
-                response.sendRedirect("home");
+                response.sendRedirect("category");
                 }
             
         } catch(NumberFormatException e) {
             request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
-            response.sendRedirect("home");
+            response.sendRedirect("category");
         }
     }
     
@@ -195,7 +197,7 @@ public class CategoriaController extends HttpServlet {
                     catDAO.update(cat);
 
                     request.getSession().setAttribute("success", "Categoria atualizada no sistema!");
-                    response.sendRedirect("home");
+                    response.sendRedirect("category");
                 } else {
                     throw new CategoryNotFoundException();
                 }
@@ -203,10 +205,10 @@ public class CategoriaController extends HttpServlet {
             
         } catch(NumberFormatException err) {
             request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
-            response.sendRedirect("home");
+            response.sendRedirect("category");
         } catch (MaxLengthTextInputException | NullTextInputException | CategoryNotFoundException | DescricaoCategoriaException err) {
             request.getSession().setAttribute("error", err.getMessage());
-            response.sendRedirect("home");
+            response.sendRedirect("category");
         }
     }
     
@@ -220,18 +222,24 @@ public class CategoriaController extends HttpServlet {
             Categoria cat = catDAO.getByID(id);
             
             if(cat == null) throw new CategoryNotFoundException();
+            
             else {
+                LancamentoDAO lancDAO = new LancamentoDAO();
+                Lancamento lanc = lancDAO.getByCategoriaID(id);
+                
+                if(lanc != null) throw new RestrictLancamentoException();
+                
                 catDAO.delete(id);
 
                 request.getSession().setAttribute("success", "Categoria removido do sistema!");
-                response.sendRedirect("home");
+                response.sendRedirect("category");
             }
         } catch(NumberFormatException e) {
             request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
-            response.sendRedirect("home");
-        } catch(CategoryNotFoundException err) {
+            response.sendRedirect("category");
+        } catch(CategoryNotFoundException | RestrictLancamentoException err) {
             request.getSession().setAttribute("error", err.getMessage());
-            response.sendRedirect("home");
+            response.sendRedirect("category");
         }
     }
 

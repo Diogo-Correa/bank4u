@@ -9,14 +9,14 @@
 <!DOCTYPE html>
 <html style="background-color: #efefef !important;">
     <head>
-        <jsp:include page="./assets/includes/head.html" />
+        <jsp:include page="../../assets/includes/head.html" />
         <title>4U - Settings</title>
     </head>
     <body style="background-color: #efefef !important;" class="text-dark">
         
-        <jsp:include page="./assets/components/modal/alertMsgs.jsp" />
+        <jsp:include page="../../assets/components/modal/alertMsgs.jsp" />
         
-        <jsp:include page="./assets/components/header/header.jsp" />
+        <jsp:include page="../../assets/components/header/header.jsp" />
         
         <div class="container">
             
@@ -207,10 +207,22 @@
             </div> 
         </div>                  
                             
-        <jsp:include page="./assets/components/modal/novaCategoria.html" />
+        <jsp:include page="../../assets/components/modal/novaCategoria.html" />
         
-        <jsp:include page="./assets/components/modal/confirmaAction.html" />
+        <jsp:include page="../../assets/components/modal/confirmaAction.html" />
         
-        <jsp:include page="./assets/includes/scripts.html" />
+        <jsp:include page="../../assets/includes/scripts.html" />
+        
+        <c:if test="${allowModalInfoOnLogin}">
+            <c:if test="${show}">
+                <jsp:include page="../../assets/components/modal/adminInfo.html" />
+                <script>
+                    $("#infosModal").show();
+                </script>
+            </c:if>
+        </c:if>
+        <%
+            request.getSession().setAttribute("show", false);
+        %>
     </body>
 </html>

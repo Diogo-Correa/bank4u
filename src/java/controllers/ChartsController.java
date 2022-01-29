@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import models.AdministradorDAO;
+import models.ContaDAO;
 import models.UsuarioDAO;
 
 /**
@@ -35,16 +36,17 @@ public class ChartsController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        if((!(boolean) request.getSession().getAttribute("isAdmin") || request.getSession().getAttribute("isAdmin") == null) || (!(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null)) {
+        if(request.getSession().getAttribute("authUser") == null || (request.getSession().getAttribute("isAdmin") == null || !(boolean) request.getSession().getAttribute("isAdmin")) || (!(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null)) {
             request.getSession().setAttribute("error", "Voce nao tem permissao para acessar essa area!");
             response.sendRedirect("home");
         } else {
-            request.setAttribute("users", new UsuarioDAO().getThreeUsers());
             request.setAttribute("usersCount", new UsuarioDAO().getAll().size());
             request.setAttribute("usersSuspendCount", new UsuarioDAO().getSuspendUsers().size());
 
-            request.setAttribute("admins", new AdministradorDAO().getThreeAdmins());
             request.setAttribute("adminsCount", new AdministradorDAO().getAll().size());
+            
+            request.setAttribute("itauCount", new ContaDAO().getByBanco("341").size());
+            request.setAttribute("bbCount", new ContaDAO().getByBanco("001").size());
 
             request.getRequestDispatcher(this.resource + "index.jsp").forward(request, response);
         }

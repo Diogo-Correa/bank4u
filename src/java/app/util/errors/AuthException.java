@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controllers;
+package app.util.errors;
 
 /**
  *
  * @author Diogo
  */
-public class OperationNotFoundException {
-    
+public class AuthException extends Exception {
+    public AuthException() {
+        super("Voce nao tem permissao a esta area!");
+    }
 }

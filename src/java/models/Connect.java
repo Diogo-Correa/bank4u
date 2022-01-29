@@ -5,6 +5,9 @@
  */
 package models;
 
+import app.configs.Configurations;
+import java.io.IOException;
+import java.util.Properties;
 import java.sql.*;
 
 /**
@@ -12,18 +15,25 @@ import java.sql.*;
  * @author Diogo
  */
 public final class Connect {
-    private static final String driver = "com.mysql.jdbc.Driver";
-    private static final String url = "jdbc:mysql://localhost:3306/financeiro";
-    private static final String user = "root";
-    private static final String pass = "root";
-    private static Connection conn;
+    private static final String fileConfig = "database.properties";
+    private static String driver = "";
+    private static String url = "";
+    private static String user = "";
+    private static String pass = "";
+    private Connection conn;
     
     public Connect() {
         try {
+            Properties props = Configurations.getProps(fileConfig);
+            driver = props.getProperty("DriverClassName");
+            url = props.getProperty("DatabaseHost");
+            user = props.getProperty("DatabaseUser");
+            pass = props.getProperty("DatabasePassword");
+            
             Class.forName(driver);
             conn = (Connection) DriverManager.getConnection(url, user, pass);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException | ClassNotFoundException | SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
 

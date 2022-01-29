@@ -11,7 +11,7 @@
 <html style="background-color: #efefef !important;">
     <head>
         <jsp:include page="../../assets/includes/head.html" />
-        <title>4U - Users</title>
+        <title>4U - Category</title>
     </head>
     <body style="background-color: #efefef !important;" class="text-dark">
         
@@ -78,13 +78,13 @@
                                 </tr>
                             </c:forEach>
                         </tbody>
-                        <tfoot class="table-dark">
+                        <tbody class="table-dark">
                             <tr>
                                 <th>#</th>
                                 <th>Descricao</th>
                                 <th colspan="2"></th>
                             </tr>
-                        </tfoot>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -110,7 +110,8 @@
                         "targets": 2,
                         "searchable": false,
                         "orderable": false
-                    }]
+                    }],
+                order: [[0, "asc"]]
                 });
             } );
         </script>

@@ -48,7 +48,7 @@ public class ProfileController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        if(!(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null) {
+        if(request.getSession().getAttribute("authUser") == null || !(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null) {
             request.getSession().invalidate();
             request.getSession().setAttribute("error", "Voce nao tem permissao para acessar essa area!");
             response.sendRedirect("home");
@@ -74,7 +74,7 @@ public class ProfileController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if(!(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null) {
+        if(request.getSession().getAttribute("authUser") == null || !(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null) {
             request.getSession().invalidate();
             request.getSession().setAttribute("error", "Voce nao tem permissao para acessar essa area!");
             response.sendRedirect("home");
@@ -95,19 +95,27 @@ public class ProfileController extends HttpServlet {
     protected void index(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        User user = (User) request.getSession().getAttribute("authUser");
+        try {
+            User user = (User) request.getSession().getAttribute("authUser");
 
-        request.getSession().setAttribute("nome", user.getNome());
-        request.getSession().setAttribute("senha", user.getSenha());
-        request.getSession().setAttribute("cpf", user.getCpf());
-        request.getSession().setAttribute("id", user.getId());
-        request.getSession().setAttribute("isAdmin", user.isAdmin());
-        if(!user.isAdmin()) {
-            ContaDAO contaDAO = new ContaDAO();
-            request.getSession().setAttribute("contas", contaDAO.getByUserID(user.getId()));
+            request.getSession().setAttribute("nome", user.getNome());
+            request.getSession().setAttribute("senha", user.getSenha());
+            request.getSession().setAttribute("cpf", user.getCpf());
+            request.getSession().setAttribute("id", user.getId());
+            request.getSession().setAttribute("isAdmin", user.isAdmin());
+            if(!user.isAdmin()) {
+                ContaDAO contaDAO = new ContaDAO();
+                request.getSession().setAttribute("contas", contaDAO.getByUserID(user.getId()));
+            } else {
+                request.getSession().removeAttribute("contas");
+            }
+
+            request.getRequestDispatcher("profile.jsp").forward(request, response);
+        } catch(Exception err) {
+            request.getSession().invalidate();
+            request.getSession().setAttribute("error", "Voce nao tem permissao para acessar essa area!");
+            response.sendRedirect("home");
         }
-
-        request.getRequestDispatcher("profile.jsp").forward(request, response);
     }
     
     protected void update(HttpServletRequest request, HttpServletResponse response)

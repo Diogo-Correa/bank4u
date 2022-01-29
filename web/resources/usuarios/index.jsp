@@ -59,9 +59,9 @@
                                             </c:otherwise>
                                         </c:choose>
                                     </td>
-                                    <c:choose>
-                                        <c:when test="${u.isAdmin()}">
-                                            <td colspan="2" class="text-end">
+                                    <td colspan="2" class="text-end">
+                                        <c:choose>
+                                            <c:when test="${u.isAdmin()}">
                                                 <div class="dropdown">
                                                 <a href="" class="link-secondary" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
 
@@ -89,10 +89,8 @@
                                                   </c:if>
                                                 </ul>
                                               </div>
-                                            </td>
-                                        </c:when>    
-                                        <c:otherwise>
-                                            <td colspan="2" class="text-end">
+                                            </c:when>    
+                                            <c:otherwise>
                                                 <div class="dropdown">
                                                 <a href="" class="link-secondary" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
 
@@ -133,20 +131,20 @@
                                                   </li>
                                                 </ul>
                                               </div>
-                                            </td>
-                                        </c:otherwise>
-                                    </c:choose>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
                                 </tr>
                             </c:forEach>
                         </tbody>
-                        <tfoot class="table-dark">
+                        <tbody class="table-dark">
                             <tr>
                                 <th>Nome</th>
                                 <th>CPF</th>
                                 <th>Nivel</th>
                                 <th colspan="2"></th>
                             </tr>
-                        </tfoot>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -172,7 +170,8 @@
                         "targets": 3,
                         "searchable": false,
                         "orderable": false
-                    }]
+                    }],
+                order: [[0, "asc"]]
                 });
             } );
         </script>

@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import models.UsuarioDAO;
 import app.Usuario;
+import app.configs.Configurations;
+import java.util.Properties;
 import models.AdministradorDAO;
 
 /**
@@ -23,6 +25,9 @@ import models.AdministradorDAO;
 @WebServlet(name = "AuthController", urlPatterns = {"/auth"})
 public class AuthController extends HttpServlet {
 
+    private final String adminConfig = "admin.properties";
+    private final String appConfig = "app.properties";
+    
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -49,9 +54,25 @@ public class AuthController extends HttpServlet {
             response.sendRedirect("/banco");
         } else {
             if(user != null || admin != null) {
+                Properties adminProps = Configurations.getProps(adminConfig);
+                Properties appProps = Configurations.getProps(appConfig);
+                
                 request.getSession().setAttribute("authUser", (user != null) ? user : admin);
-                request.getSession().setAttribute("isAdmin", (user != null) ? false : true);
+                request.getSession().setAttribute("isAdmin", (user == null));
                 request.getSession().setAttribute("isLoggedIn", true);
+
+                boolean allowAdminDeleteBankAcc = Boolean.parseBoolean(adminProps.getProperty("AllowAdminDeleteBankAcc"));
+                boolean allowAdminDeleteEntries = Boolean.parseBoolean(adminProps.getProperty("AllowAdminDeleteEntries"));
+
+                boolean allowModalInfoOnLogin = Boolean.parseBoolean(appProps.getProperty("AllowModalInfoOnLogin"));
+                boolean showAlertNegativeAccounts = Boolean.parseBoolean(appProps.getProperty("ShowAlertNegativeAccounts"));
+                
+                request.getSession().setAttribute("allowAdminDeleteBankAcc", allowAdminDeleteBankAcc);
+                request.getSession().setAttribute("allowAdminDeleteEntries", allowAdminDeleteEntries);
+                request.getSession().setAttribute("allowModalInfoOnLogin", allowModalInfoOnLogin);
+                request.getSession().setAttribute("show", true);
+                request.getSession().setAttribute("showAlertNegativeAccounts", showAlertNegativeAccounts);
+                
                 response.sendRedirect("home");
             } else {
                 request.getSession().removeAttribute("isLoggedIn");

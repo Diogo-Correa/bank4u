@@ -95,6 +95,33 @@ public class LancamentoDAO {
         return lanc;
     }
     
+    public Lancamento getByCategoriaID(int id) {
+        Connect conn = new Connect();
+        Lancamento lanc = new Lancamento();
+        try {
+            PreparedStatement stmt = conn.getConn().prepareStatement("SELECT * FROM lancamentos WHERE id_categoria = ? limit 1");
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                lanc.setId(rs.getInt("id"));
+                lanc.setContaId(rs.getInt("id_conta"));
+                lanc.setCategoriaId(rs.getInt("id_categoria"));
+                lanc.setValor(rs.getFloat("valor"));
+                lanc.setOperacao(rs.getString("operacao"));
+                lanc.setData(rs.getDate("data"));
+                lanc.setDescricao(rs.getString("descricao"));
+            } else {
+                lanc = null;
+            }
+        } catch(SQLException e) {
+            System.out.println("DAO getContasByID error.");
+            System.out.println(e);
+        } finally {
+            conn.closeConn();
+        }
+        return lanc;
+    }
+    
     public ArrayList<Lancamento> getByContaID(int id) {
         
         Connect conn = new Connect();    

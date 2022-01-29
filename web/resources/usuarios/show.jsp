@@ -56,33 +56,59 @@
                             </div>
                         </c:if>
                     </div>
-                    <div class="d-flex text-muted pt-3">
-                        <c:if test="${contas != null}">
-                            <i class="fas fa-piggy-bank me-2"></i>
-                            <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
-                              <div class="d-flex justify-content-between">
-                                <strong class="text-gray-dark"> Contas</strong>
-                              </div>
-                                <c:choose>
-                                    <c:when test="${contas.size() > 0}">
-                                        <c:forEach var="c" items="${contas}">
-                                            <span class="d-block pt-3 text-uppercase">
-                                                <i class="fas fa-money-check-alt me-2"></i>
-                                                (${c.getBanco()} - ${c.getBancoNome()}) 
-                                                ${c.nome} - 
-                                                ${c.agencia}/${c.getConta()}
-                                            </span>
-                                        </c:forEach> 
-                                    </c:when>    
-                                    <c:otherwise>
-                                        <span class="text-muted">Nenhuma conta encontrada.</span>
-                                    </c:otherwise>
-                                </c:choose>      
-                              
+                         <c:if test="${contas != null}">
+                            <div class="bg-dark text-light p-2 rounded my-4">
+                                <strong>
+                                    <i class="fas fa-piggy-bank me-2"></i> Contas
+                                </strong>
                             </div>
-                        </c:if>
-                    </div>
-                </div>
+                            <c:choose>
+                                <c:when test="${contas.size() > 0}">
+                                    <c:forEach var="c" items="${contas}">
+                                        <div class="d-flex pt-3">
+                                            <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+                                                <div class="d-flex justify-content-between">
+                                                    <span class="d-block pt-3 text-uppercase">
+                                                        <i class="fas fa-money-check-alt me-2"></i>
+                                                        (${c.getBanco()} - ${c.getBancoNome()}) 
+                                                    </span>
+                                                    <div class="dropdown">
+                                                      <a href="" class="link-secondary" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
+
+                                                      <ul class="dropdown-menu dropdown-menu-dark mx-0 shadow" style="width: 220px;">
+                                                        <li>
+                                                          <a class="dropdown-item dropdown-item-danger d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#confirmaAction" data-href="entries?action=deleteAll&id=${c.id}" href="#">
+                                                            <i class="fas fa-times"></i>
+                                                            Apagar lancamentos
+                                                          </a>
+                                                        </li>
+                                                        <li>
+                                                          <a class="dropdown-item dropdown-item-danger d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#confirmaAction" data-href="wallet?action=delete&id=${c.id}" href="#">
+                                                            <i class="fas fa-trash"></i>
+                                                            Deletar
+                                                          </a>
+                                                        </li>
+                                                      </ul>
+                                                    </div>
+                                                </div>
+                                                <span class="d-block text-muted p-3">
+                                                    <i class="fas fa-signature"></i> ${c.nome}
+                                                </span>
+                                                <span class="d-block text-muted ps-3">
+                                                    <i class="fas fa-university"></i> ${c.agencia}
+                                                </span>
+                                                <span class="d-block text-muted ps-3">
+                                                    <i class="fas fa-wallet"></i> ${c.getConta()}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </c:forEach> 
+                                </c:when>    
+                                <c:otherwise>
+                                    <span class="text-muted">Nenhuma conta encontrada.</span>
+                                </c:otherwise>
+                            </c:choose>    
+                    </c:if>
             </div>
         </div>
                             

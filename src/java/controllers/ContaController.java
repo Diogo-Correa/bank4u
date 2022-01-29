@@ -42,15 +42,21 @@ public class ContaController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String action = request.getParameter("action");
-        
-        switch(action) {
-                    case "total":
-                        getTotal(request,response);
-                        break;
-                    case "delete":
-                        delete(request,response);
-                        break;
+        if(request.getSession().getAttribute("authUser") == null || !(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null) {
+            request.getSession().invalidate();
+            request.getSession().setAttribute("error", "Voce nao tem permissao para acessar essa area!");
+            response.sendRedirect("home");
+        } else {
+            String action = request.getParameter("action");
+
+            switch(action) {
+                        case "total":
+                            getTotal(request,response);
+                            break;
+                        case "delete":
+                            delete(request,response);
+                            break;
+            }
         }
     }
 
@@ -65,16 +71,21 @@ public class ContaController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String action = request.getParameter("action");
-        
-        switch(action) {
-                    case "store":
-                        store(request,response);
-                        break;
-                    case "update":
-                        update(request,response);
-                        break;
+        if(request.getSession().getAttribute("authUser") == null || !(boolean) request.getSession().getAttribute("isLoggedIn") || request.getSession().getAttribute("isLoggedIn") == null) {
+            request.getSession().invalidate();
+            request.getSession().setAttribute("error", "Voce nao tem permissao para acessar essa area!");
+            response.sendRedirect("home");
+        } else {
+            String action = request.getParameter("action");
+
+            switch(action) {
+                        case "store":
+                            store(request,response);
+                            break;
+                        case "update":
+                            update(request,response);
+                            break;
+            }
         }
     }
     
@@ -190,42 +201,57 @@ public class ContaController extends HttpServlet {
     protected void getTotal(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        float total = 0, totalDebitos = 0, totalCreditos = 0;
-        List<String> totais = new ArrayList<>();
-        
-        LancamentoDAO lancDAO = new LancamentoDAO();
-        
-        for(Lancamento lanc : lancDAO.getByContaID(Integer.parseInt(request.getParameter("conta")))) {
-            if(lanc.isCredit()) {
-                total += lanc.getValor();
-                totalCreditos += lanc.getValor();
-            } else {
-                total += -lanc.getValor();
-                totalDebitos += -lanc.getValor();
-            }
-        }
-        
-        totais.add(Float.toString(total));
-        totais.add(Float.toString(totalDebitos));
-        totais.add(Float.toString(totalCreditos));
-        
-        String json = new Gson().toJson(totais);
+        try {
+            float total = 0, totalDebitos = 0, totalCreditos = 0;
+            List<String> totais = new ArrayList<>();
 
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(json);
+            LancamentoDAO lancDAO = new LancamentoDAO();
+            ContaDAO accDAO = new ContaDAO();
+            Conta conta = accDAO.getByID(Integer.parseInt(request.getParameter("conta")));
+            User user = (User) request.getSession().getAttribute("authUser");
+
+            if(conta == null) throw new ContaNotFoundException();
+            if(conta.getUserId() != user.getId()) throw new AuthException();
+            
+            for(Lancamento lanc : lancDAO.getByContaID(Integer.parseInt(request.getParameter("conta")))) {
+                if(lanc.isCredit()) {
+                    total += lanc.getValor();
+                    totalCreditos += lanc.getValor();
+                } else {
+                    total += -lanc.getValor();
+                    totalDebitos += -lanc.getValor();
+                }
+            }
+
+            totais.add(Float.toString(total));
+            totais.add(Float.toString(totalDebitos));
+            totais.add(Float.toString(totalCreditos));
+            totais.add(conta.getBanco());
+
+            String json = new Gson().toJson(totais);
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(json);
+        } catch(Exception err) {
+            //
+        }
     }
 
         
     protected void delete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            User authUser = (User) request.getSession().getAttribute("authUser");
+            
             int id = Integer.parseInt(request.getParameter("id"));
             
             ContaDAO contaDAO = new ContaDAO();
             Conta acc = contaDAO.getByID(id);
             
             if(acc == null) throw new ContaNotFoundException();
+            
+            if(authUser.isAdmin() && request.getSession().getAttribute("allowAdminDeleteBankAcc") != null && !(boolean) request.getSession().getAttribute("allowAdminDeleteBankAcc")) throw new AdminDeleteAccException();
             
             LancamentoDAO lancDAO = new LancamentoDAO();
             ArrayList<Lancamento> lancs = lancDAO.getByContaID(id);
@@ -236,14 +262,23 @@ public class ContaController extends HttpServlet {
                 contaDAO.delete(id);
 
                 request.getSession().setAttribute("success", "Conta removida do sistema!");
-                response.sendRedirect("profile");
+                if(authUser.isAdmin()) response.sendRedirect("user");
+                else response.sendRedirect("profile");
             }
         } catch(NumberFormatException e) {
+            User authUser = (User) request.getSession().getAttribute("authUser");
+            
             request.getSession().setAttribute("error", "ID informado nao eh um inteiro.");
-            response.sendRedirect("profile");
-        } catch(ContaNotFoundException | RestrictEntriesException err) {
+            if(authUser.isAdmin()) response.sendRedirect("user");
+            else response.sendRedirect("profile");
+        } catch(ContaNotFoundException | RestrictEntriesException | AdminDeleteAccException err) {
+            User authUser = (User) request.getSession().getAttribute("authUser");
+            
             request.getSession().setAttribute("error", err.getMessage());
-            response.sendRedirect("profile");
+            
+            if(authUser.isAdmin() && request.getSession().getAttribute("allowAdminDeleteBankAcc") != null && !(boolean) request.getSession().getAttribute("allowAdminDeleteBankAcc")) response.sendRedirect("settings");
+            else if(authUser.isAdmin()) response.sendRedirect("user");
+            else response.sendRedirect("profile");
         }
     }
     
